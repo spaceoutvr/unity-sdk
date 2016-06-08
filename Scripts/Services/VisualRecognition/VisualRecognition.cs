@@ -289,15 +289,19 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
             req.Parameters["api_key"] = mp_ApiKey;
             req.Parameters["version"] = VisualRecognitionVersion.Version;
 
+            //  Create form
             req.Forms = new Dictionary<string, RESTConnector.Form>();
 
+            //  Add image byte data to form
             if(imageData != default(byte[]))
                 req.Forms["images_file"] = new RESTConnector.Form(imageData, Path.GetFileName(imagePath), GetMimeType(imagePath));
 
+            //  Build json
             if(!string.IsNullOrEmpty(imageURL))
             {
                 string param = BuildDetectFacesParametersJson(imageURL);
                 req.Forms["parameters"] = new RESTConnector.Form(param);
+                Log.Debug("VisualRecognition", "sending parameters: {0}", param);
             }
 
             return connector.Send(req);

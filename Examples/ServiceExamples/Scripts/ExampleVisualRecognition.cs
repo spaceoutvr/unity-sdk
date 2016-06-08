@@ -88,7 +88,7 @@ public class ExampleVisualRecognition : MonoBehaviour {
 
         //  test alchemy chages
         string m_faceExamplePath = Application.dataPath + "/Watson/Examples/ServiceExamples/TestData/visual-recognition-classifiers/obama.jpg";
-        if(!m_VisualRecognition.TestDetectFacesPost(OnDetectFaces, m_faceExamplePath, m_imageURL))
+        if(!m_VisualRecognition.TestDetectFacesPost(OnDetectFaces, null, m_imageURL))
             Log.Debug("ExampleVisualRecognition", "Detect faces failed!");
 	}
 
