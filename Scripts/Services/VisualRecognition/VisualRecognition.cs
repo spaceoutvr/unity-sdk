@@ -87,6 +87,7 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
 
         #region Private Data
         private const string SERVICE_ID = "VisualRecognitionV3";
+//        private const string SERVICE_ID = "TestVisualRecognitionV3";
         private const string SERVICE_CLASSIFY = "/v3/classify";
         private const string SERVICE_DETECT_FACES = "/v3/detect_faces";
         private const string SERVICE_RECOGNIZE_TEXT = "/v3/recognize_text";
@@ -242,6 +243,81 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
             }
 
             return classify;
+        }
+        #endregion
+
+        #region Testing alchemy changes
+        public bool TestDetectFacesPost(OnDetectFaces callback, string imagePath = default(string), string imageURL = default(string))
+        {
+            if(string.IsNullOrEmpty(imagePath) && string.IsNullOrEmpty(imageURL))
+                throw new ArgumentNullException("Define an image path and/or imageURL to classify!");
+            if(string.IsNullOrEmpty(mp_ApiKey))
+                mp_ApiKey = Config.Instance.GetVariableValue("VISUAL_RECOGNITION_API_KEY");
+            if(string.IsNullOrEmpty(mp_ApiKey))
+                throw new WatsonException("FindClassifier - VISUAL_RECOGNITION_API_KEY needs to be defined in config.json");
+
+            byte[] imageData = null;
+            if(imagePath != default(string))
+            {
+                if(LoadFile != null)
+                {
+                    imageData = LoadFile(imagePath);
+                }
+                else
+                {
+                    #if !UNITY_WEBPLAYER
+                    imageData = File.ReadAllBytes(imagePath);
+                    #endif
+                }
+
+                if(imageData == null)
+                    Log.Error("VisualRecognition", "Failed to upload {0}!", imagePath);
+            }
+
+            return TestDetectFacesPost(callback, imagePath, imageURL, imageData);
+        }
+
+        private bool TestDetectFacesPost(OnDetectFaces callback, string imagePath = default(string), string imageURL = default(string), byte[] imageData = default(byte[]))
+        {
+            RESTConnector connector = RESTConnector.GetConnector(SERVICE_ID, SERVICE_DETECT_FACES);
+            if(connector == null)
+                return false;
+            DetectFacesReq req = new DetectFacesReq();
+            req.Callback = callback;
+            req.Timeout = REQUEST_TIMEOUT;
+            req.OnResponse = OnDetectFacesResp;
+            req.Parameters["api_key"] = mp_ApiKey;
+            req.Parameters["version"] = VisualRecognitionVersion.Version;
+
+            req.Forms = new Dictionary<string, RESTConnector.Form>();
+
+            if(imageData != default(byte[]))
+                req.Forms["images_file"] = new RESTConnector.Form(imageData, Path.GetFileName(imagePath), GetMimeType(imagePath));
+
+            if(!string.IsNullOrEmpty(imageURL))
+            {
+                string param = BuildDetectFacesParametersJson(imageURL);
+                req.Forms["parameters"] = new RESTConnector.Form(param);
+            }
+
+            return connector.Send(req);
+        }
+
+        private string BuildDetectFacesParametersJson(string url)
+        {
+            DetectFacesParameters cParameters = new DetectFacesParameters();
+            cParameters.url = url;
+
+            fsData jsondata = new fsData();
+            if (sm_Serializer.TrySerialize(cParameters, out jsondata).Succeeded)
+            {
+                return fsJsonPrinter.CompressedJson(jsondata, true);
+            }
+            else
+            {
+                Log.Error("VisualRecognition", "Error parsing to JSON!");
+                return null;
+            }
         }
         #endregion
 
