@@ -15,7 +15,7 @@
 *
 */
 
-//#define SPLINE_INTERPOLATOR
+#define SPLINE_INTERPOLATOR
 
 using UnityEngine;
 using IBM.Watson.DeveloperCloud.Logging;
@@ -51,7 +51,7 @@ namespace IBM.Watson.DeveloperCloud.Camera
         [SerializeField]
         private float m_RatioAtCameraPath = 0.0f;
         [SerializeField]
-        private Vector3 m_DistanceFromCamera = Vector3.zero;
+        private Vector3 m_DistanceFromPath = Vector3.zero;
         #if SPLINE_INTERPOLATOR
         [SerializeField]
         private SplineInterpolator m_SplineInterpolator;
@@ -133,6 +133,10 @@ namespace IBM.Watson.DeveloperCloud.Camera
             }
         }
 
+        /// <summary>
+        /// Gets or sets the offset position.
+        /// </summary>
+        /// <value>The offset position.</value>
         public Vector3 OffsetPosition
         {
             get
@@ -144,19 +148,27 @@ namespace IBM.Watson.DeveloperCloud.Camera
                 m_OffsetPosition = value;
             }
         }
-
-        public Vector3 DistanceFromCamera
+            
+        /// <summary>
+        /// Gets or sets the distance from path.
+        /// </summary>
+        /// <value>The distance from path.</value>
+        public Vector3 DistanceFromPath
         {
             get
             {
-                return m_DistanceFromCamera;
+                return m_DistanceFromPath;
             }
             set
             {
-                m_DistanceFromCamera = value;
+                m_DistanceFromPath = value;
             }
         }
 
+        /// <summary>
+        /// Gets or sets the offset position rotation.
+        /// </summary>
+        /// <value>The offset position rotation.</value>
         public Quaternion OffsetPositionRotation
         {
             get
@@ -166,6 +178,24 @@ namespace IBM.Watson.DeveloperCloud.Camera
             set
             {
                 m_OffsetPositionRotation = value;
+            }
+        }
+
+        public SplineInterpolator SplineInterpolator
+        {
+            get
+            {
+                if (m_SplineInterpolator == null)
+                {
+                    m_SplineInterpolator = this.gameObject.GetComponent<SplineInterpolator>();
+                    if (m_SplineInterpolator == null)
+                        m_SplineInterpolator = this.gameObject.AddComponent<SplineInterpolator>();
+                }
+                return m_SplineInterpolator;
+            }
+            set
+            {
+                m_SplineInterpolator = value;
             }
         }
 
@@ -204,11 +234,11 @@ namespace IBM.Watson.DeveloperCloud.Camera
 
                     if (m_OffsetPosition != Vector3.zero)
                     {
-                        return m_SplineInterpolator.GetHermiteAtTime(m_RatioAtCameraPath) + (TargetRotation * m_OffsetPosition) + DistanceFromCamera;
+                        return m_SplineInterpolator.GetHermiteAtTime(m_RatioAtCameraPath) + (TargetRotation * m_OffsetPosition) + DistanceFromPath;
                     }
                     else
                     {
-                        return m_SplineInterpolator.GetHermiteAtTime(m_RatioAtCameraPath) + DistanceFromCamera;
+                        return m_SplineInterpolator.GetHermiteAtTime(m_RatioAtCameraPath) + DistanceFromPath;
                     }
 
                 }
