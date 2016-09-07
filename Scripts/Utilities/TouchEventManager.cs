@@ -402,7 +402,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
 
         #endregion
 
-        #region OneFinger Events - Register / UnRegister / Call
+        #region Drag Events - Register / UnRegister / Call
         /// <summary>
         /// Registers the drag event.
         /// </summary>
