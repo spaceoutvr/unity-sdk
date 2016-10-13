@@ -1,0 +1,4 @@
+[submodule "Scripts/Services"]
+	path = Scripts/Services
+	url = git@github.com:mediumTaj/csharp-sdk-base.git
+	branch = master
