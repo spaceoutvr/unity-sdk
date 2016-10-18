@@ -67,7 +67,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
         /// <param name="tolerance">Tolerance.</param>
         public static bool Approximately(double a, double b, double tolerance = 0.0001)
         {
-            return (System.Math.Abs(a - b) < tolerance);
+            return (Math.Abs(a - b) < tolerance);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
         /// <param name="tolerance">Tolerance.</param>
         public static bool Approximately(float a, float b, float tolerance = 0.0001f)
         {
-            return (Mathf.Abs(a - b) < tolerance);
+            return (Math.Abs(a - b) < tolerance);
         }
 
         /// <summary>
@@ -488,6 +488,25 @@ namespace IBM.Watson.DeveloperCloud.Utilities
 
             return null;
         }
+		#endregion
+
+		#region
+		/// <summary>
+		/// Determines if a string is a file path.
+		/// </summary>
+		/// <param name="s">String to query.</param>
+		/// <returns></returns>
+		public static bool IsLocalFile(string s)
+		{
+			try
+			{
+				return new Uri(s).IsFile;
+			}
+			catch
+			{
+				return false;
+			}
+		}
 		#endregion
 	}
 }
