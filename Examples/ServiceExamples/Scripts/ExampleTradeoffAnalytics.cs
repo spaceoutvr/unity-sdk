@@ -22,7 +22,7 @@ using IBM.Watson.DeveloperCloud.Services.TradeoffAnalytics.v1;
 
 public class ExampleTradeoffAnalytics : MonoBehaviour
 {
-  TradeoffAnalytics m_TradeoffAnalytics = new TradeoffAnalytics();
+  TradeoffAnalytics tradeoffAnalytics = new TradeoffAnalytics();
 
   void Start()
   {
@@ -100,7 +100,7 @@ public class ExampleTradeoffAnalytics : MonoBehaviour
 
     problemToSolve.options = listOption.ToArray();
 
-    m_TradeoffAnalytics.GetDilemma(OnGetDilemma, problemToSolve, false);
+    tradeoffAnalytics.GetDilemma(OnGetDilemma, problemToSolve, false);
   }
 
   private void OnGetDilemma(DilemmasResponse resp)

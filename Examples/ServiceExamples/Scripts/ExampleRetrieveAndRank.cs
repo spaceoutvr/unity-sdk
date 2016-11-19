@@ -28,7 +28,7 @@ using UnityEditor;
 #pragma warning disable 219
 public class ExampleRetrieveAndRank : MonoBehaviour
 {
-  private RetrieveAndRank m_RetrieveAndRank = new RetrieveAndRank();
+  private RetrieveAndRank retrieveAndRank = new RetrieveAndRank();
 
   void Start()
   {
@@ -47,101 +47,101 @@ public class ExampleRetrieveAndRank : MonoBehaviour
 
     ////  Get clusters
     //Log.Debug("ExampleRetrieveAndRank", "Attempting to get clusters!");
-    //if (!m_RetrieveAndRank.GetClusters(OnGetClusters))
+    //if (!retrieveAndRank.GetClusters(OnGetClusters))
     //    Log.Debug("ExampleRetrieveAndRank", "Failed to get clusters!");
 
     ////  Create cluster
     //Log.Debug("ExampleRetrieveAndRank", "Attempting to create cluster!");
-    //if (!m_RetrieveAndRank.CreateCluster(OnCreateCluster, "unity-test-cluster", "1"))
+    //if (!retrieveAndRank.CreateCluster(OnCreateCluster, "unity-test-cluster", "1"))
     //    Log.Debug("ExampleRetrieveAndRank", "Failed to create cluster!");
 
     ////  Delete cluster
     //string clusterToDelete = "scabeadb4c_cd5a_4745_b1b9_156c6292687c";
     //Log.Debug("ExampleRetrieveAndRank", "Attempting to delete cluster {0}!", clusterToDelete);
-    //if (!m_RetrieveAndRank.DeleteCluster(OnDeleteCluster, clusterToDelete))
+    //if (!retrieveAndRank.DeleteCluster(OnDeleteCluster, clusterToDelete))
     //    Log.Debug("ExampleRetrieveAndRank", "Failed to delete cluster!");
 
     ////  Get cluster
     //Log.Debug("ExampleRetrieveAndRank", "Attempting to get cluster {0}!", testClusterID);
-    //if (!m_RetrieveAndRank.GetCluster(OnGetCluster, testClusterID))
+    //if (!retrieveAndRank.GetCluster(OnGetCluster, testClusterID))
     //    Log.Debug("ExampleRetrieveAndRank", "Failed to get cluster!");
 
     ////  List cluster configs
     //Log.Debug("ExampleRetrieveAndRank", "Attempting to get cluster configs for {0}!", testClusterID);
-    //if (!m_RetrieveAndRank.GetClusterConfigs(OnGetClusterConfigs, testClusterID))
+    //if (!retrieveAndRank.GetClusterConfigs(OnGetClusterConfigs, testClusterID))
     //    Log.Debug("ExampleRetrieveAndRank", "Failed to get cluster configs!");
 
     ////  Delete cluster config
     //string clusterConfigToDelete = "test-config";
     //Log.Debug("ExampleRetrieveAndRank", "Attempting to delete cluster {0} config {1}!", testClusterID, clusterConfigToDelete);
-    //if (!m_RetrieveAndRank.DeleteClusterConfig(OnDeleteClusterConfig, testClusterID, clusterConfigToDelete))
+    //if (!retrieveAndRank.DeleteClusterConfig(OnDeleteClusterConfig, testClusterID, clusterConfigToDelete))
     //    Log.Debug("ExampleRetriveAndRank", "Failed to delete cluster config {0}", clusterConfigToDelete);
 
     ////  Get cluster config
     //Log.Debug("ExampleRetrieveAndRank", "Attempting to get cluster {0} config {1}!", testClusterID, testClusterConfigName);
-    //if (!m_RetrieveAndRank.GetClusterConfig(OnGetClusterConfig, testClusterID, testClusterConfigName))
+    //if (!retrieveAndRank.GetClusterConfig(OnGetClusterConfig, testClusterID, testClusterConfigName))
     //    Log.Debug("ExampleRetrieveAndRank", "Failed to get cluster config {0}!", testClusterConfigName);
 
     ////  Upload cluster config
     //Log.Debug("ExampleRetrieveAndRank", "Attempting to upload cluster {0} config {1}!", testClusterID, testClusterConfigName);
-    //if (!m_RetrieveAndRank.UploadClusterConfig(OnUploadClusterConfig, testClusterID, testClusterConfigName, testClusterConfigPath))
+    //if (!retrieveAndRank.UploadClusterConfig(OnUploadClusterConfig, testClusterID, testClusterConfigName, testClusterConfigPath))
     //    Log.Debug("ExampleRetrieveAndRank", "Failed to upload cluster config {0}!", testClusterConfigPath);
 
     ////  List Collection request
     //Log.Debug("ExampleRetrieveAndRank", "Attempting to list collections!");
-    //if (!m_RetrieveAndRank.ForwardCollectionRequest(OnGetCollections, testClusterID, CollectionsAction.LIST))
+    //if (!retrieveAndRank.ForwardCollectionRequest(OnGetCollections, testClusterID, CollectionsAction.LIST))
     //    Log.Debug("ExampleRetrieveAndRank", "Failed to get collections!");
 
     ////  Create Collection request
     //Log.Debug("ExampleRetrieveAndRank", "Attempting to create collection!");
-    //if (!m_RetrieveAndRank.ForwardCollectionRequest(OnGetCollections, testClusterID, CollectionsAction.CREATE, "TestCollectionToDelete", testClusterConfigName))
+    //if (!retrieveAndRank.ForwardCollectionRequest(OnGetCollections, testClusterID, CollectionsAction.CREATE, "TestCollectionToDelete", testClusterConfigName))
     //    Log.Debug("ExampleRetrieveAndRank", "Failed to create collections!");
 
     ////  Delete Collection request
     //Log.Debug("ExampleRetrieveAndRank", "Attempting to delete collection!");
-    //if (!m_RetrieveAndRank.ForwardCollectionRequest(OnGetCollections, testClusterID, CollectionsAction.DELETE, "TestCollectionToDelete"))
+    //if (!retrieveAndRank.ForwardCollectionRequest(OnGetCollections, testClusterID, CollectionsAction.DELETE, "TestCollectionToDelete"))
     //    Log.Debug("ExampleRetrieveAndRank", "Failed to delete collections!");
 
     ////  Index documents
     //Log.Debug("ExampleRetrieveAndRank", "Attempting to index documents!");
-    //if (!m_RetrieveAndRank.IndexDocuments(OnIndexDocuments, indexDataPath, testClusterID, testCollectionName))
+    //if (!retrieveAndRank.IndexDocuments(OnIndexDocuments, indexDataPath, testClusterID, testCollectionName))
     //    Log.Debug("ExampleRetrieveAndRank", "Failed to index documents!");
 
     ////  Standard Search
     //Log.Debug("ExampleRetrieveAndRank", "Attempting to search!");
     //string[] fl = { "title", "id", "body", "author", "bibliography" };
-    //if (!m_RetrieveAndRank.Search(OnSearch, testClusterID, testCollectionName, testQuery, fl))
+    //if (!retrieveAndRank.Search(OnSearch, testClusterID, testCollectionName, testQuery, fl))
     //    Log.Debug("ExampleRetrieveAndRank", "Failed to search!");
 
     ////  Ranked Search
     //Log.Debug("ExampleRetrieveAndRank", "Attempting to search!");
     //string[] fl = { "title", "id", "body", "author", "bibliography" };
-    //if (!m_RetrieveAndRank.Search(OnSearch, testClusterID, testCollectionName, testQuery, fl, true))
+    //if (!retrieveAndRank.Search(OnSearch, testClusterID, testCollectionName, testQuery, fl, true))
     //    Log.Debug("ExampleRetrieveAndRank", "Failed to search!");
 
     ////  Get rankers
     //Log.Debug("ExampleRetrieveAndRank", "Attempting to get rankers!");
-    //if (!m_RetrieveAndRank.GetRankers(OnGetRankers))
+    //if (!retrieveAndRank.GetRankers(OnGetRankers))
     //    Log.Debug("ExampleRetrieveAndRank", "Failed to get rankers!");
 
     ////  Create ranker
     //Log.Debug("ExampleRetrieveAndRank", "Attempting to create rankers!");
-    //if (!m_RetrieveAndRank.CreateRanker(OnCreateRanker, testRankerTrainingPath, "testRanker"))
+    //if (!retrieveAndRank.CreateRanker(OnCreateRanker, testRankerTrainingPath, "testRanker"))
     //    Log.Debug("ExampleRetrieveAndRank", "Failed to create ranker!");
 
     //  Rank
     Log.Debug("ExampleRetrieveAndRank", "Attempting to rank!");
-    if (!m_RetrieveAndRank.Rank(OnRank, testRankerID, testAnswerDataPath))
+    if (!retrieveAndRank.Rank(OnRank, testRankerID, testAnswerDataPath))
       Log.Debug("ExampleRetriveAndRank", "Failed to rank!");
 
     ////  Delete rankers
     //Log.Debug("ExampleRetriveAndRank", "Attempting to delete ranker {0}!", rankerToDelete);
-    //if (!m_RetrieveAndRank.DeleteRanker(OnDeleteRanker, rankerToDelete))
+    //if (!retrieveAndRank.DeleteRanker(OnDeleteRanker, rankerToDelete))
     //    Log.Debug("ExampleRetrieveAndRank", "Failed to delete ranker {0}!", rankerToDelete);
 
     ////  Get ranker info
     //Log.Debug("ExampleRetrieveAndRank", "Attempting to get Ranker Info!");
-    //if (!m_RetrieveAndRank.GetRanker(OnGetRanker, testRankerID))
+    //if (!retrieveAndRank.GetRanker(OnGetRanker, testRankerID))
     //    Log.Debug("ExampleRetrieveAndRank", "Failed to get ranker!");
   }
 
@@ -234,7 +234,7 @@ public class ExampleRetrieveAndRank : MonoBehaviour
       if (!string.IsNullOrEmpty(path))
       {
         currentDirectory = Path.GetDirectoryName(path);
-        m_RetrieveAndRank.SaveConfig(OnSaveConfig, respData, path, data);
+        retrieveAndRank.SaveConfig(OnSaveConfig, respData, path, data);
       }
     }
     else

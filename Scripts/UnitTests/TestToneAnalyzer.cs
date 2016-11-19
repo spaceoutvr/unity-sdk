@@ -26,17 +26,17 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
 {
   public class TestToneAnalyzer : UnitTest
   {
-    ToneAnalyzer m_ToneAnalyzer = new ToneAnalyzer();
-    bool m_GetToneAnalyzerTested = false;
-    string m_StringToTestTone = "This service enables people to discover and understand, and revise the impact of tone in their content. It uses linguistic analysis to detect and interpret emotional, social, and language cues found in text.\n";
+    ToneAnalyzer toneAnalyzer = new ToneAnalyzer();
+    bool getToneAnalyzerTested = false;
+    string stringToTestTone = "This service enables people to discover and understand, and revise the impact of tone in their content. It uses linguistic analysis to detect and interpret emotional, social, and language cues found in text.\n";
 
     public override IEnumerator RunTest()
     {
-      if (Utilities.Config.Instance.FindCredentials(m_ToneAnalyzer.GetServiceID()) == null)
+      if (Utilities.Config.Instance.FindCredentials(toneAnalyzer.GetServiceID()) == null)
         yield break;
 
-      m_ToneAnalyzer.GetToneAnalyze(OnGetToneAnalyze, m_StringToTestTone, "TEST");
-      while (!m_GetToneAnalyzerTested)
+      toneAnalyzer.GetToneAnalyze(OnGetToneAnalyze, stringToTestTone, "TEST");
+      while (!getToneAnalyzerTested)
         yield return null;
 
       yield break;
@@ -47,7 +47,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Log.Status("TestToneAnalyzer", "Response: {0} - {1}", resp, data);
 
       Test(resp != null);
-      m_GetToneAnalyzerTested = true;
+      getToneAnalyzerTested = true;
     }
 
   }

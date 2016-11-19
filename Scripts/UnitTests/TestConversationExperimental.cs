@@ -21,22 +21,22 @@ using IBM.Watson.DeveloperCloud.Services.ConversationExperimental.v1;
 #pragma warning disable 0414
 public class TestConversationExperimental// : UnitTest  //  Commented out integration test
 {
-  private ConversationExperimental m_Conversation = new ConversationExperimental();
-  private string m_WorkspaceID;
-  private string m_Input = "Can you unlock the door?";
-  private bool m_MessageTested = false;
+  private ConversationExperimental conversation = new ConversationExperimental();
+  private string workspaceID;
+  private string input = "Can you unlock the door?";
+  private bool messageTested = false;
 
   //public override IEnumerator RunTest()
   //{
-  //       m_WorkspaceID = Config.Instance.GetVariableValue("ConversationExperimentalV1_WorkspaceID");
+  //       workspaceID = Config.Instance.GetVariableValue("ConversationExperimentalV1_WorkspaceID");
 
-  //	if (Config.Instance.FindCredentials(m_Conversation.GetServiceID()) == null)
+  //	if (Config.Instance.FindCredentials(conversation.GetServiceID()) == null)
   //		yield break;
 
-  //	if(!m_MessageTested)
+  //	if(!messageTested)
   //	{
-  //		m_Conversation.Message(m_WorkspaceID, m_Input, OnMessage);
-  //		while(!m_MessageTested)
+  //		conversation.Message(workspaceID, input, OnMessage);
+  //		while(!messageTested)
   //			yield return null;
   //	}
   //}
@@ -51,6 +51,6 @@ public class TestConversationExperimental// : UnitTest  //  Commented out integr
   //		Log.Debug("TestConversation", "response: " + resp.output.text);
   //	}
 
-  //	m_MessageTested = true;
+  //	messageTested = true;
   //}
 }

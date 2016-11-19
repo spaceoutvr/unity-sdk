@@ -36,7 +36,7 @@ namespace IBM.Watson.DeveloperCloud.Services.TradeoffAnalytics.v1
 
     #region Private Data
     private const string SERVICE_ID = "TradeoffAnalyticsV1";
-    private static fsSerializer sm_Serializer = new fsSerializer();
+    private static fsSerializer sserializer = new fsSerializer();
     #endregion
 
     #region Dilemmas
@@ -62,7 +62,7 @@ namespace IBM.Watson.DeveloperCloud.Services.TradeoffAnalytics.v1
       req.Parameters["generate_visualization"] = generateVisualization.ToString();
 
       fsData tempData = null;
-      sm_Serializer.TrySerialize<Problem>(problem, out tempData);
+      sserializer.TrySerialize<Problem>(problem, out tempData);
 
       Log.Status("GetDilemma", "JSON: {0}", tempData.ToString());
 
@@ -90,7 +90,7 @@ namespace IBM.Watson.DeveloperCloud.Services.TradeoffAnalytics.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = response;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -143,13 +143,13 @@ namespace IBM.Watson.DeveloperCloud.Services.TradeoffAnalytics.v1
 
     private class CheckServiceStatus
     {
-      private TradeoffAnalytics m_Service = null;
-      private ServiceStatus m_Callback = null;
+      private TradeoffAnalytics service = null;
+      private ServiceStatus callback = null;
 
-      public CheckServiceStatus(TradeoffAnalytics service, ServiceStatus callback)
+      public CheckServiceStatus(TradeoffAnalytics tradeoffAnalytics, ServiceStatus serviceStatus)
       {
-        m_Service = service;
-        m_Callback = callback;
+        service = tradeoffAnalytics;
+        callback = serviceStatus;
 
         Problem problem = new Problem();
         problem.subject = "ping";
@@ -176,15 +176,15 @@ namespace IBM.Watson.DeveloperCloud.Services.TradeoffAnalytics.v1
 
         problem.options = listOption.ToArray();
 
-        if (!m_Service.GetDilemma(OnGetDilemma, problem, false))
+        if (!service.GetDilemma(OnGetDilemma, problem, false))
           OnFailure("Failed to invoke OnGetDilemma().");
       }
 
       private void OnGetDilemma(DilemmasResponse resp)
       {
-        if (m_Callback != null && resp != null)
+        if (callback != null && resp != null)
         {
-          m_Callback(SERVICE_ID, true);
+          callback(SERVICE_ID, true);
         }
         else
         {
@@ -195,7 +195,7 @@ namespace IBM.Watson.DeveloperCloud.Services.TradeoffAnalytics.v1
       private void OnFailure(string msg)
       {
         Log.Error("TradeoffAnalytics", msg);
-        m_Callback(SERVICE_ID, false);
+        callback(SERVICE_ID, false);
       }
     }
 

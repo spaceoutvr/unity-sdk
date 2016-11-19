@@ -30,7 +30,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
   public class Singleton<T> where T : class
   {
     #region Private Data
-    static private T sm_Instance = null;
+    static private T sinstance = null;
     #endregion
 
     #region Public Properties
@@ -41,9 +41,9 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     {
       get
       {
-        if (sm_Instance == null)
+        if (sinstance == null)
           CreateInstance();
-        return sm_Instance;
+        return sinstance;
       }
     }
     #endregion
@@ -66,16 +66,16 @@ namespace IBM.Watson.DeveloperCloud.Utilities
 #else
                 singletonObject.hideFlags = HideFlags.HideAndDontSave;
 #endif
-        sm_Instance = singletonObject.GetComponent<T>();
-        if (sm_Instance == null)
-          sm_Instance = singletonObject.AddComponent(typeof(T)) as T;
+        sinstance = singletonObject.GetComponent<T>();
+        if (sinstance == null)
+          sinstance = singletonObject.AddComponent(typeof(T)) as T;
       }
       else
       {
-        sm_Instance = Activator.CreateInstance(typeof(T)) as T;
+        sinstance = Activator.CreateInstance(typeof(T)) as T;
       }
 
-      if (sm_Instance == null)
+      if (sinstance == null)
         throw new WatsonException("Failed to create instance " + typeof(T).Name);
     }
     #endregion

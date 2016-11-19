@@ -29,16 +29,16 @@ public class WebCamRecognition : MonoBehaviour
 {
   #region Private Data
   [SerializeField]
-  private WebCamWidget m_WebCamWidget;
+  private WebCamWidget webCamWidget;
   [SerializeField]
-  private WebCamDisplayWidget m_WebCamDisplayWidget;
+  private WebCamDisplayWidget webCamDisplayWidget;
 
-  VisualRecognition m_VisualRecognition;
+  VisualRecognition visualRecognition;
   #endregion
 
   void Start()
   {
-    m_VisualRecognition = new VisualRecognition();
+    visualRecognition = new VisualRecognition();
   }
 
   #region Public Functions
@@ -83,8 +83,8 @@ public class WebCamRecognition : MonoBehaviour
       filePath = Application.dataPath + "/../";
     if (fileName == default(string))
       fileName = "WebCamImage.png";
-    Texture2D image = new Texture2D(m_WebCamWidget.WebCamTexture.width, m_WebCamWidget.WebCamTexture.height, TextureFormat.RGB24, false);
-    image.SetPixels32(m_WebCamWidget.WebCamTexture.GetPixels32());
+    Texture2D image = new Texture2D(webCamWidget.WebCamTexture.width, webCamWidget.WebCamTexture.height, TextureFormat.RGB24, false);
+    image.SetPixels32(webCamWidget.WebCamTexture.GetPixels32());
     image.Apply();
 
     File.WriteAllBytes(filePath + fileName, image.EncodeToPNG());
@@ -96,39 +96,39 @@ public class WebCamRecognition : MonoBehaviour
   {
     yield return new WaitForEndOfFrame();
 
-    //Color32[] colors = m_WebCamWidget.WebCamTexture.GetPixels32();
+    //Color32[] colors = webCamWidget.WebCamTexture.GetPixels32();
     //byte[] rawImageData = Utility.Color32ArrayToByteArray(colors);
 
-    Texture2D image = new Texture2D(m_WebCamWidget.WebCamTexture.width, m_WebCamWidget.WebCamTexture.height, TextureFormat.RGB24, false);
-    image.SetPixels32(m_WebCamWidget.WebCamTexture.GetPixels32());
+    Texture2D image = new Texture2D(webCamWidget.WebCamTexture.width, webCamWidget.WebCamTexture.height, TextureFormat.RGB24, false);
+    image.SetPixels32(webCamWidget.WebCamTexture.GetPixels32());
 
     byte[] imageData = image.EncodeToPNG();
 
-    m_VisualRecognition.Classify(OnClassify, imageData);
+    visualRecognition.Classify(OnClassify, imageData);
   }
 
   private IEnumerator DetectFacesInImage()
   {
     yield return new WaitForEndOfFrame();
 
-    Texture2D image = new Texture2D(m_WebCamWidget.WebCamTexture.width, m_WebCamWidget.WebCamTexture.height, TextureFormat.RGB24, false);
-    image.SetPixels32(m_WebCamWidget.WebCamTexture.GetPixels32());
+    Texture2D image = new Texture2D(webCamWidget.WebCamTexture.width, webCamWidget.WebCamTexture.height, TextureFormat.RGB24, false);
+    image.SetPixels32(webCamWidget.WebCamTexture.GetPixels32());
 
     byte[] imageData = image.EncodeToPNG();
 
-    m_VisualRecognition.DetectFaces(OnDetectFaces, imageData);
+    visualRecognition.DetectFaces(OnDetectFaces, imageData);
   }
 
   private IEnumerator RecognizeTextInImage()
   {
     yield return new WaitForEndOfFrame();
 
-    Texture2D image = new Texture2D(m_WebCamWidget.WebCamTexture.width, m_WebCamWidget.WebCamTexture.height, TextureFormat.RGB24, false);
-    image.SetPixels32(m_WebCamWidget.WebCamTexture.GetPixels32());
+    Texture2D image = new Texture2D(webCamWidget.WebCamTexture.width, webCamWidget.WebCamTexture.height, TextureFormat.RGB24, false);
+    image.SetPixels32(webCamWidget.WebCamTexture.GetPixels32());
 
     byte[] imageData = image.EncodeToPNG();
 
-    m_VisualRecognition.RecognizeText(OnRecognizeText, imageData);
+    visualRecognition.RecognizeText(OnRecognizeText, imageData);
   }
   #endregion
 

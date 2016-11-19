@@ -29,45 +29,45 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
 {
   public class TestNaturalLanguageClassifier : UnitTest
   {
-    NaturalLanguageClassifier m_NaturalLanguageClassifier = new NaturalLanguageClassifier();
-    bool m_FindClassifierTested = false;
-    bool m_TrainClasifierTested = false;
-    bool m_TrainClassifier = false;
+    NaturalLanguageClassifier naturalLanguageClassifier = new NaturalLanguageClassifier();
+    bool findClassifierTested = false;
+    bool trainClasifierTested = false;
+    bool trainClassifier = false;
 #if TEST_DELETE
-        bool m_DeleteTested = false;
+        bool deleteTested = false;
 #endif
-    string m_ClassifierId = null;
-    bool m_ClassifyTested = false;
+    string classifierId = null;
+    bool classifyTested = false;
 
     public override IEnumerator RunTest()
     {
-      if (Config.Instance.FindCredentials(m_NaturalLanguageClassifier.GetServiceID()) == null)
+      if (Config.Instance.FindCredentials(naturalLanguageClassifier.GetServiceID()) == null)
         yield break;
 
-      m_NaturalLanguageClassifier.FindClassifier("TestNaturalLanguageClassifier/", OnFindClassifier);
-      while (!m_FindClassifierTested)
+      naturalLanguageClassifier.FindClassifier("TestNaturalLanguageClassifier/", OnFindClassifier);
+      while (!findClassifierTested)
         yield return null;
 
-      if (m_TrainClassifier)
+      if (trainClassifier)
       {
         string trainingData = File.ReadAllText(Application.dataPath + "/Watson/Scripts/Editor/TestData/weather_data_train.csv");
 
-        Test(m_NaturalLanguageClassifier.TrainClassifier("TestNaturalLanguageClassifier/" + DateTime.Now.ToString(), "en", trainingData, OnTrainClassifier));
-        while (!m_TrainClasifierTested)
+        Test(naturalLanguageClassifier.TrainClassifier("TestNaturalLanguageClassifier/" + DateTime.Now.ToString(), "en", trainingData, OnTrainClassifier));
+        while (!trainClasifierTested)
           yield return null;
       }
-      else if (!string.IsNullOrEmpty(m_ClassifierId))
+      else if (!string.IsNullOrEmpty(classifierId))
       {
-        Test(m_NaturalLanguageClassifier.Classify(m_ClassifierId, "Is it hot outside", OnClassify));
-        while (!m_ClassifyTested)
+        Test(naturalLanguageClassifier.Classify(classifierId, "Is it hot outside", OnClassify));
+        while (!classifyTested)
           yield return null;
       }
 
 #if TEST_DELETE
-            if ( !string.IsNullOrEmpty( m_ClassifierId ) )
+            if ( !string.IsNullOrEmpty( classifierId ) )
             {
-                Test( m_NaturalLanguageClassifier.DeleteClassifer( m_ClassifierId, OnDeleteClassifier ) );
-                while(! m_DeleteTested ) 
+                Test( naturalLanguageClassifier.DeleteClassifer( classifierId, OnDeleteClassifier ) );
+                while(! deleteTested ) 
                     yield return null;
             }
 #endif
@@ -79,7 +79,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
         private void OnDeleteClassifier( bool success )
         {
             Test( success );
-            m_DeleteTested = true;
+            deleteTested = true;
         }
 #endif
 
@@ -89,15 +89,15 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       {
         Log.Status("TestNaturalLanguageClassifier", "Find Result, Classifier ID: {0}, Status: {1}", find.classifier_id, find.status);
 
-        m_TrainClassifier = false;
+        trainClassifier = false;
         if (find.status == "Available")
-          m_ClassifierId = find.classifier_id;
+          classifierId = find.classifier_id;
       }
       else
       {
-        m_TrainClassifier = true;
+        trainClassifier = true;
       }
-      m_FindClassifierTested = true;
+      findClassifierTested = true;
     }
 
     private void OnClassify(ClassifyResult result)
@@ -108,7 +108,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
         Log.Status("TestNaturalLanguageClassifier", "Classify Result: {0}", result.top_class);
         Test(result.top_class == "temperature");
       }
-      m_ClassifyTested = true;
+      classifyTested = true;
     }
 
     private void OnTrainClassifier(Classifier classifier)
@@ -117,7 +117,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       if (classifier != null)
         Log.Status("TestNaturalLanguageClassifier", "Classifier ID: {0}, Status: {1}", classifier.classifier_id, classifier.status);
 
-      m_TrainClasifierTested = true;
+      trainClasifierTested = true;
     }
   }
 }

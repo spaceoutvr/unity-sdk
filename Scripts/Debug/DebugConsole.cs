@@ -54,33 +54,33 @@ namespace IBM.Watson.DeveloperCloud.Debug
     #region Private Data
     private class DebugInfo
     {
-      public string m_Label;
-      public GetDebugInfo m_Callback;
-      public GameObject m_InfoObject;
-      public Text m_TextOutput;
+      public string label;
+      public GetDebugInfo callback;
+      public GameObject infoObject;
+      public Text textOutput;
     }
-    private List<DebugInfo> m_DebugInfos = new List<DebugInfo>();
+    private List<DebugInfo> debugInfos = new List<DebugInfo>();
 
     [SerializeField]
-    private bool m_ActiveOutput = false;
+    private bool activeOutput = false;
     [SerializeField]
-    private bool m_ActiveInput = false;
+    private bool activeInput = false;
     [SerializeField, Tooltip("The root of the debug console, this is what is hidden or displayed to show the console when active.")]
-    private GameObject m_RootOutput = null;
+    private GameObject rootOutput = null;
     [SerializeField]
-    private GameObject m_RootInput = null;
+    private GameObject rootInput = null;
     [SerializeField]
-    private LayoutGroup m_MessageLayout = null;
+    private LayoutGroup messageLayout = null;
     [SerializeField]
-    private Text m_MessagePrefab = null;
+    private Text messagePrefab = null;
     [SerializeField]
-    private InputField m_CommandInput = null;
+    private InputField commandInput = null;
     [SerializeField]
-    private LayoutGroup m_DebugInfoLayout = null;
+    private LayoutGroup debugInfoLayout = null;
     [SerializeField]
-    private Text m_DebugInfoPrefab = null;
+    private Text debugInfoPrefab = null;
 
-    private MicrophoneWidget m_MicWidget = null;
+    private MicrophoneWidget micWidget = null;
     #endregion
 
     #region Public Properties
@@ -93,13 +93,13 @@ namespace IBM.Watson.DeveloperCloud.Debug
     /// </summary>
     public bool ActiveOutput
     {
-      get { return m_ActiveOutput; }
+      get { return activeOutput; }
       set
       {
-        if (m_ActiveOutput != value)
+        if (activeOutput != value)
         {
-          m_ActiveOutput = value;
-          m_RootOutput.SetActive(m_ActiveOutput);
+          activeOutput = value;
+          rootOutput.SetActive(activeOutput);
         }
       }
     }
@@ -109,13 +109,13 @@ namespace IBM.Watson.DeveloperCloud.Debug
     /// </summary>
     public bool ActiveInput
     {
-      get { return m_ActiveInput; }
+      get { return activeInput; }
       set
       {
-        if (m_ActiveInput != value)
+        if (activeInput != value)
         {
-          m_ActiveInput = value;
-          m_RootInput.SetActive(m_ActiveInput);
+          activeInput = value;
+          rootInput.SetActive(activeInput);
         }
       }
     }
@@ -134,13 +134,13 @@ namespace IBM.Watson.DeveloperCloud.Debug
         throw new ArgumentNullException("callback");
 
       DebugInfo info = new DebugInfo();
-      info.m_Label = label;
-      info.m_Callback = callback;
-      info.m_InfoObject = Instantiate(m_DebugInfoPrefab.gameObject) as GameObject;
-      info.m_TextOutput = info.m_InfoObject.GetComponentInChildren<Text>();
-      m_DebugInfos.Add(info);
+      info.label = label;
+      info.callback = callback;
+      info.infoObject = Instantiate(debugInfoPrefab.gameObject) as GameObject;
+      info.textOutput = info.infoObject.GetComponentInChildren<Text>();
+      debugInfos.Add(info);
 
-      info.m_InfoObject.transform.SetParent(m_DebugInfoLayout.transform, false);
+      info.infoObject.transform.SetParent(debugInfoLayout.transform, false);
     }
 
     /// <summary>
@@ -153,15 +153,15 @@ namespace IBM.Watson.DeveloperCloud.Debug
     {
       if (string.IsNullOrEmpty(label))
         throw new ArgumentNullException("label");
-      for (int i = 0; i < m_DebugInfos.Count; ++i)
+      for (int i = 0; i < debugInfos.Count; ++i)
       {
-        if (m_DebugInfos[i].m_Label == label)
+        if (debugInfos[i].label == label)
         {
-          if (callback != null && callback != m_DebugInfos[i].m_Callback)
+          if (callback != null && callback != debugInfos[i].callback)
             continue;
 
-          Destroy(m_DebugInfos[i].m_InfoObject);
-          m_DebugInfos.RemoveAt(i);
+          Destroy(debugInfos[i].infoObject);
+          debugInfos.RemoveAt(i);
           return true;
         }
       }
@@ -171,22 +171,22 @@ namespace IBM.Watson.DeveloperCloud.Debug
 
     private void Start()
     {
-      if (m_RootInput == null
-          || m_RootOutput == null
-          || m_MessageLayout == null
-          || m_MessagePrefab == null
-          || m_CommandInput == null
-          || m_DebugInfoLayout == null
-          || m_DebugInfoPrefab == null)
+      if (rootInput == null
+          || rootOutput == null
+          || messageLayout == null
+          || messagePrefab == null
+          || commandInput == null
+          || debugInfoLayout == null
+          || debugInfoPrefab == null)
       {
         Log.Error("DebugConsole", "DebugConsole is missing references to it's parts, disabling debug console.");
         gameObject.SetActive(false);
       }
       else
       {
-        m_RootInput.SetActive(m_ActiveInput);
-        m_RootOutput.SetActive(m_ActiveOutput);
-        m_MicWidget = FindObjectOfType<MicrophoneWidget>();
+        rootInput.SetActive(activeInput);
+        rootOutput.SetActive(activeOutput);
+        micWidget = FindObjectOfType<MicrophoneWidget>();
       }
     }
 
@@ -216,17 +216,17 @@ namespace IBM.Watson.DeveloperCloud.Debug
     {
       if (ActiveOutput)
       {
-        for (int i = 0; i < m_DebugInfos.Count; ++i)
+        for (int i = 0; i < debugInfos.Count; ++i)
         {
-          DebugInfo info = m_DebugInfos[i];
-          if (info.m_Callback == null || info.m_TextOutput == null)
+          DebugInfo info = debugInfos[i];
+          if (info.callback == null || info.textOutput == null)
           {
-            if (info.m_InfoObject != null)
-              Destroy(info.m_InfoObject);
-            m_DebugInfos.RemoveAt(i--);
+            if (info.infoObject != null)
+              Destroy(info.infoObject);
+            debugInfos.RemoveAt(i--);
             continue;
           }
-          info.m_TextOutput.text = string.Format("{0}: {1}", info.m_Label, info.m_Callback());
+          info.textOutput.text = string.Format("{0}: {1}", info.label, info.callback());
         }
       }
     }
@@ -239,9 +239,9 @@ namespace IBM.Watson.DeveloperCloud.Debug
       {
         if (args[0] is string)
         {
-          GameObject messageObject = Instantiate(m_MessagePrefab.gameObject) as GameObject;
+          GameObject messageObject = Instantiate(messagePrefab.gameObject) as GameObject;
           messageObject.GetComponent<Text>().text = Utility.RemoveTags((string)args[0]);
-          messageObject.transform.SetParent(m_MessageLayout.transform, false);
+          messageObject.transform.SetParent(messageLayout.transform, false);
         }
       }
     }
@@ -254,18 +254,18 @@ namespace IBM.Watson.DeveloperCloud.Debug
 
     private void OnBeginEdit(object[] args)
     {
-      if (m_CommandInput != null)
+      if (commandInput != null)
       {
         ActiveInput = true;
-        m_CommandInput.gameObject.SetActive(true);
-        m_CommandInput.ActivateInputField();
+        commandInput.gameObject.SetActive(true);
+        commandInput.ActivateInputField();
 
         // turn off all key press events..
         KeyEventManager.Instance.Active = false;
 
         //	turn off mic
-        if (m_MicWidget != null)
-          m_MicWidget.Active = false;
+        if (micWidget != null)
+          micWidget.Active = false;
 
         //	timer to turn mic back on
         StartCoroutine(ActivateMicAfterTime(10f));
@@ -277,27 +277,27 @@ namespace IBM.Watson.DeveloperCloud.Debug
     /// </summary>
     public void OnEndEdit()
     {
-      if (m_CommandInput != null)
+      if (commandInput != null)
       {
-        EventManager.Instance.SendEvent("OnDebugCommand", m_CommandInput.text);
-        m_CommandInput.text = string.Empty;
-        m_CommandInput.gameObject.SetActive(false);   // hide the input     
+        EventManager.Instance.SendEvent("OnDebugCommand", commandInput.text);
+        commandInput.text = string.Empty;
+        commandInput.gameObject.SetActive(false);   // hide the input     
         ActiveInput = false;
 
         // restore the key manager state
         KeyEventManager.Instance.Active = true;
 
         //	turn on mic
-        if (m_MicWidget != null)
-          m_MicWidget.Active = true;
+        if (micWidget != null)
+          micWidget.Active = true;
       }
     }
 
     private IEnumerator ActivateMicAfterTime(float time)
     {
       yield return new WaitForSeconds(time);
-      if (m_MicWidget != null)
-        m_MicWidget.Active = true;
+      if (micWidget != null)
+        micWidget.Active = true;
     }
     #endregion
   }

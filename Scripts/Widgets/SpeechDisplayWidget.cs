@@ -32,7 +32,7 @@ namespace IBM.Watson.DeveloperCloud.Widgets
   {
     #region Inputs
     [SerializeField]
-    private Input m_SpeechInput = new Input("SpeechInput", typeof(SpeechToTextData), "OnSpeechInput");
+    private Input speechInput = new Input("SpeechInput", typeof(SpeechToTextData), "OnSpeechInput");
     #endregion
 
     #region Widget interface
@@ -46,26 +46,26 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     #region Private Data
 
     [SerializeField]
-    private bool m_ContinuousText = false;
+    private bool continuousText = false;
     [SerializeField]
-    private Text m_Output = null;
+    private Text output = null;
     [SerializeField]
-    private InputField m_OutputAsInputField = null;
+    private InputField outputAsInputField = null;
     [SerializeField]
-    private Text m_OutputStatus = null;
+    private Text outputStatus = null;
     [SerializeField]
-    private float m_MinConfidenceToShow = 0.5f;
+    private float minConfidenceToShow = 0.5f;
 
-    private string m_PreviousOutputTextWithStatus = "";
-    private string m_PreviousOutputText = "";
-    private float m_ThresholdTimeFromLastInput = 3.0f; //3 secs as threshold time. After 3 secs from last OnSpeechInput, we are considering input as new input
-    private float m_TimeAtLastInterim = 0.0f;
+    private string previousOutputTextWithStatus = "";
+    private string previousOutputText = "";
+    private float thresholdTimeFromLastInput = 3.0f; //3 secs as threshold time. After 3 secs from last OnSpeechInput, we are considering input as new input
+    private float timeAtLastInterim = 0.0f;
     #endregion
 
     #region Event Handlers
     private void OnSpeechInput(Data data)
     {
-      if (m_Output != null || m_OutputAsInputField != null)
+      if (output != null || outputAsInputField != null)
       {
         SpeechRecognitionEvent result = ((SpeechToTextData)data).Results;
         if (result != null && result.results.Length > 0)
@@ -73,45 +73,45 @@ namespace IBM.Watson.DeveloperCloud.Widgets
           string outputTextWithStatus = "";
           string outputText = "";
 
-          if (Time.time - m_TimeAtLastInterim > m_ThresholdTimeFromLastInput)
+          if (Time.time - timeAtLastInterim > thresholdTimeFromLastInput)
           {
-            if (m_Output != null)
-              m_PreviousOutputTextWithStatus = m_Output.text;
-            if (m_OutputAsInputField != null)
-              m_PreviousOutputText = m_OutputAsInputField.text;
+            if (output != null)
+              previousOutputTextWithStatus = output.text;
+            if (outputAsInputField != null)
+              previousOutputText = outputAsInputField.text;
           }
 
-          if (m_Output != null && m_ContinuousText)
-            outputTextWithStatus = m_PreviousOutputTextWithStatus;
+          if (output != null && continuousText)
+            outputTextWithStatus = previousOutputTextWithStatus;
 
-          if (m_OutputAsInputField != null && m_ContinuousText)
-            outputText = m_PreviousOutputText;
+          if (outputAsInputField != null && continuousText)
+            outputText = previousOutputText;
 
           foreach (var res in result.results)
           {
             foreach (var alt in res.alternatives)
             {
               string text = alt.transcript;
-              if (m_Output != null)
+              if (output != null)
               {
-                m_Output.text = string.Concat(outputTextWithStatus, string.Format("{0} ({1}, {2:0.00})\n", text, res.final ? "Final" : "Interim", alt.confidence));
+                output.text = string.Concat(outputTextWithStatus, string.Format("{0} ({1}, {2:0.00})\n", text, res.final ? "Final" : "Interim", alt.confidence));
               }
 
-              if (m_OutputAsInputField != null)
+              if (outputAsInputField != null)
               {
-                if (!res.final || alt.confidence > m_MinConfidenceToShow)
+                if (!res.final || alt.confidence > minConfidenceToShow)
                 {
-                  m_OutputAsInputField.text = string.Concat(outputText, " ", text);
+                  outputAsInputField.text = string.Concat(outputText, " ", text);
 
-                  if (m_OutputStatus != null)
+                  if (outputStatus != null)
                   {
-                    m_OutputStatus.text = string.Format("{0}, {1:0.00}", res.final ? "Final" : "Interim", alt.confidence);
+                    outputStatus.text = string.Format("{0}, {1:0.00}", res.final ? "Final" : "Interim", alt.confidence);
                   }
                 }
               }
 
               if (!res.final)
-                m_TimeAtLastInterim = Time.time;
+                timeAtLastInterim = Time.time;
 
             }
           }

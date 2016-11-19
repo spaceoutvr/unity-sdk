@@ -41,28 +41,28 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     [Serializable]
     private class Mapping
     {
-      public string m_Event = "";
-      public SerializedDelegate m_Callback = new SerializedDelegate(typeof(EventManager.OnReceiveEvent));
+      public string _event = "";
+      public SerializedDelegate callback = new SerializedDelegate(typeof(EventManager.OnReceiveEvent));
     };
 
     [SerializeField]
-    private List<Mapping> m_Mappings = new List<Mapping>();
+    private List<Mapping> mappings = new List<Mapping>();
     #endregion
 
     #region Event Handlers
     private void OnEnable()
     {
-      foreach (var mapping in m_Mappings)
+      foreach (var mapping in mappings)
       {
-        EventManager.Instance.RegisterEventReceiver(mapping.m_Event, mapping.m_Callback.ResolveDelegate() as EventManager.OnReceiveEvent);
+        EventManager.Instance.RegisterEventReceiver(mapping._event, mapping.callback.ResolveDelegate() as EventManager.OnReceiveEvent);
       }
     }
 
     private void OnDisable()
     {
-      foreach (var mapping in m_Mappings)
+      foreach (var mapping in mappings)
       {
-        EventManager.Instance.UnregisterEventReceiver(mapping.m_Event, mapping.m_Callback.ResolveDelegate() as EventManager.OnReceiveEvent);
+        EventManager.Instance.UnregisterEventReceiver(mapping._event, mapping.callback.ResolveDelegate() as EventManager.OnReceiveEvent);
       }
     }
     #endregion

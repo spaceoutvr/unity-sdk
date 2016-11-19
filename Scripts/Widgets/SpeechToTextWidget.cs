@@ -35,38 +35,38 @@ namespace IBM.Watson.DeveloperCloud.Widgets
   {
     #region Inputs
     [SerializeField]
-    private Input m_AudioInput = new Input("Audio", typeof(AudioData), "OnAudio");
+    private Input audioInput = new Input("Audio", typeof(AudioData), "OnAudio");
     [SerializeField]
-    private Input m_LanguageInput = new Input("Language", typeof(LanguageData), "OnLanguage");
+    private Input languageInput = new Input("Language", typeof(LanguageData), "OnLanguage");
     #endregion
 
     #region Outputs
     [SerializeField]
-    private Output m_ResultOutput = new Output(typeof(SpeechToTextData), true);
+    private Output resultOutput = new Output(typeof(SpeechToTextData), true);
     #endregion
 
     #region Private Data
-    private SpeechToText m_SpeechToText = new SpeechToText();
+    private SpeechToText speechToText = new SpeechToText();
     [SerializeField]
-    private Text m_StatusText = null;
+    private Text statusText = null;
     [SerializeField]
-    private bool m_DetectSilence = true;
+    private bool detectSilence = true;
     [SerializeField]
-    private float m_SilenceThreshold = 0.03f;
+    private float silenceThreshold = 0.03f;
     [SerializeField]
-    private bool m_WordConfidence = false;
+    private bool wordConfidence = false;
     [SerializeField]
-    private bool m_TimeStamps = false;
+    private bool timeStamps = false;
     [SerializeField]
-    private int m_MaxAlternatives = 1;
+    private int maxAlternatives = 1;
     [SerializeField]
-    private bool m_EnableContinous = false;
+    private bool enableContinous = false;
     [SerializeField]
-    private bool m_EnableInterimResults = false;
+    private bool enableInterimResults = false;
     [SerializeField]
-    private Text m_Transcript = null;
+    private Text transcript = null;
     [SerializeField, Tooltip("Language ID to use in the speech recognition model.")]
-    private string m_Language = "en-US";
+    private string language = "en-US";
     #endregion
 
     #region Public Properties
@@ -75,28 +75,28 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     /// </summary>
     public bool Active
     {
-      get { return m_SpeechToText.IsListening; }
+      get { return speechToText.IsListening; }
       set
       {
-        if (value && !m_SpeechToText.IsListening)
+        if (value && !speechToText.IsListening)
         {
-          m_SpeechToText.DetectSilence = m_DetectSilence;
-          m_SpeechToText.EnableWordConfidence = m_WordConfidence;
-          m_SpeechToText.EnableTimestamps = m_TimeStamps;
-          m_SpeechToText.SilenceThreshold = m_SilenceThreshold;
-          m_SpeechToText.MaxAlternatives = m_MaxAlternatives;
-          m_SpeechToText.EnableContinousRecognition = m_EnableContinous;
-          m_SpeechToText.EnableInterimResults = m_EnableInterimResults;
-          m_SpeechToText.OnError = OnError;
-          m_SpeechToText.StartListening(OnRecognize);
-          if (m_StatusText != null)
-            m_StatusText.text = "LISTENING";
+          speechToText.DetectSilence = detectSilence;
+          speechToText.EnableWordConfidence = wordConfidence;
+          speechToText.EnableTimestamps = timeStamps;
+          speechToText.SilenceThreshold = silenceThreshold;
+          speechToText.MaxAlternatives = maxAlternatives;
+          speechToText.EnableContinousRecognition = enableContinous;
+          speechToText.EnableInterimResults = enableInterimResults;
+          speechToText.OnError = OnError;
+          speechToText.StartListening(OnRecognize);
+          if (statusText != null)
+            statusText.text = "LISTENING";
         }
-        else if (!value && m_SpeechToText.IsListening)
+        else if (!value && speechToText.IsListening)
         {
-          m_SpeechToText.StopListening();
-          if (m_StatusText != null)
-            m_StatusText.text = "READY";
+          speechToText.StopListening();
+          if (statusText != null)
+            statusText.text = "READY";
         }
       }
     }
@@ -124,9 +124,9 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     {
       base.Start();
 
-      if (m_StatusText != null)
-        m_StatusText.text = "READY";
-      if (!m_SpeechToText.GetModels(OnGetModels))
+      if (statusText != null)
+        statusText.text = "READY";
+      if (!speechToText.GetModels(OnGetModels))
         Log.Error("SpeechToTextWidget", "Failed to request models.");
     }
 
@@ -139,8 +139,8 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     private void OnError(string error)
     {
       Active = false;
-      if (m_StatusText != null)
-        m_StatusText.text = "ERROR: " + error;
+      if (statusText != null)
+        statusText.text = "ERROR: " + error;
     }
 
     private void OnAudio(Data data)
@@ -148,20 +148,20 @@ namespace IBM.Watson.DeveloperCloud.Widgets
       if (!Active)
         Active = true;
 
-      m_SpeechToText.OnListen((AudioData)data);
+      speechToText.OnListen((AudioData)data);
     }
 
     private void OnLanguage(Data data)
     {
-      LanguageData language = data as LanguageData;
-      if (language == null)
+      LanguageData languageData = data as LanguageData;
+      if (languageData == null)
         throw new WatsonException("Unexpected data type");
 
-      if (!string.IsNullOrEmpty(language.Language))
+      if (!string.IsNullOrEmpty(languageData.Language))
       {
-        m_Language = language.Language;
+        language = languageData.Language;
 
-        if (!m_SpeechToText.GetModels(OnGetModels))
+        if (!speechToText.GetModels(OnGetModels))
           Log.Error("SpeechToTextWidget", "Failed to rquest models.");
       }
     }
@@ -173,7 +173,7 @@ namespace IBM.Watson.DeveloperCloud.Widgets
         Model bestModel = null;
         foreach (var model in models)
         {
-          if (model.language.StartsWith(m_Language)
+          if (model.language.StartsWith(language)
               && (bestModel == null || model.rate > bestModel.rate))
           {
             bestModel = model;
@@ -183,19 +183,19 @@ namespace IBM.Watson.DeveloperCloud.Widgets
         if (bestModel != null)
         {
           Log.Status("SpeechToTextWidget", "Selecting Recognize Model: {0} ", bestModel.name);
-          m_SpeechToText.RecognizeModel = bestModel.name;
+          speechToText.RecognizeModel = bestModel.name;
         }
       }
     }
 
     private void OnRecognize(SpeechRecognitionEvent result)
     {
-      m_ResultOutput.SendData(new SpeechToTextData(result));
+      resultOutput.SendData(new SpeechToTextData(result));
 
       if (result != null && result.results.Length > 0)
       {
-        if (m_Transcript != null)
-          m_Transcript.text = "";
+        if (transcript != null)
+          transcript.text = "";
 
         foreach (var res in result.results)
         {
@@ -203,8 +203,8 @@ namespace IBM.Watson.DeveloperCloud.Widgets
           {
             string text = alt.transcript;
 
-            if (m_Transcript != null)
-              m_Transcript.text += string.Format("{0} ({1}, {2:0.00})\n",
+            if (transcript != null)
+              transcript.text += string.Format("{0} ({1}, {2:0.00})\n",
                   text, res.final ? "Final" : "Interim", alt.confidence);
           }
         }

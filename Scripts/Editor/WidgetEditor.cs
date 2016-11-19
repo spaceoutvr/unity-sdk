@@ -38,17 +38,17 @@ namespace IBM.Watson.DeveloperCloud.Editor
     [CustomPropertyDrawer(typeof(Widget.Input))]
     public class WidgetInputDrawer : PropertyDrawer
     {
-        const float m_Rows = 3;
-        private bool m_Expanded = true;
-        private static Dictionary<string, bool> sm_ExpandedStates = new Dictionary<string, bool>();
+        const float rows = 3;
+        private bool isExpanded = true;
+        private static Dictionary<string, bool> expandedStates = new Dictionary<string, bool>();
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            if (!sm_ExpandedStates.ContainsKey(property.propertyPath))
-                sm_ExpandedStates[property.propertyPath] = true;
+            if (!expandedStates.ContainsKey(property.propertyPath))
+                expandedStates[property.propertyPath] = true;
 
-            if (sm_ExpandedStates[property.propertyPath])
-                return base.GetPropertyHeight(property, label) * m_Rows;
+            if (expandedStates[property.propertyPath])
+                return base.GetPropertyHeight(property, label) * rows;
             else
                 return base.GetPropertyHeight(property, label);
         }
@@ -62,18 +62,18 @@ namespace IBM.Watson.DeveloperCloud.Editor
                 target.Owner = property.serializedObject.targetObject as Widget;
 
             //EditorGUIUtility.LookLikeControls();
-            bool expanded_state = sm_ExpandedStates[property.propertyPath];
-            bool expanded = EditorGUI.Foldout(m_Expanded ? new Rect(pos.x, pos.y, pos.width / 2, pos.height / m_Rows) : pos, expanded_state, label);
+            bool expanded_state = expandedStates[property.propertyPath];
+            bool expanded = EditorGUI.Foldout(isExpanded ? new Rect(pos.x, pos.y, pos.width / 2, pos.height / rows) : pos, expanded_state, label);
             if (expanded_state)
             {
                 EditorGUI.indentLevel += 1;
-                EditorGUI.LabelField(new Rect(pos.x, pos.y += pos.height / m_Rows, pos.width, pos.height / m_Rows),
+                EditorGUI.LabelField(new Rect(pos.x, pos.y += pos.height / rows, pos.width, pos.height / rows),
                     "Input Name: " + target.FullInputName);
-                EditorGUI.LabelField(new Rect(pos.x, pos.y += pos.height / m_Rows, pos.width, pos.height / m_Rows),
+                EditorGUI.LabelField(new Rect(pos.x, pos.y += pos.height / rows, pos.width, pos.height / rows),
                     "Data Type: " + target.DataTypeName);
                 EditorGUI.indentLevel -= 1;
             }
-            sm_ExpandedStates[property.propertyPath] = expanded;
+            expandedStates[property.propertyPath] = expanded;
         }
     }
 }

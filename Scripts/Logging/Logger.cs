@@ -63,32 +63,32 @@ namespace IBM.Watson.DeveloperCloud.Logging
     /// <summary>
     /// The time stamp this log message in UTC time.
     /// </summary>
-    public DateTime m_TimeStamp = DateTime.UtcNow;
+    public DateTime timeStamp = DateTime.UtcNow;
     /// <summary>
     /// The level of this log message.
     /// </summary>
-    public LogLevel m_Level = LogLevel.STATUS;
+    public LogLevel level = LogLevel.STATUS;
     /// <summary>
     /// What sub-system sent this message.
     /// </summary>
-    public string m_SubSystem;
+    public string subSystem;
     /// <summary>
     /// The log message.
     /// </summary>
-    public string m_Message;
+    public string message;
 
     /// <summary>
     /// The default constructor for a LogRecord.
     /// </summary>
-    /// <param name="level">The log level.</param>
+    /// <param name="logLevel">The log level.</param>
     /// <param name="subSystem">The subsystem that orignates this log messages.</param>
     /// <param name="messageFmt">The message string with format parameters.</param>
     /// <param name="args">The format parameters.</param>
-    public LogRecord(LogLevel level, string subSystem, string messageFmt, params object[] args)
+    public LogRecord(LogLevel logLevel, string system, string messageFmt, params object[] args)
     {
-      m_Level = level;
-      m_SubSystem = subSystem;
-      m_Message = string.Format(messageFmt, args);
+      level = logLevel;
+      subSystem = system;
+      message = string.Format(messageFmt, args);
     }
 
     /// <summary>
@@ -97,7 +97,7 @@ namespace IBM.Watson.DeveloperCloud.Logging
     /// <returns>A <see cref="System.String"/> that represents the current <see cref="IBM.Watson.DeveloperCloud.Logging.LogRecord"/>.</returns>
     public override string ToString()
     {
-      return string.Format("[{0}][{1}][{2}] {3}", m_TimeStamp.ToString("MM/dd/yyyy HH:mm:ss"), m_SubSystem, m_Level.ToString(), m_Message);
+      return string.Format("[{0}][{1}][{2}] {3}", timeStamp.ToString("MM/dd/yyyy HH:mm:ss"), subSystem, level.ToString(), message);
     }
   };
 
@@ -117,7 +117,7 @@ namespace IBM.Watson.DeveloperCloud.Logging
 
     #region Private Data
     private static bool sm_bInstalledDefaultReactors = false;
-    List<ILogReactor> m_Reactors = new List<ILogReactor>();
+    List<ILogReactor> reactors = new List<ILogReactor>();
     #endregion
 
     #region Public Functions
@@ -125,7 +125,7 @@ namespace IBM.Watson.DeveloperCloud.Logging
     {
       get
       {
-        return LogSystem.Instance.m_Reactors;
+        return LogSystem.Instance.reactors;
       }
     }
 
@@ -163,9 +163,9 @@ namespace IBM.Watson.DeveloperCloud.Logging
     /// <param name="reactor">The reactor object.</param>
     public void InstallReactor(ILogReactor reactor)
     {
-      lock (m_Reactors)
+      lock (reactors)
       {
-        m_Reactors.Add(reactor);
+        reactors.Add(reactor);
       }
       // set our default reactor flag to true if the user installs their own reactors.
       sm_bInstalledDefaultReactors = true;
@@ -178,9 +178,9 @@ namespace IBM.Watson.DeveloperCloud.Logging
     /// <returns>Returns true on success.</returns>
     public bool RemoveReactor(ILogReactor reactor)
     {
-      lock (m_Reactors)
+      lock (reactors)
       {
-        return m_Reactors.Remove(reactor);
+        return reactors.Remove(reactor);
       }
     }
 
@@ -190,9 +190,9 @@ namespace IBM.Watson.DeveloperCloud.Logging
     /// <param name="log">The LogRecord to pass to all reactors.</param>
     public void ProcessLog(LogRecord log)
     {
-      lock (m_Reactors)
+      lock (reactors)
       {
-        foreach (var reactor in m_Reactors)
+        foreach (var reactor in reactors)
           reactor.ProcessLog(log);
       }
     }

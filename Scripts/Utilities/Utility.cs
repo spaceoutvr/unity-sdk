@@ -34,8 +34,8 @@ namespace IBM.Watson.DeveloperCloud.Utilities
   /// </summary>
   static public class Utility
   {
-    private static fsSerializer sm_Serializer = new fsSerializer();
-    private static string sm_MacAddress = null;
+    private static fsSerializer sserializer = new fsSerializer();
+    private static string smacAddress = null;
 
     /// <summary>
     /// This helper functions returns all Type's that inherit from the given type.
@@ -324,7 +324,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     {
       get
       {
-        if (string.IsNullOrEmpty(sm_MacAddress))
+        if (string.IsNullOrEmpty(smacAddress))
         {
           foreach (NetworkInterface adapter in NetworkInterface.GetAllNetworkInterfaces())
           {
@@ -333,14 +333,14 @@ namespace IBM.Watson.DeveloperCloud.Utilities
             {
               string regex = "(.{2})(.{2})(.{2})(.{2})(.{2})(.{2})";
               string replace = "$1:$2:$3:$4:$5:$6";
-              sm_MacAddress = Regex.Replace(macAddress, regex, replace);
+              smacAddress = Regex.Replace(macAddress, regex, replace);
 
               break;
             }
           }
         }
 
-        return sm_MacAddress;
+        return smacAddress;
       }
     }
 
@@ -399,7 +399,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
         }
 
         fsData data = null;
-        fsResult r = sm_Serializer.TrySerialize(objectToCache.GetType(), objectToCache, out data);
+        fsResult r = sserializer.TrySerialize(objectToCache.GetType(), objectToCache, out data);
         if (!r.Succeeded)
           throw new WatsonException(r.FormattedMessages);
 
@@ -475,7 +475,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
         if (obj == null)
           obj = new T();
 
-        r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+        r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
         if (!r.Succeeded)
           throw new WatsonException(r.FormattedMessages);
 

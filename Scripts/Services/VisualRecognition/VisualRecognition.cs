@@ -177,7 +177,7 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
     private const string SERVICE_COLLECTION_IMAGE_METADATA = "/v3/collections/{0}/images/{1}/metadata";
     private const string SERVICE_COLLECTION_FIND_SIMILAR = "/v3/collections/{0}/find_similar";
     private static string mp_ApiKey = null;
-    private static fsSerializer sm_Serializer = new fsSerializer();
+    private static fsSerializer sserializer = new fsSerializer();
     private const float REQUEST_TIMEOUT = 10.0f * 60.0f;
     #endregion
 
@@ -359,7 +359,7 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
           classify = new ClassifyTopLevelMultiple();
 
           object obj = classify;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -515,7 +515,7 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
           faces = new FacesTopLevelMultiple();
 
           object obj = faces;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -668,7 +668,7 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
           text = new TextRecogTopLevelMultiple();
 
           object obj = text;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -803,7 +803,7 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
           fsResult r = fsJsonParser.Parse(Encoding.UTF8.GetString(resp.Data), out data);
 
           object obj = classifiers;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
 
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
@@ -876,7 +876,7 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
             throw new WatsonException(r.FormattedMessages);
 
           object obj = classifier;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1014,7 +1014,7 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
             throw new WatsonException(r.FormattedMessages);
 
           object obj = classifier;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1236,7 +1236,7 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
           fsResult r = fsJsonParser.Parse(Encoding.UTF8.GetString(resp.Data), out data);
 
           object obj = collections;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
 
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
@@ -1319,7 +1319,7 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
           fsResult r = fsJsonParser.Parse(Encoding.UTF8.GetString(resp.Data), out data);
 
           object obj = collection;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
 
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
@@ -1457,7 +1457,7 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
           fsResult r = fsJsonParser.Parse(Encoding.UTF8.GetString(resp.Data), out data);
 
           object obj = collection;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
 
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
@@ -1536,7 +1536,7 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
           fsResult r = fsJsonParser.Parse(Encoding.UTF8.GetString(resp.Data), out data);
 
           object obj = collectionImages;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
 
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
@@ -1729,7 +1729,7 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
           fsResult r = fsJsonParser.Parse(Encoding.UTF8.GetString(resp.Data), out data);
 
           object obj = collectionsConfig;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
 
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
@@ -1882,7 +1882,7 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
           fsResult r = fsJsonParser.Parse(Encoding.UTF8.GetString(resp.Data), out data);
 
           object obj = image;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
 
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
@@ -2036,7 +2036,7 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
           fsResult r = fsJsonParser.Parse(Encoding.UTF8.GetString(resp.Data), out data);
 
           object obj = image;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
 
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
@@ -2176,7 +2176,7 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
           fsResult r = fsJsonParser.Parse(Encoding.UTF8.GetString(resp.Data), out data);
 
           object obj = config;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
 
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
@@ -2286,23 +2286,23 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
 
     private class CheckServiceStatus
     {
-      private VisualRecognition m_Service = null;
-      private ServiceStatus m_Callback = null;
-      private int m_GetClassifierCount = 0;
-      private int m_ClassifyCount = 0;
+      private VisualRecognition service = null;
+      private ServiceStatus callback = null;
+      private int getClassifierCount = 0;
+      private int classifyCount = 0;
 
-      public CheckServiceStatus(VisualRecognition service, ServiceStatus callback)
+      public CheckServiceStatus(VisualRecognition visualRecognition, ServiceStatus serviceStatus)
       {
-        m_Service = service;
-        m_Callback = callback;
+        service = visualRecognition;
+        callback = serviceStatus;
 
-        if (!m_Service.GetClassifiers(OnCheckServices))
+        if (!service.GetClassifiers(OnCheckServices))
           OnFailure("Failed to get classifiers!");
       }
 
       private void OnCheckServices(GetClassifiersTopLevelBrief classifiers, string customData)
       {
-        if (m_Callback != null)
+        if (callback != null)
         {
           if (classifiers != null)
           {
@@ -2314,21 +2314,21 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
                 int numClassifiers = (classifiers.classifiers.Length > 5) ? 5 : classifiers.classifiers.Length;
                 for (int i = 0; i < numClassifiers; i++)
                 {
-                  if (!m_Service.GetClassifier(OnCheckService, classifiers.classifiers[i].classifier_id))
+                  if (!service.GetClassifier(OnCheckService, classifiers.classifiers[i].classifier_id))
                   {
                     Log.Debug("VisualRecognition", "Failed to call GetClassifier()");
                   }
                   else
                   {
-                    m_GetClassifierCount += 1;
+                    getClassifierCount += 1;
                   }
                 }
               }
               else
               {
-                if (m_Callback != null && m_Callback.Target != null)
+                if (callback != null && callback.Target != null)
                 {
-                  m_Callback(SERVICE_ID, true);     // no classifiers to check, just return success then..
+                  callback(SERVICE_ID, true);     // no classifiers to check, just return success then..
                 }
               }
             }
@@ -2340,26 +2340,26 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
           else
           {
             Log.Debug("VisualRecognition", "Classifiers in null!");
-            if (m_Callback != null && m_Callback.Target != null)
+            if (callback != null && callback.Target != null)
             {
-              m_Callback(SERVICE_ID, false);
+              callback(SERVICE_ID, false);
             }
           }
         }
         else
         {
-          if (m_Callback != null && m_Callback.Target != null)
+          if (callback != null && callback.Target != null)
           {
-            m_Callback(SERVICE_ID, false);
+            callback(SERVICE_ID, false);
           }
         }
       }
 
       private void OnCheckService(GetClassifiersPerClassifierVerbose classifier, string customData)
       {
-        if (m_GetClassifierCount > 0)
+        if (getClassifierCount > 0)
         {
-          m_GetClassifierCount -= 1;
+          getClassifierCount -= 1;
           if (classifier != null)
           {
             Log.Debug("VisualRecognition", "classifier status: {0}", classifier.status);
@@ -2370,13 +2370,13 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
             else
             {
               // try to classify something with this classifier.
-              if (!m_Service.Classify(OnClassify, "https://upload.wikimedia.org/wikipedia/commons/e/e9/Official_portrait_of_Barack_Obama.jpg"))
+              if (!service.Classify(OnClassify, "https://upload.wikimedia.org/wikipedia/commons/e/e9/Official_portrait_of_Barack_Obama.jpg"))
               {
                 Log.Debug("VisualRecognition", "Failed to invoke Classify!");
               }
               else
               {
-                m_ClassifyCount += 1;
+                classifyCount += 1;
               }
             }
           }
@@ -2389,15 +2389,15 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
 
       private void OnClassify(ClassifyTopLevelMultiple result, string customData)
       {
-        if (m_ClassifyCount > 0)
+        if (classifyCount > 0)
         {
-          m_ClassifyCount -= 1;
+          classifyCount -= 1;
           if (result != null)
           {
             // success!
-            if (m_ClassifyCount == 0 && m_Callback != null && m_Callback.Target != null)
+            if (classifyCount == 0 && callback != null && callback.Target != null)
             {
-              m_Callback(SERVICE_ID, true);
+              callback(SERVICE_ID, true);
             }
           }
           else
@@ -2410,9 +2410,9 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
       private void OnFailure(string msg)
       {
         Log.Error("VisualRecognition", msg);
-        if (m_Callback != null && m_Callback.Target != null)
+        if (callback != null && callback.Target != null)
         {
-          m_Callback(SERVICE_ID, false);
+          callback(SERVICE_ID, false);
         }
       }
     }

@@ -635,7 +635,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
       }
     }
 
-    private PositionOnMap m_GeoLocation = null;
+    private PositionOnMap geoLocation = null;
     /// <summary>
     /// Gets the geo location.
     /// </summary>
@@ -644,7 +644,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
     {
       get
       {
-        if (m_GeoLocation == null)
+        if (geoLocation == null)
         {
           string geoString = null;
           for (int i = 0; entities != null && i < entities.Length; i++)
@@ -662,7 +662,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
 
                   if (double.TryParse(geoValues[0], out latitute) && double.TryParse(geoValues[1], out longitutde))
                   {
-                    m_GeoLocation = new PositionOnMap(latitute, longitutde, entities[i].disambiguated.name);
+                    geoLocation = new PositionOnMap(latitute, longitutde, entities[i].disambiguated.name);
                     break;
                   }
                 }
@@ -670,7 +670,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
             }
           }
         }
-        return m_GeoLocation;
+        return geoLocation;
       }
     }
 
@@ -2090,7 +2090,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
     /// <value>The mixed.</value>
     public string mixed { get; set; }
 
-    private double m_Score = 0;
+    private double _score = 0;
     /// <summary>
     /// Gets the score.
     /// </summary>
@@ -2099,15 +2099,15 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
     {
       get
       {
-        if (m_Score == 0)
+        if (_score == 0)
         {
           if (!string.IsNullOrEmpty(score))
           {
-            double.TryParse(score, out m_Score);
+            double.TryParse(score, out _score);
           }
         }
 
-        return m_Score;
+        return _score;
       }
     }
 

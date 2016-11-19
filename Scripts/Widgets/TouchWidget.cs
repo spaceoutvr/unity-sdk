@@ -42,29 +42,29 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     [Serializable]
     public class TapEventMapping
     {
-      public GameObject m_TapObject = null;
-      public bool m_TapOnObject = true;
-      public int m_SortingLayer = 0;
-      public LayerMask m_LayerMask = default(LayerMask);
-      public string m_Callback = "";
+      public GameObject tapObject = null;
+      public bool tapOnObject = true;
+      public int sortingLayer = 0;
+      public LayerMask layerMask = default(LayerMask);
+      public string callback = "";
     };
 
     [Serializable]
     public class FullScreenDragEventMapping
     {
       [Tooltip("If there is no drag layer object set, it uses FullScreen")]
-      public GameObject m_DragLayerObject = null;
-      public int m_NumberOfFinger = 1;
-      public int m_SortingLayer = 0;
-      public bool m_IsDragInside = true;
-      public string m_Callback = "";
+      public GameObject dragLayerObject = null;
+      public int numberOfFinger = 1;
+      public int sortingLayer = 0;
+      public bool isDragInside = true;
+      public string callback = "";
     };
 
     [SerializeField]
-    private List<TapEventMapping> m_TapMappings = new List<TapEventMapping>();
+    private List<TapEventMapping> tapMappings = new List<TapEventMapping>();
 
     [SerializeField]
-    private List<FullScreenDragEventMapping> m_FullScreenDragMappings = new List<FullScreenDragEventMapping>();
+    private List<FullScreenDragEventMapping> fullScreenDragMappings = new List<FullScreenDragEventMapping>();
     #endregion
 
     #region Public Members
@@ -77,11 +77,11 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     {
       get
       {
-        return m_TapMappings;
+        return tapMappings;
       }
       set
       {
-        m_TapMappings = value;
+        tapMappings = value;
       }
     }
 
@@ -93,11 +93,11 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     {
       get
       {
-        return m_FullScreenDragMappings;
+        return fullScreenDragMappings;
       }
       set
       {
-        m_FullScreenDragMappings = value;
+        fullScreenDragMappings = value;
       }
     }
 
@@ -112,11 +112,11 @@ namespace IBM.Watson.DeveloperCloud.Widgets
         return;
       }
 
-      foreach (var mapping in m_TapMappings)
+      foreach (var mapping in tapMappings)
       {
-        if (!string.IsNullOrEmpty(mapping.m_Callback))
+        if (!string.IsNullOrEmpty(mapping.callback))
         {
-          TouchEventManager.Instance.RegisterTapEvent(mapping.m_TapObject, mapping.m_Callback, mapping.m_SortingLayer, mapping.m_TapOnObject, mapping.m_LayerMask);
+          TouchEventManager.Instance.RegisterTapEvent(mapping.tapObject, mapping.callback, mapping.sortingLayer, mapping.tapOnObject, mapping.layerMask);
         }
         else
         {
@@ -124,11 +124,11 @@ namespace IBM.Watson.DeveloperCloud.Widgets
         }
       }
 
-      foreach (var mapping in m_FullScreenDragMappings)
+      foreach (var mapping in fullScreenDragMappings)
       {
-        if (!string.IsNullOrEmpty(mapping.m_Callback))
+        if (!string.IsNullOrEmpty(mapping.callback))
         {
-          TouchEventManager.Instance.RegisterDragEvent(mapping.m_DragLayerObject, mapping.m_Callback, mapping.m_NumberOfFinger, mapping.m_SortingLayer, isDragInside: mapping.m_IsDragInside);
+          TouchEventManager.Instance.RegisterDragEvent(mapping.dragLayerObject, mapping.callback, mapping.numberOfFinger, mapping.sortingLayer, isDragInside: mapping.isDragInside);
         }
         else
         {
@@ -145,11 +145,11 @@ namespace IBM.Watson.DeveloperCloud.Widgets
         return;
       }
 
-      foreach (var mapping in m_TapMappings)
+      foreach (var mapping in tapMappings)
       {
-        if (!string.IsNullOrEmpty(mapping.m_Callback))
+        if (!string.IsNullOrEmpty(mapping.callback))
         {
-          TouchEventManager.Instance.UnregisterTapEvent(mapping.m_TapObject, mapping.m_Callback, mapping.m_SortingLayer, mapping.m_TapOnObject, mapping.m_LayerMask);
+          TouchEventManager.Instance.UnregisterTapEvent(mapping.tapObject, mapping.callback, mapping.sortingLayer, mapping.tapOnObject, mapping.layerMask);
         }
         else
         {
@@ -157,11 +157,11 @@ namespace IBM.Watson.DeveloperCloud.Widgets
         }
       }
 
-      foreach (var mapping in m_FullScreenDragMappings)
+      foreach (var mapping in fullScreenDragMappings)
       {
-        if (!string.IsNullOrEmpty(mapping.m_Callback))
+        if (!string.IsNullOrEmpty(mapping.callback))
         {
-          TouchEventManager.Instance.UnregisterDragEvent(mapping.m_DragLayerObject, mapping.m_Callback, mapping.m_NumberOfFinger, mapping.m_SortingLayer, isDragInside: mapping.m_IsDragInside);
+          TouchEventManager.Instance.UnregisterDragEvent(mapping.dragLayerObject, mapping.callback, mapping.numberOfFinger, mapping.sortingLayer, isDragInside: mapping.isDragInside);
         }
         else
         {

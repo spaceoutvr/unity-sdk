@@ -33,12 +33,12 @@ namespace IBM.Watson.DeveloperCloud.Widgets
   {
     #region Inputs
     [SerializeField]
-    private Input m_ClassifyInput = new Input("Classified", typeof(ClassifyResultData), "OnClassifyInput");
+    private Input classifyInput = new Input("Classified", typeof(ClassifyResultData), "OnClassifyInput");
     #endregion
 
     #region Outputs
     [SerializeField]
-    private Output m_ClassifyOutput = new Output(typeof(ClassifyResultData));
+    private Output classifyOutput = new Output(typeof(ClassifyResultData));
     #endregion
 
     #region Widget interface
@@ -55,13 +55,13 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     [Serializable]
     private class Mapping
     {
-      public string m_Class = string.Empty;
-      public SerializedDelegate m_Callback = new SerializedDelegate(typeof(OnClassifierResult));
-      public bool m_Exclusive = true;
+      public string _class = string.Empty;
+      public SerializedDelegate callback = new SerializedDelegate(typeof(OnClassifierResult));
+      public bool exclusive = true;
     };
 
     [SerializeField]
-    private List<Mapping> m_Mappings = new List<Mapping>();
+    private List<Mapping> mappings = new List<Mapping>();
     #endregion
 
     #region Event Handlers
@@ -70,15 +70,15 @@ namespace IBM.Watson.DeveloperCloud.Widgets
       ClassifyResultData input = (ClassifyResultData)data;
 
       bool bPassthrough = true;
-      foreach (var mapping in m_Mappings)
+      foreach (var mapping in mappings)
       {
-        if (mapping.m_Class == input.Result.top_class)
+        if (mapping._class == input.Result.top_class)
         {
-          OnClassifierResult callback = mapping.m_Callback.ResolveDelegate() as OnClassifierResult;
+          OnClassifierResult callback = mapping.callback.ResolveDelegate() as OnClassifierResult;
           if (callback != null)
           {
             callback(input.Result);
-            if (mapping.m_Exclusive)
+            if (mapping.exclusive)
             {
               bPassthrough = false;
               break;
@@ -88,7 +88,7 @@ namespace IBM.Watson.DeveloperCloud.Widgets
       }
 
       if (bPassthrough)
-        m_ClassifyOutput.SendData(data);
+        classifyOutput.SendData(data);
     }
     #endregion
   }

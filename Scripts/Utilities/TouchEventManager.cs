@@ -40,49 +40,49 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     /// </summary>
     public class TouchEventData
     {
-      private Collider m_Collider;
-      private Collider2D m_Collider2D;
-      private RectTransform m_RectTransform;
-      private Collider[] m_ColliderList;
-      private Collider2D[] m_Collider2DList;
-      private RectTransform[] m_RectTransformList;
-      private GameObject m_GameObject;
+      private Collider collider;
+      private Collider2D collider2D;
+      private RectTransform rectTransform;
+      private Collider[] colliderList;
+      private Collider2D[] collider2DList;
+      private RectTransform[] rectTransformList;
+      private GameObject gameObject;
       private string m_tapEventCallback;
       private string m_dragEventCallback;
       private bool m_isInside;
-      private int m_SortingLayer;
+      private int sortingLayer;
 
       /// <summary> 
       /// Game Object related with touch event
       /// </summary>
-      public GameObject GameObjectAttached { get { return m_GameObject; } }
+      public GameObject GameObjectAttached { get { return gameObject; } }
       /// <summary>
       /// If it is tap event (or one time action event) we are returning the collider of the event.
       /// </summary>
-      public Collider Collider { get { return m_Collider; } }
+      public Collider Collider { get { return collider; } }
       /// <summary>
       /// Gets the collider2 d.
       /// </summary>
       /// <value>The collider2 d.</value>
-      public Collider2D Collider2D { get { return m_Collider2D; } }
+      public Collider2D Collider2D { get { return collider2D; } }
       /// <summary>
       /// Gets the rect transform.
       /// </summary>
       /// <value>The rect transform.</value>
-      public RectTransform RectTransform { get { return m_RectTransform; } }
+      public RectTransform RectTransform { get { return rectTransform; } }
       /// <summary>
       /// If there is a drag event (or continues action) we are holding game object and all colliders inside that object
       /// </summary>
-      public Collider[] ColliderList { get { if (m_ColliderList == null && m_Collider != null) m_ColliderList = new Collider[] { m_Collider }; return m_ColliderList; } }
+      public Collider[] ColliderList { get { if (colliderList == null && collider != null) colliderList = new Collider[] { collider }; return colliderList; } }
       /// <summary>
       /// If there is a drag event (or continues action) we are holding game object and all colliders inside that object
       /// </summary>
-      public Collider2D[] ColliderList2D { get { if (m_Collider2DList == null && m_Collider2D != null) m_Collider2DList = new Collider2D[] { m_Collider2D }; return m_Collider2DList; } }
+      public Collider2D[] ColliderList2D { get { if (collider2DList == null && collider2D != null) collider2DList = new Collider2D[] { collider2D }; return collider2DList; } }
       /// <summary>
       /// Gets the rect transform list.
       /// </summary>
       /// <value>The rect transform list.</value>
-      public RectTransform[] RectTransformList { get { if (m_RectTransformList == null && m_RectTransform != null) m_RectTransformList = new RectTransform[] { m_RectTransform }; return m_RectTransformList; } }
+      public RectTransform[] RectTransformList { get { if (rectTransformList == null && rectTransform != null) rectTransformList = new RectTransform[] { rectTransform }; return rectTransformList; } }
 
       /// <summary>
       /// If the touch event has happened inside of that object (collider) we will fire that event. Otherwise, it is considered as outside
@@ -99,7 +99,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
       /// <summary>
       /// Greater sorting layer is higher importance level. 
       /// </summary>
-      public int SortingLayer { get { return m_SortingLayer; } }
+      public int SortingLayer { get { return sortingLayer; } }
       /// <summary>
       /// Gets a value indicating whether this instance can drag object.
       /// </summary>
@@ -109,20 +109,20 @@ namespace IBM.Watson.DeveloperCloud.Utilities
       /// <summary>
       /// Touch event constructor for Tap Event registration. 
       /// </summary>
-      /// <param name="collider">Collider of the object to tap</param>
+      /// <param name="objectCollider">Collider of the object to tap</param>
       /// <param name="callback">Callback for Tap Event. After tapped, callback will be invoked</param>
       /// <param name="sortingLayer">Sorting level in order to sort the event listeners</param>
       /// <param name="isInside">Whether the tap is inside the object or not</param>
-      public TouchEventData(Collider collider, string callback, int sortingLayer, bool isInside)
+      public TouchEventData(Collider objectCollider, string callback, int objectSortingLayer, bool isInside)
       {
-        m_Collider = collider;
-        m_Collider2D = null;
-        m_RectTransform = null;
-        m_ColliderList = null;
-        m_Collider2DList = null;
-        m_RectTransformList = null;
+        collider = objectCollider;
+        collider2D = null;
+        rectTransform = null;
+        colliderList = null;
+        collider2DList = null;
+        rectTransformList = null;
         m_tapEventCallback = callback;
-        m_SortingLayer = sortingLayer;
+        sortingLayer = objectSortingLayer;
         m_isInside = isInside;
       }
 
@@ -131,18 +131,18 @@ namespace IBM.Watson.DeveloperCloud.Utilities
       /// </summary>
       /// <param name="collider">Collider of the object to tap</param>
       /// <param name="callback">Callback for Tap Event. After tapped, callback will be invoked</param>
-      /// <param name="sortingLayer">Sorting level in order to sort the event listeners</param>
+      /// <param name="objectSortingLayer">Sorting level in order to sort the event listeners</param>
       /// <param name="isInside">Whether the tap is inside the object or not</param>
-      public TouchEventData(Collider2D collider, string callback, int sortingLayer, bool isInside)
+      public TouchEventData(Collider2D collider, string callback, int objectSortingLayer, bool isInside)
       {
-        m_Collider = null;
-        m_Collider2D = collider;
-        m_RectTransform = null;
-        m_ColliderList = null;
-        m_Collider2DList = null;
-        m_RectTransformList = null;
+        collider = null;
+        collider2D = collider;
+        rectTransform = null;
+        colliderList = null;
+        collider2DList = null;
+        rectTransformList = null;
         m_tapEventCallback = callback;
-        m_SortingLayer = sortingLayer;
+        sortingLayer = objectSortingLayer;
         m_isInside = isInside;
       }
 
@@ -154,38 +154,38 @@ namespace IBM.Watson.DeveloperCloud.Utilities
       /// <param name="callback">Callback.</param>
       /// <param name="sortingLayer">Sorting layer.</param>
       /// <param name="isInside">If set to <c>true</c> is inside.</param>
-      public TouchEventData(RectTransform rectTransform, string callback, int sortingLayer, bool isInside)
+      public TouchEventData(RectTransform targetRectTransform, string callback, int targetSortingLayer, bool isInside)
       {
-        m_Collider = null;
-        m_Collider2D = null;
-        m_RectTransform = rectTransform;
-        m_ColliderList = null;
-        m_Collider2DList = null;
-        m_RectTransformList = null;
+        collider = null;
+        collider2D = null;
+        rectTransform = targetRectTransform;
+        colliderList = null;
+        collider2DList = null;
+        rectTransformList = null;
         m_tapEventCallback = callback;
-        m_SortingLayer = sortingLayer;
+        sortingLayer = targetSortingLayer;
         m_isInside = isInside;
       }
 
       /// <summary>
       /// Touch event constructor for Drag Event registration. 
       /// </summary>
-      /// <param name="gameObject">Gameobject to drag</param>
+      /// <param name="go">Gameobject to drag</param>
       /// <param name="callback">Callback for Drag event. After dragging started, callback will be invoked until drag will be finished</param>
-      /// <param name="sortingLayer">Sorting level in order to sort the event listeners</param>
+      /// <param name="targetSortingLayer">Sorting level in order to sort the event listeners</param>
       /// <param name="isInside"></param>
-      public TouchEventData(GameObject gameObject, string callback, int sortingLayer, bool isInside)
+      public TouchEventData(GameObject go, string callback, int targetSortingLayer, bool isInside)
       {
-        m_GameObject = gameObject;
-        m_ColliderList = null;
+        gameObject = go;
+        colliderList = null;
         if (gameObject != null)
         {
-          m_ColliderList = gameObject.GetComponentsInChildren<Collider>(includeInactive: true);
-          m_Collider2DList = gameObject.GetComponentsInChildren<Collider2D>(includeInactive: true);
-          m_RectTransformList = gameObject.GetComponentsInChildren<RectTransform>(includeInactive: true);
+          colliderList = gameObject.GetComponentsInChildren<Collider>(includeInactive: true);
+          collider2DList = gameObject.GetComponentsInChildren<Collider2D>(includeInactive: true);
+          rectTransformList = gameObject.GetComponentsInChildren<RectTransform>(includeInactive: true);
         }
         m_dragEventCallback = callback;
-        m_SortingLayer = sortingLayer;
+        sortingLayer = targetSortingLayer;
         m_isInside = isInside;
       }
 
@@ -288,29 +288,29 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     #region Private Data
     private UnityEngine.Camera m_mainCamera;
 
-    private bool m_Active = true;
-    private Dictionary<int, List<TouchEventData>> m_TapEvents = new Dictionary<int, List<TouchEventData>>();
-    private Dictionary<int, List<TouchEventData>> m_DoubleTapEvents = new Dictionary<int, List<TouchEventData>>();
-    private Dictionary<int, List<TouchEventData>> m_DragEvents = new Dictionary<int, List<TouchEventData>>();
+    private bool active = true;
+    private Dictionary<int, List<TouchEventData>> tapEvents = new Dictionary<int, List<TouchEventData>>();
+    private Dictionary<int, List<TouchEventData>> doubleTapEvents = new Dictionary<int, List<TouchEventData>>();
+    private Dictionary<int, List<TouchEventData>> dragEvents = new Dictionary<int, List<TouchEventData>>();
     #endregion
 
     #region Serialized Private 
     [SerializeField]
-    private TapGesture m_TapGesture;
+    private TapGesture tapGesture;
     [SerializeField]
-    private TapGesture m_DoubleTapGesture;
+    private TapGesture doubleTapGesture;
     [SerializeField]
-    private TapGesture m_ThreeTapGesture;
+    private TapGesture threeTapGesture;
     [SerializeField]
-    private ScreenTransformGesture m_OneFingerMoveGesture;
+    private ScreenTransformGesture oneFingerMoveGesture;
     [SerializeField]
-    private ScreenTransformGesture m_TwoFingerMoveGesture;
+    private ScreenTransformGesture twoFingerMoveGesture;
     [SerializeField]
-    private PressGesture m_PressGesture;
+    private PressGesture pressGesture;
     [SerializeField]
-    private ReleaseGesture m_ReleaseGesture;
+    private ReleaseGesture releaseGesture;
     [SerializeField]
-    private LongPressGesture m_LongPressGesture;
+    private LongPressGesture longPressGesture;
 
     #endregion
 
@@ -318,69 +318,69 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     /// <summary>
     /// Set/Get the active state of this manager.
     /// </summary>
-    public bool Active { get { return m_Active; } set { m_Active = value; } }
+    public bool Active { get { return active; } set { active = value; } }
 
-    private static TouchEventManager sm_Instance = null;
+    private static TouchEventManager sinstance = null;
     /// <summary>
     /// The current instance of the TouchEventManager.
     /// </summary>
-    public static TouchEventManager Instance { get { return sm_Instance; } }
+    public static TouchEventManager Instance { get { return sinstance; } }
     #endregion
 
     #region Awake / OnEnable / OnDisable
 
     void Awake()
     {
-      sm_Instance = this;
+      sinstance = this;
     }
 
     private void OnEnable()
     {
       m_mainCamera = UnityEngine.Camera.main;
-      if (m_TapGesture != null)
-        m_TapGesture.Tapped += TapGesture_Tapped;
-      if (m_DoubleTapGesture != null)
-        m_DoubleTapGesture.Tapped += DoubleTapGesture_Tapped;
-      if (m_ThreeTapGesture != null)
-        m_ThreeTapGesture.Tapped += ThreeTapGesture_Tapped;
-      if (m_OneFingerMoveGesture != null)
-        m_OneFingerMoveGesture.Transformed += OneFingerTransformedHandler;
-      if (m_TwoFingerMoveGesture != null)
-        m_TwoFingerMoveGesture.Transformed += TwoFingerTransformedHandler;
-      if (m_PressGesture != null)
-        m_PressGesture.Pressed += PressGesturePressed;
-      if (m_ReleaseGesture != null)
-        m_ReleaseGesture.Released += ReleaseGestureReleased;
-      if (m_LongPressGesture != null)
-        m_LongPressGesture.LongPressed += LongPressGesturePressed;
+      if (tapGesture != null)
+        tapGesture.Tapped += TapGesture_Tapped;
+      if (doubleTapGesture != null)
+        doubleTapGesture.Tapped += DoubleTapGesture_Tapped;
+      if (threeTapGesture != null)
+        threeTapGesture.Tapped += ThreeTapGesture_Tapped;
+      if (oneFingerMoveGesture != null)
+        oneFingerMoveGesture.Transformed += OneFingerTransformedHandler;
+      if (twoFingerMoveGesture != null)
+        twoFingerMoveGesture.Transformed += TwoFingerTransformedHandler;
+      if (pressGesture != null)
+        pressGesture.Pressed += PressGesturePressed;
+      if (releaseGesture != null)
+        releaseGesture.Released += ReleaseGestureReleased;
+      if (longPressGesture != null)
+        longPressGesture.LongPressed += LongPressGesturePressed;
 
     }
 
     private void OnDisable()
     {
-      if (m_TapGesture != null)
-        m_TapGesture.Tapped -= TapGesture_Tapped;
-      if (m_DoubleTapGesture != null)
-        m_DoubleTapGesture.Tapped -= DoubleTapGesture_Tapped;
-      if (m_ThreeTapGesture != null)
-        m_ThreeTapGesture.Tapped -= ThreeTapGesture_Tapped;
-      if (m_OneFingerMoveGesture != null)
-        m_OneFingerMoveGesture.Transformed -= OneFingerTransformedHandler;
-      if (m_TwoFingerMoveGesture != null)
-        m_TwoFingerMoveGesture.Transformed -= TwoFingerTransformedHandler;
-      if (m_PressGesture != null)
-        m_PressGesture.Pressed -= PressGesturePressed;
-      if (m_ReleaseGesture != null)
-        m_ReleaseGesture.Released -= ReleaseGestureReleased;
-      if (m_LongPressGesture != null)
-        m_LongPressGesture.LongPressed -= LongPressGesturePressed;
+      if (tapGesture != null)
+        tapGesture.Tapped -= TapGesture_Tapped;
+      if (doubleTapGesture != null)
+        doubleTapGesture.Tapped -= DoubleTapGesture_Tapped;
+      if (threeTapGesture != null)
+        threeTapGesture.Tapped -= ThreeTapGesture_Tapped;
+      if (oneFingerMoveGesture != null)
+        oneFingerMoveGesture.Transformed -= OneFingerTransformedHandler;
+      if (twoFingerMoveGesture != null)
+        twoFingerMoveGesture.Transformed -= TwoFingerTransformedHandler;
+      if (pressGesture != null)
+        pressGesture.Pressed -= PressGesturePressed;
+      if (releaseGesture != null)
+        releaseGesture.Released -= ReleaseGestureReleased;
+      if (longPressGesture != null)
+        longPressGesture.LongPressed -= LongPressGesturePressed;
 
-      if (m_DragEvents != null)
-        m_DragEvents.Clear();
-      if (m_TapEvents != null)
-        m_TapEvents.Clear();
-      if (m_DoubleTapEvents != null)
-        m_DoubleTapEvents.Clear();
+      if (dragEvents != null)
+        dragEvents.Clear();
+      if (tapEvents != null)
+        tapEvents.Clear();
+      if (doubleTapEvents != null)
+        doubleTapEvents.Clear();
     }
 
     /// <summary>
@@ -417,13 +417,13 @@ namespace IBM.Watson.DeveloperCloud.Utilities
 
       if (!string.IsNullOrEmpty(callback))
       {
-        if (m_DragEvents.ContainsKey(numberOfFinger))
+        if (dragEvents.ContainsKey(numberOfFinger))
         {
-          m_DragEvents[numberOfFinger].Add(new TouchEventData(gameObjectToDrag, callback, SortingLayer, isDragInside));
+          dragEvents[numberOfFinger].Add(new TouchEventData(gameObjectToDrag, callback, SortingLayer, isDragInside));
         }
         else
         {
-          m_DragEvents[numberOfFinger] = new List<TouchEventData>() { new TouchEventData(gameObjectToDrag, callback, SortingLayer, isDragInside) };
+          dragEvents[numberOfFinger] = new List<TouchEventData>() { new TouchEventData(gameObjectToDrag, callback, SortingLayer, isDragInside) };
         }
 
         success = true;
@@ -451,9 +451,9 @@ namespace IBM.Watson.DeveloperCloud.Utilities
 
       if (!string.IsNullOrEmpty(callback))
       {
-        if (m_DragEvents.ContainsKey(numberOfFinger))
+        if (dragEvents.ContainsKey(numberOfFinger))
         {
-          int numberOfRemovedCallbacks = m_DragEvents[numberOfFinger].RemoveAll(
+          int numberOfRemovedCallbacks = dragEvents[numberOfFinger].RemoveAll(
               e =>
               e.GameObjectAttached == gameObjectToDrag &&
               e.DragCallback == callback &&
@@ -479,14 +479,14 @@ namespace IBM.Watson.DeveloperCloud.Utilities
       RaycastResult hitToFire2DEventSystem = default(RaycastResult);
 #endif
 
-      //Log.Status ("TouchEventManager", "oneFingerManipulationTransformedHandler: {0}", m_OneFingerMoveGesture.DeltaPosition);
-      if (m_Active)
+      //Log.Status ("TouchEventManager", "oneFingerManipulationTransformedHandler: {0}", oneFingerMoveGesture.DeltaPosition);
+      if (active)
       {
         TouchEventData dragEventToFire = null;
-        Vector3 oneFingerScreenPosition = m_OneFingerMoveGesture.ScreenPosition;
+        Vector3 oneFingerScreenPosition = oneFingerMoveGesture.ScreenPosition;
         Ray rayForDrag = MainCamera.ScreenPointToRay(oneFingerScreenPosition);
 
-        foreach (var kp in m_DragEvents)
+        foreach (var kp in dragEvents)
         {
           if (kp.Key == 1)
           {
@@ -791,9 +791,9 @@ namespace IBM.Watson.DeveloperCloud.Utilities
         }
 
         if (dragEventToFire != null)
-          EventManager.Instance.SendEvent(dragEventToFire.DragCallback, m_OneFingerMoveGesture, hitToFire3D, hitToFire2D, hitToFire2DEventSystem);
+          EventManager.Instance.SendEvent(dragEventToFire.DragCallback, oneFingerMoveGesture, hitToFire3D, hitToFire2D, hitToFire2DEventSystem);
 
-        EventManager.Instance.SendEvent("OnDragOneFingerFullscreen", m_OneFingerMoveGesture);
+        EventManager.Instance.SendEvent("OnDragOneFingerFullscreen", oneFingerMoveGesture);
       }
     }
 
@@ -805,15 +805,15 @@ namespace IBM.Watson.DeveloperCloud.Utilities
       RaycastResult hitToFire2DEventSystem = default(RaycastResult);
 #endif
 
-      //Log.Status ("TouchEventManager", "TwoFingerTransformedHandler: {0}", m_TwoFingerMoveGesture.DeltaPosition);
-      if (m_Active)
+      //Log.Status ("TouchEventManager", "TwoFingerTransformedHandler: {0}", twoFingerMoveGesture.DeltaPosition);
+      if (active)
       {
         TouchEventData dragEventToFire = null;
-        Vector3 twoFingerScreenPosition = m_TwoFingerMoveGesture.ScreenPosition;
+        Vector3 twoFingerScreenPosition = twoFingerMoveGesture.ScreenPosition;
         Ray rayForDrag = MainCamera.ScreenPointToRay(twoFingerScreenPosition);
 
 
-        foreach (var kp in m_DragEvents)
+        foreach (var kp in dragEvents)
         {
           if (kp.Key == 2)
           {
@@ -1118,9 +1118,9 @@ namespace IBM.Watson.DeveloperCloud.Utilities
         }
 
         if (dragEventToFire != null)
-          EventManager.Instance.SendEvent(dragEventToFire.DragCallback, m_TwoFingerMoveGesture, hitToFire3D, hitToFire2D, hitToFire2DEventSystem);
+          EventManager.Instance.SendEvent(dragEventToFire.DragCallback, twoFingerMoveGesture, hitToFire3D, hitToFire2D, hitToFire2DEventSystem);
 
-        EventManager.Instance.SendEvent("OnDragTwoFingerFullscreen", m_TwoFingerMoveGesture);
+        EventManager.Instance.SendEvent("OnDragTwoFingerFullscreen", twoFingerMoveGesture);
       }
     }
     #endregion
@@ -1160,13 +1160,13 @@ namespace IBM.Watson.DeveloperCloud.Utilities
                             Log.Debug("TouchEventManager", "RegisterTapEvent for 3D. itemCollider: {0}, callback: {1}, SortingLayer: {2}, isTapInside: {3}",itemCollider, callback, SortingLayer, isTapInside);
 #endif
 
-              if (m_TapEvents.ContainsKey(layerMaskAsKey))
+              if (tapEvents.ContainsKey(layerMaskAsKey))
               {
-                m_TapEvents[layerMaskAsKey].Add(new TouchEventData(itemCollider, callback, SortingLayer, isTapInside));
+                tapEvents[layerMaskAsKey].Add(new TouchEventData(itemCollider, callback, SortingLayer, isTapInside));
               }
               else
               {
-                m_TapEvents[layerMaskAsKey] = new List<TouchEventData>() { new TouchEventData(itemCollider, callback, SortingLayer, isTapInside) };
+                tapEvents[layerMaskAsKey] = new List<TouchEventData>() { new TouchEventData(itemCollider, callback, SortingLayer, isTapInside) };
               }
             }
 
@@ -1192,13 +1192,13 @@ namespace IBM.Watson.DeveloperCloud.Utilities
                                 Log.Debug("TouchEventManager", "RegisterTapEvent For 2D. itemCollider: {0}, callback: {1}, SortingLayer: {2}, isTapInside: {3}",itemCollider, callback, SortingLayer, isTapInside);
 #endif
 
-                if (m_TapEvents.ContainsKey(layerMaskAsKey))
+                if (tapEvents.ContainsKey(layerMaskAsKey))
                 {
-                  m_TapEvents[layerMaskAsKey].Add(new TouchEventData(itemCollider, callback, SortingLayer, isTapInside));
+                  tapEvents[layerMaskAsKey].Add(new TouchEventData(itemCollider, callback, SortingLayer, isTapInside));
                 }
                 else
                 {
-                  m_TapEvents[layerMaskAsKey] = new List<TouchEventData>() { new TouchEventData(itemCollider, callback, SortingLayer, isTapInside) };
+                  tapEvents[layerMaskAsKey] = new List<TouchEventData>() { new TouchEventData(itemCollider, callback, SortingLayer, isTapInside) };
                 }
               }
 
@@ -1225,13 +1225,13 @@ namespace IBM.Watson.DeveloperCloud.Utilities
                                 Log.Debug("TouchEventManager", "RegisterTapEvent For 2D Event System. itemRectTransform: {0}, callback: {1}, SortingLayer: {2}, isTapInside: {3}",itemRectTransform, callback, SortingLayer, isTapInside);
 #endif
 
-                if (m_TapEvents.ContainsKey(layerMaskAsKey))
+                if (tapEvents.ContainsKey(layerMaskAsKey))
                 {
-                  m_TapEvents[layerMaskAsKey].Add(new TouchEventData(itemRectTransform, callback, SortingLayer, isTapInside));
+                  tapEvents[layerMaskAsKey].Add(new TouchEventData(itemRectTransform, callback, SortingLayer, isTapInside));
                 }
                 else
                 {
-                  m_TapEvents[layerMaskAsKey] = new List<TouchEventData>() { new TouchEventData(itemRectTransform, callback, SortingLayer, isTapInside) };
+                  tapEvents[layerMaskAsKey] = new List<TouchEventData>() { new TouchEventData(itemRectTransform, callback, SortingLayer, isTapInside) };
                 }
               }
 
@@ -1279,7 +1279,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
         {
           int layerMaskAsKey = (layerMask != default(LayerMask)) ? layerMask.value : (1 << gameObjectToTouch.layer);
 
-          if (m_TapEvents.ContainsKey(layerMaskAsKey))
+          if (tapEvents.ContainsKey(layerMaskAsKey))
           {
             success = true;
             Collider[] colliderList = gameObjectToTouch.GetComponentsInChildren<Collider>(includeInactive: true);
@@ -1287,7 +1287,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
             {
               foreach (Collider itemCollider in colliderList)
               {
-                int numberOfRemovedCallbacks = m_TapEvents[layerMaskAsKey].RemoveAll(
+                int numberOfRemovedCallbacks = tapEvents[layerMaskAsKey].RemoveAll(
                                                    e =>
                     e.Collider == itemCollider &&
                                                    e.TapCallback == callback &&
@@ -1310,7 +1310,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
               {
                 foreach (Collider2D itemCollider2D in colliderList2D)
                 {
-                  int numberOfRemovedCallbacks = m_TapEvents[layerMaskAsKey].RemoveAll(
+                  int numberOfRemovedCallbacks = tapEvents[layerMaskAsKey].RemoveAll(
                       e =>
                       e.Collider2D == itemCollider2D &&
                       e.TapCallback == callback &&
@@ -1336,7 +1336,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
               {
                 foreach (RectTransform itemRectTransform in rectTransformList)
                 {
-                  int numberOfRemovedCallbacks = m_TapEvents[layerMaskAsKey].RemoveAll(
+                  int numberOfRemovedCallbacks = tapEvents[layerMaskAsKey].RemoveAll(
                       e =>
                       e.RectTransform == itemRectTransform &&
                       e.TapCallback == callback &&
@@ -1369,10 +1369,10 @@ namespace IBM.Watson.DeveloperCloud.Utilities
 
     private void TapGesture_Tapped(object sender, System.EventArgs e)
     {
-      if (m_Active)
+      if (active)
       {
 #if ENABLE_DEBUGGING
-                Log.Debug("TouchEventManager", "TapGesture_Tapped: {0} - {1}", m_TapGesture.ScreenPosition, m_TapGesture.NumTouches);
+                Log.Debug("TouchEventManager", "TapGesture_Tapped: {0} - {1}", tapGesture.ScreenPosition, tapGesture.NumTouches);
 #endif
 
         TouchEventData tapEventToFire = null;
@@ -1383,10 +1383,10 @@ namespace IBM.Watson.DeveloperCloud.Utilities
         RaycastResult hitToFire2DEventSystem = default(RaycastResult);
 #endif
 
-        foreach (var kp in m_TapEvents)
+        foreach (var kp in tapEvents)
         {
           //Adding Variables for 3D Tap Check
-          Ray rayForTab = MainCamera.ScreenPointToRay(m_TapGesture.ScreenPosition);
+          Ray rayForTab = MainCamera.ScreenPointToRay(tapGesture.ScreenPosition);
           Transform hitTransform3D = null;
           RaycastHit hit3D = default(RaycastHit);
           bool isHitOnLayer3D = Physics.Raycast(rayForTab, out hit3D, Mathf.Infinity, kp.Key);
@@ -1413,7 +1413,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
           if (EventSystem.current != null)
           {
             PointerEventData pointerEventForTap = new PointerEventData(EventSystem.current);
-            pointerEventForTap.position = m_TapGesture.ScreenPosition;
+            pointerEventForTap.position = tapGesture.ScreenPosition;
             List<RaycastResult> raycastResultListFor2DEventSystem = new List<RaycastResult>();
             EventSystem.current.RaycastAll(pointerEventForTap, raycastResultListFor2DEventSystem);
             foreach (RaycastResult itemRaycastResult in raycastResultListFor2DEventSystem)
@@ -1686,9 +1686,9 @@ namespace IBM.Watson.DeveloperCloud.Utilities
         }
 
         if (tapEventToFire != null)
-          EventManager.Instance.SendEvent(tapEventToFire.TapCallback, m_TapGesture, hitToFire3D, hitToFire2D, hitToFire2DEventSystem);
+          EventManager.Instance.SendEvent(tapEventToFire.TapCallback, tapGesture, hitToFire3D, hitToFire2D, hitToFire2DEventSystem);
 
-        EventManager.Instance.SendEvent("OnSingleTap", m_TapGesture);
+        EventManager.Instance.SendEvent("OnSingleTap", tapGesture);
       }
     }
     #endregion
@@ -1723,13 +1723,13 @@ namespace IBM.Watson.DeveloperCloud.Utilities
                             Log.Debug("TouchEventManager", "RegisterDoubleTapEvent for 3D. itemCollider: {0}, callback: {1}, SortingLayer: {2}, isTapInside: {3}",itemCollider, callback, SortingLayer, isDoubleTapInside);
 #endif
 
-              if (m_DoubleTapEvents.ContainsKey(layerMaskAsKey))
+              if (doubleTapEvents.ContainsKey(layerMaskAsKey))
               {
-                m_DoubleTapEvents[layerMaskAsKey].Add(new TouchEventData(itemCollider, callback, SortingLayer, isDoubleTapInside));
+                doubleTapEvents[layerMaskAsKey].Add(new TouchEventData(itemCollider, callback, SortingLayer, isDoubleTapInside));
               }
               else
               {
-                m_DoubleTapEvents[layerMaskAsKey] = new List<TouchEventData>() { new TouchEventData(itemCollider, callback, SortingLayer, isDoubleTapInside) };
+                doubleTapEvents[layerMaskAsKey] = new List<TouchEventData>() { new TouchEventData(itemCollider, callback, SortingLayer, isDoubleTapInside) };
               }
             }
 
@@ -1753,13 +1753,13 @@ namespace IBM.Watson.DeveloperCloud.Utilities
                                 Log.Debug("TouchEventManager", "RegisterDoubleTapEvent For 2D. itemCollider: {0}, callback: {1}, SortingLayer: {2}, isTapInside: {3}",itemCollider, callback, SortingLayer, isDoubleTapInside);
 #endif
 
-                if (m_DoubleTapEvents.ContainsKey(layerMaskAsKey))
+                if (doubleTapEvents.ContainsKey(layerMaskAsKey))
                 {
-                  m_DoubleTapEvents[layerMaskAsKey].Add(new TouchEventData(itemCollider, callback, SortingLayer, isDoubleTapInside));
+                  doubleTapEvents[layerMaskAsKey].Add(new TouchEventData(itemCollider, callback, SortingLayer, isDoubleTapInside));
                 }
                 else
                 {
-                  m_DoubleTapEvents[layerMaskAsKey] = new List<TouchEventData>() { new TouchEventData(itemCollider, callback, SortingLayer, isDoubleTapInside) };
+                  doubleTapEvents[layerMaskAsKey] = new List<TouchEventData>() { new TouchEventData(itemCollider, callback, SortingLayer, isDoubleTapInside) };
                 }
               }
 
@@ -1785,13 +1785,13 @@ namespace IBM.Watson.DeveloperCloud.Utilities
                                 Log.Debug("TouchEventManager", "RegisterDoubleTapEvent For 2D Event System. itemRectTransform: {0}, callback: {1}, SortingLayer: {2}, isTapInside: {3}",itemRectTransform, callback, SortingLayer, isDoubleTapInside);
 #endif
 
-                if (m_DoubleTapEvents.ContainsKey(layerMaskAsKey))
+                if (doubleTapEvents.ContainsKey(layerMaskAsKey))
                 {
-                  m_DoubleTapEvents[layerMaskAsKey].Add(new TouchEventData(itemRectTransform, callback, SortingLayer, isDoubleTapInside));
+                  doubleTapEvents[layerMaskAsKey].Add(new TouchEventData(itemRectTransform, callback, SortingLayer, isDoubleTapInside));
                 }
                 else
                 {
-                  m_DoubleTapEvents[layerMaskAsKey] = new List<TouchEventData>() { new TouchEventData(itemRectTransform, callback, SortingLayer, isDoubleTapInside) };
+                  doubleTapEvents[layerMaskAsKey] = new List<TouchEventData>() { new TouchEventData(itemRectTransform, callback, SortingLayer, isDoubleTapInside) };
                 }
               }
 
@@ -1837,7 +1837,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
         {
           int layerMaskAsKey = (layerMask != default(LayerMask)) ? layerMask.value : (1 << gameObjectToTouch.layer);
 
-          if (m_DoubleTapEvents.ContainsKey(layerMaskAsKey))
+          if (doubleTapEvents.ContainsKey(layerMaskAsKey))
           {
             success = true;
             Collider[] colliderList = gameObjectToTouch.GetComponentsInChildren<Collider>(includeInactive: true);
@@ -1845,7 +1845,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
             {
               foreach (Collider itemCollider in colliderList)
               {
-                int numberOfRemovedCallbacks = m_DoubleTapEvents[layerMaskAsKey].RemoveAll(
+                int numberOfRemovedCallbacks = doubleTapEvents[layerMaskAsKey].RemoveAll(
                     e =>
                     e.Collider == itemCollider &&
                     e.TapCallback == callback &&
@@ -1868,7 +1868,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
               {
                 foreach (Collider2D itemCollider2D in colliderList2D)
                 {
-                  int numberOfRemovedCallbacks = m_DoubleTapEvents[layerMaskAsKey].RemoveAll(
+                  int numberOfRemovedCallbacks = doubleTapEvents[layerMaskAsKey].RemoveAll(
                       e =>
                       e.Collider2D == itemCollider2D &&
                       e.TapCallback == callback &&
@@ -1893,7 +1893,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
               {
                 foreach (RectTransform itemRectTransform in rectTransformList)
                 {
-                  int numberOfRemovedCallbacks = m_DoubleTapEvents[layerMaskAsKey].RemoveAll(
+                  int numberOfRemovedCallbacks = doubleTapEvents[layerMaskAsKey].RemoveAll(
                       e =>
                       e.RectTransform == itemRectTransform &&
                       e.TapCallback == callback &&
@@ -1927,10 +1927,10 @@ namespace IBM.Watson.DeveloperCloud.Utilities
 
     private void DoubleTapGesture_Tapped(object sender, System.EventArgs e)
     {
-      if (m_Active)
+      if (active)
       {
 #if ENABLE_DEBUGGING
-                Log.Debug("TouchEventManager", "DoubleTapGesture_Tapped: {0} - {1}", m_DoubleTapGesture.ScreenPosition, m_DoubleTapGesture.NumTouches);
+                Log.Debug("TouchEventManager", "DoubleTapGesture_Tapped: {0} - {1}", doubleTapGesture.ScreenPosition, doubleTapGesture.NumTouches);
 #endif
 
         TouchEventData tapEventToFire = null;
@@ -1941,10 +1941,10 @@ namespace IBM.Watson.DeveloperCloud.Utilities
         RaycastResult hitToFire2DEventSystem = default(RaycastResult);
 #endif
 
-        foreach (var kp in m_DoubleTapEvents)
+        foreach (var kp in doubleTapEvents)
         {
           //Adding Variables for 3D Tap Check
-          Ray rayForTab = MainCamera.ScreenPointToRay(m_DoubleTapGesture.ScreenPosition);
+          Ray rayForTab = MainCamera.ScreenPointToRay(doubleTapGesture.ScreenPosition);
           Transform hitTransform3D = null;
           RaycastHit hit3D = default(RaycastHit);
           bool isHitOnLayer3D = Physics.Raycast(rayForTab, out hit3D, Mathf.Infinity, kp.Key);
@@ -1971,7 +1971,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
           if (EventSystem.current != null)
           {
             PointerEventData pointerEventForTap = new PointerEventData(EventSystem.current);
-            pointerEventForTap.position = m_DoubleTapGesture.ScreenPosition;
+            pointerEventForTap.position = doubleTapGesture.ScreenPosition;
             List<RaycastResult> raycastResultListFor2DEventSystem = new List<RaycastResult>();
             EventSystem.current.RaycastAll(pointerEventForTap, raycastResultListFor2DEventSystem);
             foreach (RaycastResult itemRaycastResult in raycastResultListFor2DEventSystem)
@@ -2244,9 +2244,9 @@ namespace IBM.Watson.DeveloperCloud.Utilities
         }
 
         if (tapEventToFire != null)
-          EventManager.Instance.SendEvent(tapEventToFire.TapCallback, m_DoubleTapGesture, hitToFire3D, hitToFire2D, hitToFire2DEventSystem);
+          EventManager.Instance.SendEvent(tapEventToFire.TapCallback, doubleTapGesture, hitToFire3D, hitToFire2D, hitToFire2DEventSystem);
 
-        EventManager.Instance.SendEvent("OnDoubleTap", m_DoubleTapGesture);
+        EventManager.Instance.SendEvent("OnDoubleTap", doubleTapGesture);
       }
     }
 
@@ -2257,12 +2257,12 @@ namespace IBM.Watson.DeveloperCloud.Utilities
 
     private void ThreeTapGesture_Tapped(object sender, System.EventArgs e)
     {
-      if (m_Active)
+      if (active)
       {
 #if ENABLE_DEBUGGING
-                Log.Debug("TouchEventManager", "ThreeTapGesture_Tapped: {0} - {1}", m_ThreeTapGesture.ScreenPosition, m_ThreeTapGesture.NumTouches);
+                Log.Debug("TouchEventManager", "ThreeTapGesture_Tapped: {0} - {1}", threeTapGesture.ScreenPosition, threeTapGesture.NumTouches);
 #endif
-        EventManager.Instance.SendEvent("OnTripleTap", m_ThreeTapGesture);
+        EventManager.Instance.SendEvent("OnTripleTap", threeTapGesture);
       }
     }
 
@@ -2273,10 +2273,10 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     private void PressGesturePressed(object sender, System.EventArgs e)
     {
 #if ENABLE_DEBUGGING
-            Log.Debug("TouchEventManager", "PressGesturePressed: {0} - {1}", m_PressGesture.ScreenPosition, m_PressGesture.NumTouches);
+            Log.Debug("TouchEventManager", "PressGesturePressed: {0} - {1}", pressGesture.ScreenPosition, pressGesture.NumTouches);
 #endif
 
-      EventManager.Instance.SendEvent("OnTouchPressedFullscreen", m_PressGesture);
+      EventManager.Instance.SendEvent("OnTouchPressedFullscreen", pressGesture);
     }
 
     #endregion
@@ -2286,10 +2286,10 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     private void LongPressGesturePressed(object sender, System.EventArgs e)
     {
 #if ENABLE_DEBUGGING
-            Log.Debug("TouchEventManager", "LongPressGesturePressed: {0} - {1}", m_LongPressGesture.ScreenPosition, m_LongPressGesture.NumTouches);
+            Log.Debug("TouchEventManager", "LongPressGesturePressed: {0} - {1}", longPressGesture.ScreenPosition, longPressGesture.NumTouches);
 #endif
 
-      EventManager.Instance.SendEvent("OnLongPressOneFinger", m_LongPressGesture);
+      EventManager.Instance.SendEvent("OnLongPressOneFinger", longPressGesture);
     }
 
     #endregion
@@ -2299,10 +2299,10 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     private void ReleaseGestureReleased(object sender, System.EventArgs e)
     {
 #if ENABLE_DEBUGGING
-            Log.Debug("TouchEventManager", "ReleaseGestureReleased: {0} - {1}", m_ReleaseGesture.ScreenPosition, m_ReleaseGesture.NumTouches);
+            Log.Debug("TouchEventManager", "ReleaseGestureReleased: {0} - {1}", releaseGesture.ScreenPosition, releaseGesture.NumTouches);
 #endif
 
-      EventManager.Instance.SendEvent("OnTouchReleasedFullscreen", m_ReleaseGesture);
+      EventManager.Instance.SendEvent("OnTouchReleasedFullscreen", releaseGesture);
     }
     #endregion
   }

@@ -44,10 +44,10 @@ namespace IBM.Watson.DeveloperCloud.Services.DeepQA.v1
     #endregion
 
     #region Private Data
-    private string m_ServiceId = null;
-    private DataCache m_QuestionCache = null;
+    private string serviceId = null;
+    private DataCache questionCache = null;
 
-    private static fsSerializer sm_Serializer = new fsSerializer();
+    private static fsSerializer sserializer = new fsSerializer();
     private const string ASK_QUESTION = "/v1/question";
     #endregion
 
@@ -55,9 +55,9 @@ namespace IBM.Watson.DeveloperCloud.Services.DeepQA.v1
     /// Public constructor.
     /// </summary>
     /// <param name="pipelineId">The ID of the pipeline for caching purposes.</param>
-    public DeepQA(string serviceId)
+    public DeepQA(string id)
     {
-      m_ServiceId = serviceId;
+      serviceId = id;
     }
 
     #region AskQuestion
@@ -66,10 +66,10 @@ namespace IBM.Watson.DeveloperCloud.Services.DeepQA.v1
     /// </summary>
     public void FlushAnswerCache()
     {
-      if (m_QuestionCache == null)
-        m_QuestionCache = new DataCache(m_ServiceId);
+      if (questionCache == null)
+        questionCache = new DataCache(serviceId);
 
-      m_QuestionCache.Flush();
+      questionCache.Flush();
     }
 
     /// <summary>
@@ -79,10 +79,10 @@ namespace IBM.Watson.DeveloperCloud.Services.DeepQA.v1
     /// <returns></returns>
     public Question FindQuestion(string questionId)
     {
-      if (m_QuestionCache == null)
-        m_QuestionCache = new DataCache(m_ServiceId);
+      if (questionCache == null)
+        questionCache = new DataCache(serviceId);
 
-      byte[] cachedQuestion = m_QuestionCache.Find(questionId);
+      byte[] cachedQuestion = questionCache.Find(questionId);
       if (cachedQuestion != null)
       {
         Response response = ProcessAskResp(cachedQuestion);
@@ -120,7 +120,7 @@ namespace IBM.Watson.DeveloperCloud.Services.DeepQA.v1
         }
       }
 
-      RESTConnector connector = RESTConnector.GetConnector(m_ServiceId, ASK_QUESTION);
+      RESTConnector connector = RESTConnector.GetConnector(serviceId, ASK_QUESTION);
       if (connector == null)
         return false;
 
@@ -158,8 +158,8 @@ namespace IBM.Watson.DeveloperCloud.Services.DeepQA.v1
         try
         {
           response = ProcessAskResp(resp.Data);
-          if (m_QuestionCache != null && response != null)
-            m_QuestionCache.Save(((AskQuestionReq)req).QuestionID, resp.Data);
+          if (questionCache != null && response != null)
+            questionCache.Save(((AskQuestionReq)req).QuestionID, resp.Data);
         }
         catch (Exception e)
         {
@@ -190,7 +190,7 @@ namespace IBM.Watson.DeveloperCloud.Services.DeepQA.v1
         throw new WatsonException(r.FormattedMessages);
 
       object obj = response;
-      r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+      r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
       if (!r.Succeeded)
         throw new WatsonException(r.FormattedMessages);
 
@@ -203,35 +203,35 @@ namespace IBM.Watson.DeveloperCloud.Services.DeepQA.v1
     /// <exclude />
     public string GetServiceID()
     {
-      return m_ServiceId;
+      return serviceId;
     }
 
     /// <exclude />
     public void GetServiceStatus(ServiceStatus callback)
     {
-      if (Config.Instance.FindCredentials(m_ServiceId) != null)
+      if (Config.Instance.FindCredentials(serviceId) != null)
         new CheckServiceStatus(this, callback);
       else
-        callback(m_ServiceId, false);
+        callback(serviceId, false);
     }
 
     private class CheckServiceStatus
     {
-      private DeepQA m_Service = null;
-      private ServiceStatus m_Callback = null;
+      private DeepQA service = null;
+      private ServiceStatus callback = null;
 
-      public CheckServiceStatus(DeepQA service, ServiceStatus callback)
+      public CheckServiceStatus(DeepQA deepQA, ServiceStatus serviceStatus)
       {
-        m_Service = service;
-        m_Callback = callback;
+        service = deepQA;
+        callback = serviceStatus;
 
-        if (!m_Service.AskQuestion("What is the best treatment for an African American male in heart failure?", OnQuestion, 1, false))
-          m_Callback(m_Service.GetServiceID(), false);
+        if (!service.AskQuestion("What is the best treatment for an African American male in heart failure?", OnQuestion, 1, false))
+          callback(service.GetServiceID(), false);
       }
 
       private void OnQuestion(Question question)
       {
-        m_Callback(m_Service.GetServiceID(), question != null);
+        callback(service.GetServiceID(), question != null);
       }
     };
     #endregion

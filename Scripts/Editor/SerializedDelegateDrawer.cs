@@ -39,9 +39,9 @@ namespace IBM.Watson.DeveloperCloud.Editor
             if (target == null)
                 return;
 
-            SerializedProperty targetProperty = properties.FindPropertyRelative("m_Target");
-            SerializedProperty methodProperty = properties.FindPropertyRelative("m_Method");
-            SerializedProperty componentProperty = properties.FindPropertyRelative("m_Component");
+            SerializedProperty targetProperty = properties.FindPropertyRelative("target");
+            SerializedProperty methodProperty = properties.FindPropertyRelative("method");
+            SerializedProperty componentProperty = properties.FindPropertyRelative("component");
 
             // pass through label
             EditorGUIUtility.LookLikeControls();

@@ -23,21 +23,21 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
 {
   public class TestEventManager : UnitTest
   {
-    EventManager m_Manager = new EventManager();
-    bool m_SendTested = false;
-    bool m_SendAsyncTested = false;
+    EventManager manager = new EventManager();
+    bool sendTested = false;
+    bool sendAsyncTested = false;
 
     public override IEnumerator RunTest()
     {
-      m_Manager.RegisterEventReceiver("SendEvent", OnSendEvent);
-      m_Manager.RegisterEventReceiver("SendAsyncEvent", OnSendAsyncEvent);
+      manager.RegisterEventReceiver("SendEvent", OnSendEvent);
+      manager.RegisterEventReceiver("SendAsyncEvent", OnSendAsyncEvent);
 
-      m_Manager.SendEvent("SendEvent");
-      while (!m_SendTested)
+      manager.SendEvent("SendEvent");
+      while (!sendTested)
         yield return null;
 
-      m_Manager.SendEventAsync("SendAsyncEvent");
-      while (!m_SendAsyncTested)
+      manager.SendEventAsync("SendAsyncEvent");
+      while (!sendAsyncTested)
         yield return null;
 
       yield break;
@@ -46,13 +46,13 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
     private void OnSendEvent(object[] args)
     {
       Log.Status("TestEventManager", "OnSendEvent()");
-      m_SendTested = true;
+      sendTested = true;
     }
 
     private void OnSendAsyncEvent(object[] args)
     {
       Log.Status("TestEventManager", "OnSendAsyncEvent()");
-      m_SendAsyncTested = true;
+      sendAsyncTested = true;
     }
   }
 }

@@ -28,28 +28,28 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     const float FPS_INTERVAL = 0.5f;
     const string DISPLAY = "{0} FPS";
 
-    private int m_FpsAccumulator = 0;
-    private float m_FpsNextPeriod = 0;
-    private int m_CurrentFps;
+    private int fpsAccumulator = 0;
+    private float fpsNextPeriod = 0;
+    private int currentFps;
 
     [SerializeField]
-    private Text m_Text;
+    private Text text;
 
     private void Start()
     {
-      m_FpsNextPeriod = Time.realtimeSinceStartup + FPS_INTERVAL;
+      fpsNextPeriod = Time.realtimeSinceStartup + FPS_INTERVAL;
     }
 
     private void Update()
     {
       // measure average frames per second
-      m_FpsAccumulator++;
-      if (Time.realtimeSinceStartup > m_FpsNextPeriod)
+      fpsAccumulator++;
+      if (Time.realtimeSinceStartup > fpsNextPeriod)
       {
-        m_CurrentFps = (int)(m_FpsAccumulator / FPS_INTERVAL);
-        m_FpsAccumulator = 0;
-        m_FpsNextPeriod += FPS_INTERVAL;
-        m_Text.text = string.Format(DISPLAY, m_CurrentFps);
+        currentFps = (int)(fpsAccumulator / FPS_INTERVAL);
+        fpsAccumulator = 0;
+        fpsNextPeriod += FPS_INTERVAL;
+        text.text = string.Format(DISPLAY, currentFps);
       }
     }
   }

@@ -22,14 +22,14 @@ using IBM.Watson.DeveloperCloud.Logging;
 
 public class ExampleDocumentConversion : MonoBehaviour
 {
-  private DocumentConversion m_DocumentConversion = new DocumentConversion();
+  private DocumentConversion documentConversion = new DocumentConversion();
 
   void Start()
   {
     LogSystem.InstallDefaultReactors(); LogSystem.InstallDefaultReactors();
     string examplePath = Application.dataPath + "/Watson/Examples/ServiceExamples/TestData/watson_beats_jeopardy.html";
 
-    if (!m_DocumentConversion.ConvertDocument(OnConvertDocument, examplePath, ConversionTarget.NORMALIZED_TEXT))
+    if (!documentConversion.ConvertDocument(OnConvertDocument, examplePath, ConversionTarget.NORMALIZED_TEXT))
       Log.Debug("ExampleDocumentConversion", "Document conversion failed!");
   }
 

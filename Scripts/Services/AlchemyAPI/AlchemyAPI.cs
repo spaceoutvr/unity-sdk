@@ -39,17 +39,17 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
 
     #region Private Data
     private const string SERVICE_ID = "AlchemyAPIV1";
-    private static string mp_ApiKey = null;
+    private static string apiKey = null;
 
-    private static fsSerializer sm_Serializer = new fsSerializer();
+    private static fsSerializer sserializer = new fsSerializer();
     #endregion
 
     #region SetCredentials
     private void SetCredentials()
     {
-      mp_ApiKey = Config.Instance.GetAPIKey(SERVICE_ID);
+      apiKey = Config.Instance.GetAPIKey(SERVICE_ID);
 
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         throw new WatsonException("Alchemy API Key required in config.json");
     }
     #endregion
@@ -76,14 +76,14 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
         throw new ArgumentNullException("callback");
       if (string.IsNullOrEmpty(source))
         throw new ArgumentNullException("Please provide a source for GetAuthors.");
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         SetCredentials();
 
       GetAuthorsRequest req = new GetAuthorsRequest();
       req.Callback = callback;
       req.Data = string.IsNullOrEmpty(customData) ? source : customData;
 
-      req.Parameters["apikey"] = mp_ApiKey;
+      req.Parameters["apikey"] = apiKey;
       req.Parameters["outputMode"] = "json";
 
       req.Headers["Content-Type"] = "application/x-www-form-urlencoded";
@@ -150,7 +150,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = authorsData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -198,14 +198,14 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
         throw new ArgumentNullException("callback");
       if (string.IsNullOrEmpty(source))
         throw new WatsonException("Please provide a source for GetAuthors.");
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         SetCredentials();
 
       GetRankedConceptsRequest req = new GetRankedConceptsRequest();
       req.Callback = callback;
       req.Data = string.IsNullOrEmpty(customData) ? source : customData;
 
-      req.Parameters["apikey"] = mp_ApiKey;
+      req.Parameters["apikey"] = apiKey;
       req.Parameters["outputMode"] = "json";
       req.Parameters["maxRetrieve"] = maxRetrieve;
       req.Parameters["knowledgeGraph"] = Convert.ToInt32(includeKnowledgeGraph).ToString();
@@ -276,7 +276,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = conceptsData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -317,7 +317,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
         throw new ArgumentNullException("callback");
       if (string.IsNullOrEmpty(source))
         throw new WatsonException("Please provide a source for GetAuthors.");
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         SetCredentials();
       if (string.IsNullOrEmpty(anchorDate))
         anchorDate = GetCurrentDatetime();
@@ -326,7 +326,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
       req.Callback = callback;
       req.Data = string.IsNullOrEmpty(customData) ? source : customData;
 
-      req.Parameters["apikey"] = mp_ApiKey;
+      req.Parameters["apikey"] = apiKey;
       req.Parameters["outputMode"] = "json";
       req.Parameters["showSourceText"] = Convert.ToInt32(includeSourceText).ToString();
 
@@ -395,7 +395,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = dateData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -442,14 +442,14 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
         throw new ArgumentNullException("callback");
       if (string.IsNullOrEmpty(source))
         throw new WatsonException("Please provide a source for GetEmotions.");
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         SetCredentials();
 
       GetEmotionsRequest req = new GetEmotionsRequest();
       req.Callback = callback;
       req.Data = string.IsNullOrEmpty(customData) ? source : customData;
 
-      req.Parameters["apikey"] = mp_ApiKey;
+      req.Parameters["apikey"] = apiKey;
       req.Parameters["outputMode"] = "json";
       req.Parameters["showSourceText"] = Convert.ToInt32(includeSourceText).ToString();
 
@@ -517,7 +517,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = emotionData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -575,14 +575,14 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
         throw new ArgumentNullException("callback");
       if (string.IsNullOrEmpty(source))
         throw new WatsonException("Please provide a source for ExtractEntities.");
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         SetCredentials();
 
       GetEntitiesRequest req = new GetEntitiesRequest();
       req.Callback = callback;
       req.Data = string.IsNullOrEmpty(customData) ? source : customData;
 
-      req.Parameters["apikey"] = mp_ApiKey;
+      req.Parameters["apikey"] = apiKey;
       req.Parameters["outputMode"] = "json";
       req.Parameters["maxRetrieve"] = Convert.ToInt32(maxRetrieve).ToString();
       req.Parameters["coreference"] = Convert.ToInt32(resolveCoreference).ToString();
@@ -658,7 +658,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = entityData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -696,14 +696,14 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
         throw new ArgumentNullException("callback");
       if (string.IsNullOrEmpty(source))
         throw new WatsonException("Please provide a source for GetEmotions.");
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         SetCredentials();
 
       DetectFeedsRequest req = new DetectFeedsRequest();
       req.Callback = callback;
       req.Data = string.IsNullOrEmpty(customData) ? source : customData;
 
-      req.Parameters["apikey"] = mp_ApiKey;
+      req.Parameters["apikey"] = apiKey;
       req.Parameters["outputMode"] = "json";
 
       req.Headers["Content-Type"] = "application/x-www-form-urlencoded";
@@ -767,7 +767,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = feedData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -815,14 +815,14 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
         throw new ArgumentNullException("callback");
       if (string.IsNullOrEmpty(source))
         throw new WatsonException("Please provide a source for ExtractKeywords.");
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         SetCredentials();
 
       GetKeywordsRequest req = new GetKeywordsRequest();
       req.Callback = callback;
       req.Data = string.IsNullOrEmpty(customData) ? source : customData;
 
-      req.Parameters["apikey"] = mp_ApiKey;
+      req.Parameters["apikey"] = apiKey;
       req.Parameters["outputMode"] = "json";
       req.Parameters["maxRetrieve"] = Convert.ToInt32(maxRetrieve).ToString();
       req.Parameters["knowledgeGraph"] = Convert.ToInt32(includeKnowledgeGraph).ToString();
@@ -894,7 +894,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = keywordData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -934,14 +934,14 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
         throw new ArgumentNullException("callback");
       if (string.IsNullOrEmpty(source))
         throw new WatsonException("Please provide a source for GetLanguages.");
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         SetCredentials();
 
       GetLanguagesRequest req = new GetLanguagesRequest();
       req.Callback = callback;
       req.Data = string.IsNullOrEmpty(customData) ? source : customData;
 
-      req.Parameters["apikey"] = mp_ApiKey;
+      req.Parameters["apikey"] = apiKey;
       req.Parameters["outputMode"] = "json";
       req.Parameters["showSourceText"] = Convert.ToInt32(includeSourceText).ToString();
 
@@ -1009,7 +1009,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = languageData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1047,14 +1047,14 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
         throw new ArgumentNullException("callback");
       if (string.IsNullOrEmpty(source))
         throw new WatsonException("Please provide a url for GetMicroformats.");
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         SetCredentials();
 
       GetMicroformatsRequest req = new GetMicroformatsRequest();
       req.Callback = callback;
       req.Data = string.IsNullOrEmpty(customData) ? source : customData;
 
-      req.Parameters["apikey"] = mp_ApiKey;
+      req.Parameters["apikey"] = apiKey;
       req.Parameters["outputMode"] = "json";
 
       req.Headers["Content-Type"] = "application/x-www-form-urlencoded";
@@ -1118,7 +1118,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = microformatData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1156,14 +1156,14 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
         throw new ArgumentNullException("callback");
       if (string.IsNullOrEmpty(source))
         throw new WatsonException("Please provide a url for GetPublicationDate.");
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         SetCredentials();
 
       GetPublicationDateRequest req = new GetPublicationDateRequest();
       req.Callback = callback;
       req.Data = string.IsNullOrEmpty(customData) ? source : customData;
 
-      req.Parameters["apikey"] = mp_ApiKey;
+      req.Parameters["apikey"] = apiKey;
       req.Parameters["outputMode"] = "json";
 
       req.Headers["Content-Type"] = "application/x-www-form-urlencoded";
@@ -1230,7 +1230,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = pubDateData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1292,14 +1292,14 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
         throw new ArgumentNullException("callback");
       if (string.IsNullOrEmpty(source))
         throw new WatsonException("Please provide a source for GetRelations.");
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         SetCredentials();
 
       GetRelationsRequest req = new GetRelationsRequest();
       req.Callback = callback;
       req.Data = string.IsNullOrEmpty(customData) ? source : customData;
 
-      req.Parameters["apikey"] = mp_ApiKey;
+      req.Parameters["apikey"] = apiKey;
       req.Parameters["outputMode"] = "json";
       req.Parameters["maxRetrieve"] = Convert.ToInt32(maxRetrieve).ToString();
       req.Parameters["keywords"] = Convert.ToInt32(includeKeywords).ToString();
@@ -1378,7 +1378,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = relationsData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1418,14 +1418,14 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
         throw new ArgumentNullException("callback");
       if (string.IsNullOrEmpty(source))
         throw new WatsonException("Please provide a source for GetTextSentiment.");
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         SetCredentials();
 
       GetTextSentimentRequest req = new GetTextSentimentRequest();
       req.Callback = callback;
       req.Data = string.IsNullOrEmpty(customData) ? source : customData;
 
-      req.Parameters["apikey"] = mp_ApiKey;
+      req.Parameters["apikey"] = apiKey;
       req.Parameters["outputMode"] = "json";
       req.Parameters["showSourceText"] = Convert.ToInt32(includeSourceText).ToString();
 
@@ -1493,7 +1493,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = sentimentData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1536,14 +1536,14 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
         throw new WatsonException("Please provide a source for GetTargetedSentiment.");
       if (string.IsNullOrEmpty(targets))
         throw new WatsonException("Please provide a target for GetTargetedSentiment.");
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         SetCredentials();
 
       GetTargetedSentimentRequest req = new GetTargetedSentimentRequest();
       req.Callback = callback;
       req.Data = string.IsNullOrEmpty(customData) ? source : customData;
 
-      req.Parameters["apikey"] = mp_ApiKey;
+      req.Parameters["apikey"] = apiKey;
       req.Parameters["outputMode"] = "json";
       req.Parameters["showSourceText"] = Convert.ToInt32(includeSourceText).ToString();
 
@@ -1612,7 +1612,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = sentimentData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1652,14 +1652,14 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
         throw new ArgumentNullException("callback");
       if (string.IsNullOrEmpty(source))
         throw new WatsonException("Please provide a source for GetRankedTaxonomy.");
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         SetCredentials();
 
       GetRankedTaxomomyRequest req = new GetRankedTaxomomyRequest();
       req.Callback = callback;
       req.Data = string.IsNullOrEmpty(customData) ? source : customData;
 
-      req.Parameters["apikey"] = mp_ApiKey;
+      req.Parameters["apikey"] = apiKey;
       req.Parameters["outputMode"] = "json";
       req.Parameters["showSourceText"] = Convert.ToInt32(includeSourceText).ToString();
 
@@ -1727,7 +1727,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = taxonomyData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1767,14 +1767,14 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
         throw new ArgumentNullException("callback");
       if (string.IsNullOrEmpty(source))
         throw new WatsonException("Please provide a source for GetText.");
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         SetCredentials();
 
       GetTextRequest req = new GetTextRequest();
       req.Callback = callback;
       req.Data = string.IsNullOrEmpty(customData) ? source : customData;
 
-      req.Parameters["apikey"] = mp_ApiKey;
+      req.Parameters["apikey"] = apiKey;
       req.Parameters["outputMode"] = "json";
       req.Parameters["extractLinks"] = Convert.ToInt32(extractLinks).ToString();
       req.Parameters["useMetadata"] = Convert.ToInt32(useMetadata).ToString();
@@ -1843,7 +1843,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = textData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1876,14 +1876,14 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
         throw new ArgumentNullException("callback");
       if (string.IsNullOrEmpty(source))
         throw new WatsonException("Please provide a source for GetRawText.");
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         SetCredentials();
 
       GetTextRequest req = new GetTextRequest();
       req.Callback = callback;
       req.Data = string.IsNullOrEmpty(customData) ? source : customData;
 
-      req.Parameters["apikey"] = mp_ApiKey;
+      req.Parameters["apikey"] = apiKey;
       req.Parameters["outputMode"] = "json";
 
       req.Headers["Content-Type"] = "application/x-www-form-urlencoded";
@@ -1946,14 +1946,14 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
         throw new ArgumentNullException("callback");
       if (string.IsNullOrEmpty(source))
         throw new WatsonException("Please provide a source for GetText.");
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         SetCredentials();
 
       GetTitleRequest req = new GetTitleRequest();
       req.Callback = callback;
       req.Data = string.IsNullOrEmpty(customData) ? source : customData;
 
-      req.Parameters["apikey"] = mp_ApiKey;
+      req.Parameters["apikey"] = apiKey;
       req.Parameters["outputMode"] = "json";
       req.Parameters["useMetadata"] = Convert.ToInt32(useMetadata).ToString();
 
@@ -2021,7 +2021,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = titleData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -2106,14 +2106,14 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
           && !extractPageImage
           && !extractImageKeywords)
         throw new WatsonException("GetCombinedCall - Please include one or more services.");
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         SetCredentials();
 
       CombinedCallRequest req = new CombinedCallRequest();
       req.Callback = callback;
       req.Data = string.IsNullOrEmpty(customData) ? source : customData;
 
-      req.Parameters["apikey"] = mp_ApiKey;
+      req.Parameters["apikey"] = apiKey;
       req.Parameters["outputMode"] = "json";
       req.Parameters["showSourceText"] = Convert.ToInt32(includeSourceText).ToString();
 
@@ -2212,7 +2212,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = combinedData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -2260,14 +2260,14 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
     {
       if (callback == null)
         throw new ArgumentNullException("callback");
-      if (string.IsNullOrEmpty(mp_ApiKey))
+      if (string.IsNullOrEmpty(apiKey))
         SetCredentials();
 
       GetNewsRequest req = new GetNewsRequest();
       req.Callback = callback;
       req.Data = customData;
 
-      req.Parameters["apikey"] = mp_ApiKey;
+      req.Parameters["apikey"] = apiKey;
       req.Parameters["outputMode"] = "json";
       req.Parameters["start"] = startDate;
       req.Parameters["end"] = endDate;
@@ -2316,7 +2316,7 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = newsData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -2350,22 +2350,22 @@ namespace IBM.Watson.DeveloperCloud.Services.AlchemyAPI.v1
 
     private class CheckServiceStatus
     {
-      private AlchemyAPI m_Service = null;
-      private ServiceStatus m_Callback = null;
+      private AlchemyAPI service = null;
+      private ServiceStatus callback = null;
 
-      public CheckServiceStatus(AlchemyAPI service, ServiceStatus callback)
+      public CheckServiceStatus(AlchemyAPI alchemyAPI, ServiceStatus serviceStatus)
       {
-        m_Service = service;
-        m_Callback = callback;
+        service = alchemyAPI;
+        callback = serviceStatus;
 
-        if (!m_Service.ExtractEntities(OnGetEntityExtraction, "Test"))
-          m_Callback(SERVICE_ID, false);
+        if (!service.ExtractEntities(OnGetEntityExtraction, "Test"))
+          callback(SERVICE_ID, false);
       }
 
       void OnGetEntityExtraction(EntityData entityExtractionData, string data)
       {
-        if (m_Callback != null)
-          m_Callback(SERVICE_ID, entityExtractionData != null);
+        if (callback != null)
+          callback(SERVICE_ID, entityExtractionData != null);
       }
 
     };

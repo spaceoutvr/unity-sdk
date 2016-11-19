@@ -27,12 +27,12 @@ namespace IBM.Watson.DeveloperCloud.Widgets
   {
     #region Outputs
     [SerializeField]
-    private Output m_ActivateOutput = new Output(typeof(BooleanData), true);
+    private Output activateOutput = new Output(typeof(BooleanData), true);
     #endregion
 
     #region Private Data
     [SerializeField]
-    private bool m_SendValue = true;
+    private bool sendValue = true;
     #endregion
 
     #region Widget interface
@@ -49,7 +49,7 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     /// </summary>
     public void OnButton()
     {
-      m_ActivateOutput.SendData(new BooleanData(m_SendValue));
+      activateOutput.SendData(new BooleanData(sendValue));
     }
     #endregion
   }

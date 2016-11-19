@@ -29,17 +29,17 @@ namespace IBM.Watson.DeveloperCloud.Logging
     /// Days of Log store on file system
     /// </summary>
     [SerializeField]
-    private int m_LogHistory = 2;
+    private int logHistory = 2;
 
     /// <summary>
     /// Log level definition to store on file. 
     /// </summary>
     [SerializeField]
-    private LogLevel m_LogLevelOnFile = LogLevel.STATUS;
+    private LogLevel logLevelOnFile = LogLevel.STATUS;
 
     void Awake()
     {
-      LogSystem.InstallDefaultReactors(m_LogHistory, m_LogLevelOnFile);
+      LogSystem.InstallDefaultReactors(logHistory, logLevelOnFile);
     }
   }
 }

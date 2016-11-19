@@ -23,7 +23,7 @@ using System;
 
 public class ExampleAlchemyDataNews : MonoBehaviour
 {
-  private AlchemyAPI m_AlchemyAPI = new AlchemyAPI();
+  private AlchemyAPI alchemyAPI = new AlchemyAPI();
 
   void Start()
   {
@@ -34,7 +34,7 @@ public class ExampleAlchemyDataNews : MonoBehaviour
     queryFields.Add(Fields.ENRICHED_URL_RELATIONS_RELATION_SUBJECT_TEXT, "Obama");
     queryFields.Add(Fields.ENRICHED_URL_CLEANEDTITLE, "Washington");
 
-    if (!m_AlchemyAPI.GetNews(OnGetNews, returnFields, queryFields))
+    if (!alchemyAPI.GetNews(OnGetNews, returnFields, queryFields))
       Log.Debug("ExampleAlchemyData", "Failed to get news!");
   }
 

@@ -23,17 +23,17 @@ using IBM.Watson.DeveloperCloud.Utilities;
 
 public class ExampleConversationExperimental : MonoBehaviour
 {
-  private ConversationExperimental m_Conversation = new ConversationExperimental();
-  private string m_WorkspaceID;
-  private string m_Input = "Can you unlock the door?";
+  private ConversationExperimental conversation = new ConversationExperimental();
+  private string workspaceID;
+  private string input = "Can you unlock the door?";
 
   void Start()
   {
     LogSystem.InstallDefaultReactors();
-    m_WorkspaceID = Config.Instance.GetVariableValue("ConversationExperimentalV1_ID");
-    Debug.Log("User: " + m_Input);
+    workspaceID = Config.Instance.GetVariableValue("ConversationExperimentalV1_ID");
+    Debug.Log("User: " + input);
 
-    m_Conversation.Message(m_WorkspaceID, m_Input, OnMessage);
+    conversation.Message(workspaceID, input, OnMessage);
   }
 
   void OnMessage(MessageResponse resp)

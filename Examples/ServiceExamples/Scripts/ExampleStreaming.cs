@@ -24,13 +24,13 @@ using IBM.Watson.DeveloperCloud.DataTypes;
 
 public class ExampleStreaming : MonoBehaviour
 {
-  private int m_RecordingRoutine = 0;
-  private string m_MicrophoneID = null;
-  private AudioClip m_Recording = null;
-  private int m_RecordingBufferSize = 2;
-  private int m_RecordingHZ = 22050;
+  private int recordingRoutine = 0;
+  private string microphoneID = null;
+  private AudioClip recording = null;
+  private int recordingBufferSize = 2;
+  private int recordingHZ = 22050;
 
-  private SpeechToText m_SpeechToText = new SpeechToText();
+  private SpeechToText speechToText = new SpeechToText();
 
   void Start()
   {
@@ -44,44 +44,44 @@ public class ExampleStreaming : MonoBehaviour
 
   public bool Active
   {
-    get { return m_SpeechToText.IsListening; }
+    get { return speechToText.IsListening; }
     set
     {
-      if (value && !m_SpeechToText.IsListening)
+      if (value && !speechToText.IsListening)
       {
-        m_SpeechToText.DetectSilence = true;
-        m_SpeechToText.EnableWordConfidence = false;
-        m_SpeechToText.EnableTimestamps = false;
-        m_SpeechToText.SilenceThreshold = 0.03f;
-        m_SpeechToText.MaxAlternatives = 1;
-        m_SpeechToText.EnableContinousRecognition = true;
-        m_SpeechToText.EnableInterimResults = true;
-        m_SpeechToText.OnError = OnError;
-        m_SpeechToText.StartListening(OnRecognize);
+        speechToText.DetectSilence = true;
+        speechToText.EnableWordConfidence = false;
+        speechToText.EnableTimestamps = false;
+        speechToText.SilenceThreshold = 0.03f;
+        speechToText.MaxAlternatives = 1;
+        speechToText.EnableContinousRecognition = true;
+        speechToText.EnableInterimResults = true;
+        speechToText.OnError = OnError;
+        speechToText.StartListening(OnRecognize);
       }
-      else if (!value && m_SpeechToText.IsListening)
+      else if (!value && speechToText.IsListening)
       {
-        m_SpeechToText.StopListening();
+        speechToText.StopListening();
       }
     }
   }
 
   private void StartRecording()
   {
-    if (m_RecordingRoutine == 0)
+    if (recordingRoutine == 0)
     {
       UnityObjectUtil.StartDestroyQueue();
-      m_RecordingRoutine = Runnable.Run(RecordingHandler());
+      recordingRoutine = Runnable.Run(RecordingHandler());
     }
   }
 
   private void StopRecording()
   {
-    if (m_RecordingRoutine != 0)
+    if (recordingRoutine != 0)
     {
-      Microphone.End(m_MicrophoneID);
-      Runnable.Stop(m_RecordingRoutine);
-      m_RecordingRoutine = 0;
+      Microphone.End(microphoneID);
+      Runnable.Stop(recordingRoutine);
+      recordingRoutine = 0;
     }
   }
 
@@ -95,23 +95,23 @@ public class ExampleStreaming : MonoBehaviour
   private IEnumerator RecordingHandler()
   {
     Log.Debug("ExampleStreaming", "devices: {0}", Microphone.devices);
-    m_Recording = Microphone.Start(m_MicrophoneID, true, m_RecordingBufferSize, m_RecordingHZ);
-    yield return null;      // let m_RecordingRoutine get set..
+    recording = Microphone.Start(microphoneID, true, recordingBufferSize, recordingHZ);
+    yield return null;      // let recordingRoutine get set..
 
-    if (m_Recording == null)
+    if (recording == null)
     {
       StopRecording();
       yield break;
     }
 
     bool bFirstBlock = true;
-    int midPoint = m_Recording.samples / 2;
+    int midPoint = recording.samples / 2;
     float[] samples = null;
 
-    while (m_RecordingRoutine != 0 && m_Recording != null)
+    while (recordingRoutine != 0 && recording != null)
     {
-      int writePos = Microphone.GetPosition(m_MicrophoneID);
-      if (writePos > m_Recording.samples || !Microphone.IsRecording(m_MicrophoneID))
+      int writePos = Microphone.GetPosition(microphoneID);
+      if (writePos > recording.samples || !Microphone.IsRecording(microphoneID))
       {
         Log.Error("MicrophoneWidget", "Microphone disconnected.");
 
@@ -124,14 +124,14 @@ public class ExampleStreaming : MonoBehaviour
       {
         // front block is recorded, make a RecordClip and pass it onto our callback.
         samples = new float[midPoint];
-        m_Recording.GetData(samples, bFirstBlock ? 0 : midPoint);
+        recording.GetData(samples, bFirstBlock ? 0 : midPoint);
 
         AudioData record = new AudioData();
         record.MaxLevel = Mathf.Max(samples);
-        record.Clip = AudioClip.Create("Recording", midPoint, m_Recording.channels, m_RecordingHZ, false);
+        record.Clip = AudioClip.Create("Recording", midPoint, recording.channels, recordingHZ, false);
         record.Clip.SetData(samples, 0);
 
-        m_SpeechToText.OnListen(record);
+        speechToText.OnListen(record);
 
         bFirstBlock = !bFirstBlock;
       }
@@ -139,8 +139,8 @@ public class ExampleStreaming : MonoBehaviour
       {
         // calculate the number of samples remaining until we ready for a block of audio, 
         // and wait that amount of time it will take to record.
-        int remaining = bFirstBlock ? (midPoint - writePos) : (m_Recording.samples - writePos);
-        float timeRemaining = (float)remaining / (float)m_RecordingHZ;
+        int remaining = bFirstBlock ? (midPoint - writePos) : (recording.samples - writePos);
+        float timeRemaining = (float)remaining / (float)recordingHZ;
 
         yield return new WaitForSeconds(timeRemaining);
       }

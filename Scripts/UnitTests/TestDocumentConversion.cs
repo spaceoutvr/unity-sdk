@@ -24,10 +24,10 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
 {
   public class TestDocumentConversion : UnitTest
   {
-    DocumentConversion m_DocumentConversion = new DocumentConversion();
-    bool m_DocumentConversionAnswerUnitsTested = false;
-    bool m_DocumentConversionTextTested = false;
-    bool m_DocumentConversionHTMLTested = false;
+    DocumentConversion documentConversion = new DocumentConversion();
+    bool documentConversionAnswerUnitsTested = false;
+    bool documentConversionTextTested = false;
+    bool documentConversionHTMLTested = false;
 
     public override IEnumerator RunTest()
     {
@@ -35,19 +35,19 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
 
       //  test get classifiers
       Log.Debug("TestDocumentConversion", "Testing conversion by answerUnit!");
-      m_DocumentConversion.ConvertDocument(OnConvertDocumentAnswerUnits, examplePath, ConversionTarget.ANSWER_UNITS);
-      while (!m_DocumentConversionAnswerUnitsTested)
+      documentConversion.ConvertDocument(OnConvertDocumentAnswerUnits, examplePath, ConversionTarget.ANSWER_UNITS);
+      while (!documentConversionAnswerUnitsTested)
         yield return null;
 
 
       Log.Debug("TestDocumentConversion", "Testing conversion by Text!");
-      m_DocumentConversion.ConvertDocument(OnConvertDocumentText, examplePath, ConversionTarget.NORMALIZED_TEXT);
-      while (!m_DocumentConversionTextTested)
+      documentConversion.ConvertDocument(OnConvertDocumentText, examplePath, ConversionTarget.NORMALIZED_TEXT);
+      while (!documentConversionTextTested)
         yield return null;
 
       Log.Debug("TestDocumentConversion", "Testing conversion by HTML!");
-      m_DocumentConversion.ConvertDocument(OnConvertDocumentHTML, examplePath, ConversionTarget.NORMALIZED_HTML);
-      while (!m_DocumentConversionHTMLTested)
+      documentConversion.ConvertDocument(OnConvertDocumentHTML, examplePath, ConversionTarget.NORMALIZED_HTML);
+      while (!documentConversionHTMLTested)
         yield return null;
 
       yield break;
@@ -84,7 +84,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
         }
       }
 
-      m_DocumentConversionAnswerUnitsTested = true;
+      documentConversionAnswerUnitsTested = true;
     }
 
     private void OnConvertDocumentHTML(ConvertedDocument documentConversionResponse, string data)
@@ -94,7 +94,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       if (!string.IsNullOrEmpty(documentConversionResponse.htmlContent))
         Log.Debug("ExampleDocumentConversion", "TextContent: {0}", documentConversionResponse.htmlContent);
 
-      m_DocumentConversionHTMLTested = true;
+      documentConversionHTMLTested = true;
     }
 
     private void OnConvertDocumentText(ConvertedDocument documentConversionResponse, string data)
@@ -104,7 +104,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       if (!string.IsNullOrEmpty(documentConversionResponse.textContent))
         Log.Debug("ExampleDocumentConversion", "HTMLContent: {0}", documentConversionResponse.textContent);
 
-      m_DocumentConversionTextTested = true;
+      documentConversionTextTested = true;
     }
   }
 }

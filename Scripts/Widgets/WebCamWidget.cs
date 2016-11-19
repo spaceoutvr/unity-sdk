@@ -33,36 +33,36 @@ namespace IBM.Watson.DeveloperCloud.Widgets
   {
     #region Inputs
     [SerializeField]
-    private Input m_DisableInput = new Input("Disable", typeof(DisableWebCamData), "OnDisableInput");
+    private Input disableInput = new Input("Disable", typeof(DisableWebCamData), "OnDisableInput");
     #endregion
 
     #region Outputs
     [SerializeField]
-    private Output m_WebCamTextureOutput = new Output(typeof(WebCamTextureData));
+    private Output webCamTextureOutput = new Output(typeof(WebCamTextureData));
     [SerializeField]
-    private Output m_ActivateOutput = new Output(typeof(BooleanData));
+    private Output activateOutput = new Output(typeof(BooleanData));
     #endregion
 
     #region Private Data
-    private bool m_Active = false;
-    private bool m_Disabled = false;
-    private bool m_Failure = false;
-    private DateTime m_LastFailure = DateTime.Now;
+    private bool active = false;
+    private bool disabled = false;
+    private bool failure = false;
+    private DateTime lastFailure = DateTime.Now;
 
     [SerializeField]
-    private bool m_ActivateOnStart = true;
+    private bool activateOnStart = true;
     [SerializeField]
-    private int m_RequestedWidth = 640;
+    private int requestedWidth = 640;
     [SerializeField]
-    private int m_RequestedHeight = 480;
+    private int requestedHeight = 480;
     [SerializeField]
-    private int m_RequestedFPS = 60;
+    private int requestedFPS = 60;
     [SerializeField]
-    private Text m_StatusText = null;
+    private Text statusText = null;
 
-    private int m_RecordingRoutine = 0;                      // ID of our co-routine when recording, 0 if not recording currently.
-    private WebCamTexture m_WebCamTexture;
-    private int m_WebCamIndex = 0;
+    private int recordingRoutine = 0;                      // ID of our co-routine when recording, 0 if not recording currently.
+    private WebCamTexture webCamTexture;
+    private int webCamIndex = 0;
     #endregion
 
     #region Public Properties
@@ -71,13 +71,13 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     /// </summary>
     public bool Active
     {
-      get { return m_Active; }
+      get { return active; }
       set
       {
-        if (m_Active != value)
+        if (active != value)
         {
-          m_Active = value;
-          if (m_Active && !m_Disabled)
+          active = value;
+          if (active && !disabled)
             StartRecording();
           else
             StopRecording();
@@ -89,13 +89,13 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     /// </summary>
     public bool Disable
     {
-      get { return m_Disabled; }
+      get { return disabled; }
       set
       {
-        if (m_Disabled != value)
+        if (disabled != value)
         {
-          m_Disabled = value;
-          if (m_Active && !m_Disabled)
+          disabled = value;
+          if (active && !disabled)
             StartRecording();
           else
             StopRecording();
@@ -108,14 +108,14 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     /// </summary>
     public bool Failure
     {
-      get { return m_Failure; }
+      get { return failure; }
       private set
       {
-        if (m_Failure != value)
+        if (failure != value)
         {
-          m_Failure = value;
-          if (m_Failure)
-            m_LastFailure = DateTime.Now;
+          failure = value;
+          if (failure)
+            lastFailure = DateTime.Now;
         }
       }
     }
@@ -131,23 +131,23 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     /// </summary>
     public WebCamTexture WebCamTexture
     {
-      get { return m_WebCamTexture; }
+      get { return webCamTexture; }
     }
     /// <summary>
     /// The requested width of the WebCamTexture.
     /// </summary>
     public int RequestedWidth
     {
-      get { return m_RequestedWidth; }
-      set { m_RequestedWidth = value; }
+      get { return requestedWidth; }
+      set { requestedWidth = value; }
     }
     /// <summary>
     /// The requested height of the WebCamTexture.
     /// </summary>
     public int RequestedHeight
     {
-      get { return m_RequestedHeight; }
-      set { m_RequestedHeight = value; }
+      get { return requestedHeight; }
+      set { requestedHeight = value; }
     }
 
     /// <summary>
@@ -155,8 +155,8 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     /// </summary>
     public int RequestedFPS
     {
-      get { return m_RequestedFPS; }
-      set { m_RequestedFPS = value; }
+      get { return requestedFPS; }
+      set { requestedFPS = value; }
     }
     #endregion
 
@@ -192,16 +192,16 @@ namespace IBM.Watson.DeveloperCloud.Widgets
         return;
       }
 
-      m_WebCamTexture.Stop();
+      webCamTexture.Stop();
       int requestedIndex;
-      if (m_WebCamIndex == devices.Length - 1)
+      if (webCamIndex == devices.Length - 1)
         requestedIndex = 0;
       else
-        requestedIndex = m_WebCamIndex + 1;
-      m_WebCamTexture.deviceName = devices[requestedIndex].name;
-      m_WebCamIndex = requestedIndex;
-      Log.Status("WebCamWidget", "Switched to WebCam {0}, name: {1}, isFontFacing: {2}.", m_WebCamIndex, devices[m_WebCamIndex].name, devices[m_WebCamIndex].isFrontFacing);
-      m_WebCamTexture.Play();
+        requestedIndex = webCamIndex + 1;
+      webCamTexture.deviceName = devices[requestedIndex].name;
+      webCamIndex = requestedIndex;
+      Log.Status("WebCamWidget", "Switched to WebCam {0}, name: {1}, isFontFacing: {2}.", webCamIndex, devices[webCamIndex].name, devices[webCamIndex].isFrontFacing);
+      webCamTexture.Play();
     }
 
     /// <summary>
@@ -217,11 +217,11 @@ namespace IBM.Watson.DeveloperCloud.Widgets
         throw new WatsonException(string.Format("Requested WebCam index {0} does not exist! There are {1} available WebCams.", index, devices.Length));
       }
 
-      m_WebCamTexture.Stop();
-      m_WebCamTexture.deviceName = devices[index].name;
-      m_WebCamIndex = index;
-      Log.Status("WebCamWidget", "Switched to WebCam {0}, name: {1}, isFontFacing: {2}.", m_WebCamIndex, devices[m_WebCamIndex].name, devices[m_WebCamIndex].isFrontFacing);
-      m_WebCamTexture.Play();
+      webCamTexture.Stop();
+      webCamTexture.deviceName = devices[index].name;
+      webCamIndex = index;
+      Log.Status("WebCamWidget", "Switched to WebCam {0}, name: {1}, isFontFacing: {2}.", webCamIndex, devices[webCamIndex].name, devices[webCamIndex].isFrontFacing);
+      webCamTexture.Play();
     }
 
     /// <summary>
@@ -240,7 +240,7 @@ namespace IBM.Watson.DeveloperCloud.Widgets
       LogSystem.InstallDefaultReactors();
       Log.Debug("WebCamWidget", "WebCamWidget.Start();");
 
-      if (m_ActivateOnStart)
+      if (activateOnStart)
         Active = true;
     }
 
@@ -260,33 +260,33 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     #region Recording Functions
     private void StartRecording()
     {
-      Log.Debug("WebCamWidget", "StartRecording(); m_RecordingRoutine: {0}", m_RecordingRoutine);
-      if (m_RecordingRoutine == 0)
+      Log.Debug("WebCamWidget", "StartRecording(); recordingRoutine: {0}", recordingRoutine);
+      if (recordingRoutine == 0)
       {
         //UnityObjectUtil.StartDestroyQueue();
 
-        m_RecordingRoutine = Runnable.Run(RecordingHandler());
-        m_ActivateOutput.SendData(new BooleanData(true));
+        recordingRoutine = Runnable.Run(RecordingHandler());
+        activateOutput.SendData(new BooleanData(true));
 
-        if (m_StatusText != null)
-          m_StatusText.text = "WEB CAMERA ON";
+        if (statusText != null)
+          statusText.text = "WEB CAMERA ON";
       }
     }
 
     private void StopRecording()
     {
       Log.Debug("WebCamWidget", "StopRecording();");
-      if (m_RecordingRoutine != 0)
+      if (recordingRoutine != 0)
       {
-        Runnable.Stop(m_RecordingRoutine);
-        m_RecordingRoutine = 0;
+        Runnable.Stop(recordingRoutine);
+        recordingRoutine = 0;
 
-        m_ActivateOutput.SendData(new BooleanData(false));
+        activateOutput.SendData(new BooleanData(false));
 
-        m_WebCamTexture.Stop();
+        webCamTexture.Stop();
 
-        if (m_StatusText != null)
-          m_StatusText.text = "WEB CAMERA OFF";
+        if (statusText != null)
+          statusText.text = "WEB CAMERA OFF";
       }
     }
 
@@ -298,18 +298,18 @@ namespace IBM.Watson.DeveloperCloud.Widgets
 			yield return Application.RequestUserAuthorization(UserAuthorization.WebCam);
 #endif
 
-      m_WebCamTexture = new WebCamTexture(m_RequestedWidth, m_RequestedHeight, m_RequestedFPS);
+      webCamTexture = new WebCamTexture(requestedWidth, requestedHeight, requestedFPS);
       yield return null;
 
-      if (m_WebCamTexture == null)
+      if (webCamTexture == null)
       {
         Failure = true;
         StopRecording();
         yield break;
       }
 
-      WebCamTextureData camData = new WebCamTextureData(m_WebCamTexture, m_RequestedWidth, m_RequestedHeight, m_RequestedFPS);
-      m_WebCamTextureOutput.SendData(camData);
+      WebCamTextureData camData = new WebCamTextureData(webCamTexture, requestedWidth, requestedHeight, requestedFPS);
+      webCamTextureOutput.SendData(camData);
     }
     #endregion
   }

@@ -30,37 +30,37 @@ namespace IBM.Watson.DeveloperCloud.Camera
 
     #region Private Members
 
-    private WatsonCamera mp_WatsonCamera = null;
-    private UnityEngine.Camera mp_CameraAttached = null;
+    private WatsonCamera watsonCamera = null;
+    private UnityEngine.Camera cameraAttached = null;
     [SerializeField]
-    private bool m_UseCustomPosition = false;
+    private bool useCustomPosition = false;
     [SerializeField]
-    private Vector3 m_CustomPosition = Vector3.zero;
+    private Vector3 customPosition = Vector3.zero;
     [SerializeField]
-    private Vector3 m_OffsetPosition = Vector3.zero;
-    private Quaternion m_OffsetPositionRotation = Quaternion.identity;
+    private Vector3 offsetPosition = Vector3.zero;
+    private Quaternion offsetPositionRotation = Quaternion.identity;
     [SerializeField]
-    private bool m_UseCustomRotation = false;
-    private Quaternion m_CustomRotation = Quaternion.identity;
-    private bool m_UseTargetObjectToRotate = false;
+    private bool useCustomRotation = false;
+    private Quaternion customRotation = Quaternion.identity;
+    private bool useTargetObjectToRotate = false;
     [SerializeField]
-    private GameObject m_CustomTargetObjectToLookAt = null;
+    private GameObject customTargetObjectToLookAt = null;
     [SerializeField]
-    private GameObject m_CameraPathRootObject = null;
+    private GameObject cameraPathRootObject = null;
     [SerializeField]
-    private float m_RatioAtCameraPath = 0.0f;
+    private float ratioAtCameraPath = 0.0f;
     [SerializeField]
-    private Vector3 m_DistanceFromCamera = Vector3.zero;
+    private Vector3 distanceFromCamera = Vector3.zero;
 #if SPLINE_INTERPOLATOR
         [SerializeField]
-        private SplineInterpolator m_SplineInterpolator;
+        private SplineInterpolator splineInterpolator;
 #endif
-    private Transform[] m_PathTransforms;
+    private Transform[] pathTransforms;
 
     [SerializeField]
-    private bool m_TextEnableCamera = false;
+    private bool textEnableCamera = false;
     [SerializeField]
-    private bool m_TestToMakeItCurrent = false;
+    private bool testToMakeItCurrent = false;
 
     #endregion
 
@@ -75,11 +75,11 @@ namespace IBM.Watson.DeveloperCloud.Camera
     {
       get
       {
-        return m_UseCustomPosition;
+        return useCustomPosition;
       }
       set
       {
-        m_UseCustomPosition = value;
+        useCustomPosition = value;
       }
     }
 
@@ -92,11 +92,11 @@ namespace IBM.Watson.DeveloperCloud.Camera
     {
       get
       {
-        return m_UseCustomRotation;
+        return useCustomRotation;
       }
       set
       {
-        m_UseCustomRotation = value;
+        useCustomRotation = value;
       }
     }
 
@@ -108,11 +108,11 @@ namespace IBM.Watson.DeveloperCloud.Camera
     {
       get
       {
-        return m_RatioAtCameraPath;
+        return ratioAtCameraPath;
       }
       set
       {
-        m_RatioAtCameraPath = Mathf.Repeat(value, 1.0f);
+        ratioAtCameraPath = Mathf.Repeat(value, 1.0f);
       }
     }
 
@@ -124,11 +124,11 @@ namespace IBM.Watson.DeveloperCloud.Camera
     {
       get
       {
-        return m_CameraPathRootObject;
+        return cameraPathRootObject;
       }
       set
       {
-        m_CameraPathRootObject = value;
+        cameraPathRootObject = value;
       }
     }
 
@@ -136,11 +136,11 @@ namespace IBM.Watson.DeveloperCloud.Camera
     {
       get
       {
-        return m_OffsetPosition;
+        return offsetPosition;
       }
       set
       {
-        m_OffsetPosition = value;
+        offsetPosition = value;
       }
     }
 
@@ -148,11 +148,11 @@ namespace IBM.Watson.DeveloperCloud.Camera
     {
       get
       {
-        return m_DistanceFromCamera;
+        return distanceFromCamera;
       }
       set
       {
-        m_DistanceFromCamera = value;
+        distanceFromCamera = value;
       }
     }
 
@@ -160,11 +160,11 @@ namespace IBM.Watson.DeveloperCloud.Camera
     {
       get
       {
-        return m_OffsetPositionRotation;
+        return offsetPositionRotation;
       }
       set
       {
-        m_OffsetPositionRotation = value;
+        offsetPositionRotation = value;
       }
     }
 
@@ -177,49 +177,49 @@ namespace IBM.Watson.DeveloperCloud.Camera
       get
       {
 #if SPLINE_INTERPOLATOR
-                if (m_CameraPathRootObject != null)
+                if (cameraPathRootObject != null)
                 {
-                    if (m_PathTransforms == null)
+                    if (pathTransforms == null)
                     {
-                        List<Transform> childrenTransforms = new List<Transform>(m_CameraPathRootObject.GetComponentsInChildren<Transform>());
+                        List<Transform> childrenTransforms = new List<Transform>(cameraPathRootObject.GetComponentsInChildren<Transform>());
 
-                        childrenTransforms.Remove(m_CameraPathRootObject.transform);
+                        childrenTransforms.Remove(cameraPathRootObject.transform);
                         childrenTransforms.Sort(delegate(Transform t1, Transform t2)
                             {
                                 return t1.name.CompareTo(t2.name);
                             });
 
-                        m_PathTransforms = childrenTransforms.ToArray();
+                        pathTransforms = childrenTransforms.ToArray();
 
-                        if (m_SplineInterpolator == null)
+                        if (splineInterpolator == null)
                         {
-                            m_SplineInterpolator = this.gameObject.GetComponent<SplineInterpolator>();
-                            if (m_SplineInterpolator == null)
-                                m_SplineInterpolator = this.gameObject.AddComponent<SplineInterpolator>();
+                            splineInterpolator = this.gameObject.GetComponent<SplineInterpolator>();
+                            if (splineInterpolator == null)
+                                splineInterpolator = this.gameObject.AddComponent<SplineInterpolator>();
                         }
 
-                        m_SplineInterpolator.SetupSplineInterpolator(m_PathTransforms);
+                        splineInterpolator.SetupSplineInterpolator(pathTransforms);
                     }
 
-                    if (m_OffsetPosition != Vector3.zero)
+                    if (offsetPosition != Vector3.zero)
                     {
-                        return m_SplineInterpolator.GetHermiteAtTime(m_RatioAtCameraPath) + (TargetRotation * m_OffsetPosition) + DistanceFromCamera;
+                        return splineInterpolator.GetHermiteAtTime(ratioAtCameraPath) + (TargetRotation * offsetPosition) + DistanceFromCamera;
                     }
                     else
                     {
-                        return m_SplineInterpolator.GetHermiteAtTime(m_RatioAtCameraPath) + DistanceFromCamera;
+                        return splineInterpolator.GetHermiteAtTime(ratioAtCameraPath) + DistanceFromCamera;
                     }
 
                 }
                 else 
 #endif
-        if (m_UseCustomPosition)
+        if (useCustomPosition)
         {
-          return m_CustomPosition;
+          return customPosition;
         }
-        else if (m_OffsetPosition != Vector3.zero)
+        else if (offsetPosition != Vector3.zero)
         {
-          return transform.position + (Quaternion.Euler(transform.rotation.eulerAngles - m_OffsetPositionRotation.eulerAngles) * m_OffsetPosition);
+          return transform.position + (Quaternion.Euler(transform.rotation.eulerAngles - offsetPositionRotation.eulerAngles) * offsetPosition);
         }
         else
         {
@@ -228,8 +228,8 @@ namespace IBM.Watson.DeveloperCloud.Camera
       }
       set
       {
-        m_UseCustomPosition = true;
-        m_CustomPosition = value;
+        useCustomPosition = true;
+        customPosition = value;
       }
     }
 
@@ -241,7 +241,7 @@ namespace IBM.Watson.DeveloperCloud.Camera
     {
       get
       {
-        if (m_UseTargetObjectToRotate)
+        if (useTargetObjectToRotate)
         {
           if (TargetObject != null)
           {
@@ -265,9 +265,9 @@ namespace IBM.Watson.DeveloperCloud.Camera
             return Quaternion.identity;
           }
         }
-        else if (m_UseCustomRotation)
+        else if (useCustomRotation)
         {
-          return m_CustomRotation;
+          return customRotation;
         }
         else
         {
@@ -276,8 +276,8 @@ namespace IBM.Watson.DeveloperCloud.Camera
       }
       set
       {
-        m_UseCustomRotation = true;
-        m_CustomRotation = value;
+        useCustomRotation = true;
+        customRotation = value;
       }
     }
 
@@ -289,19 +289,19 @@ namespace IBM.Watson.DeveloperCloud.Camera
     {
       get
       {
-        return m_CustomTargetObjectToLookAt;
+        return customTargetObjectToLookAt;
       }
       set
       {
         if (value != null)
         {
-          m_UseTargetObjectToRotate = true;
-          m_CustomTargetObjectToLookAt = value;
+          useTargetObjectToRotate = true;
+          customTargetObjectToLookAt = value;
         }
         else
         {
-          m_UseTargetObjectToRotate = false;
-          m_CustomTargetObjectToLookAt = null;
+          useTargetObjectToRotate = false;
+          customTargetObjectToLookAt = null;
         }
       }
     }
@@ -314,12 +314,12 @@ namespace IBM.Watson.DeveloperCloud.Camera
     {
       get
       {
-        if (mp_CameraAttached == null)
+        if (cameraAttached == null)
         {
           if (WatsonCameraAttached != null)
-            mp_CameraAttached = WatsonCameraAttached.GetComponent<UnityEngine.Camera>();
+            cameraAttached = WatsonCameraAttached.GetComponent<UnityEngine.Camera>();
         }
-        return mp_CameraAttached;
+        return cameraAttached;
       }
     }
 
@@ -331,17 +331,17 @@ namespace IBM.Watson.DeveloperCloud.Camera
     {
       get
       {
-        if (mp_WatsonCamera == null)
+        if (watsonCamera == null)
         {
           //Check if is there any local camera attached
-          mp_WatsonCamera = this.gameObject.GetComponent<WatsonCamera>();
+          watsonCamera = this.gameObject.GetComponent<WatsonCamera>();
 
-          if (mp_WatsonCamera == null)
+          if (watsonCamera == null)
           {
-            mp_WatsonCamera = GameObject.FindObjectOfType<WatsonCamera>();
+            watsonCamera = GameObject.FindObjectOfType<WatsonCamera>();
           }
         }
-        return mp_WatsonCamera;
+        return watsonCamera;
       }
     }
 
@@ -392,10 +392,10 @@ namespace IBM.Watson.DeveloperCloud.Camera
 
     void Update()
     {
-      if (m_TestToMakeItCurrent)
+      if (testToMakeItCurrent)
       {
-        m_TestToMakeItCurrent = false;
-        SetCurrentTargetOnCamera(m_TextEnableCamera);
+        testToMakeItCurrent = false;
+        SetCurrentTargetOnCamera(textEnableCamera);
       }
     }
 
@@ -407,10 +407,10 @@ namespace IBM.Watson.DeveloperCloud.Camera
     /// Sets the target position with offset.
     /// </summary>
     /// <param name="offsetPosition"></param>
-    public void SetTargetPositionWithOffset(Vector3 offsetPosition)
+    public void SetTargetPositionWithOffset(Vector3 offset)
     {
-      m_OffsetPosition = offsetPosition;
-      m_OffsetPositionRotation = this.transform.rotation;
+      offsetPosition = offset;
+      offsetPositionRotation = this.transform.rotation;
     }
 
     #endregion
@@ -419,32 +419,32 @@ namespace IBM.Watson.DeveloperCloud.Camera
 
         void OnDrawGizmos()
         {
-            if (m_CameraPathRootObject != null)
+            if (cameraPathRootObject != null)
             {
-                List<Transform> childrenTransforms = new List<Transform>(m_CameraPathRootObject.GetComponentsInChildren<Transform>());
+                List<Transform> childrenTransforms = new List<Transform>(cameraPathRootObject.GetComponentsInChildren<Transform>());
 
-                childrenTransforms.Remove(m_CameraPathRootObject.transform);
+                childrenTransforms.Remove(cameraPathRootObject.transform);
                 childrenTransforms.Sort(delegate(Transform t1, Transform t2)
                     {
                         return t1.name.CompareTo(t2.name);
                     });
 
-                m_PathTransforms = childrenTransforms.ToArray();
+                pathTransforms = childrenTransforms.ToArray();
 
-                if (m_SplineInterpolator == null)
+                if (splineInterpolator == null)
                 {
-                    m_SplineInterpolator = this.gameObject.GetComponent<SplineInterpolator>();
-                    if (m_SplineInterpolator == null)
-                        m_SplineInterpolator = this.gameObject.AddComponent<SplineInterpolator>();
+                    splineInterpolator = this.gameObject.GetComponent<SplineInterpolator>();
+                    if (splineInterpolator == null)
+                        splineInterpolator = this.gameObject.AddComponent<SplineInterpolator>();
                 }
 
-                m_SplineInterpolator.SetupSplineInterpolator(m_PathTransforms);
+                splineInterpolator.SetupSplineInterpolator(pathTransforms);
 
-                Vector3 prevPos = m_PathTransforms[0].position;
+                Vector3 prevPos = pathTransforms[0].position;
                 for (int c = 1; c <= 100; c++)
                 {
                     float currTime = c * 1.0f / 100;
-                    Vector3 currPos = m_SplineInterpolator.GetHermiteAtTime(currTime);
+                    Vector3 currPos = splineInterpolator.GetHermiteAtTime(currTime);
                     float mag = (currPos - prevPos).magnitude * 2;
                     Gizmos.color = new Color(mag, 0, 0, 1);
                     Gizmos.DrawLine(prevPos, currPos);

@@ -84,10 +84,10 @@ namespace IBM.Watson.DeveloperCloud.Editor
         private const string NO = "No";
         private const string OK = "Okay";
 
-        private IWatsonService [] m_Services = null;
-        private Dictionary<string,bool> m_ServiceStatus = new Dictionary<string,bool>();
-        private int m_CheckServiceRoutine = 0;
-        private bool m_CheckServicesNow = false;
+        private IWatsonService [] services = null;
+        private Dictionary<string,bool> serviceStatus = new Dictionary<string,bool>();
+        private int checkServiceRoutine = 0;
+        private bool checkServicesNow = false;
         #endregion
 
         [UnityEditor.Callbacks.DidReloadScripts]
@@ -108,48 +108,48 @@ namespace IBM.Watson.DeveloperCloud.Editor
 #if UNITY_5
             titleContent.text = "Config Editor";
 #endif
-            m_WatsonIcon = (Texture2D)Resources.Load(Constants.Resources.WATSON_ICON, typeof(Texture2D));
-            m_StatusUnknown = (Texture2D)Resources.Load( "status_unknown", typeof(Texture2D));
-            m_StatusDown = (Texture2D)Resources.Load( "status_down", typeof(Texture2D));
-            m_StatusUp = (Texture2D)Resources.Load( "status_up", typeof(Texture2D));
-            m_WizardMode = PlayerPrefs.GetInt( "WizardMode", 1 ) != 0;
+            watsonIcon = (Texture2D)Resources.Load(Constants.Resources.WATSON_ICON, typeof(Texture2D));
+            statusUnknown = (Texture2D)Resources.Load( "status_unknown", typeof(Texture2D));
+            statusDown = (Texture2D)Resources.Load( "status_down", typeof(Texture2D));
+            statusUp = (Texture2D)Resources.Load( "status_up", typeof(Texture2D));
+            wizardMode = PlayerPrefs.GetInt( "WizardMode", 1 ) != 0;
 
             Runnable.EnableRunnableInEditor();
-            m_CheckServiceRoutine = Runnable.Run( CheckServices() );
+            checkServiceRoutine = Runnable.Run( CheckServices() );
         }
 
         private void OnDisable()
         {
-            if ( m_CheckServiceRoutine != 0 )
+            if ( checkServiceRoutine != 0 )
             {
-                Runnable.Stop( m_CheckServiceRoutine );
-                m_CheckServiceRoutine = 0;
+                Runnable.Stop( checkServiceRoutine );
+                checkServiceRoutine = 0;
             }
         }
 
         private IEnumerator CheckServices()
         {
             yield return null;
-            m_Services = ServiceHelper.GetAllServices();
+            services = ServiceHelper.GetAllServices();
 
             DateTime lastCheck = DateTime.Now;
 
             while( true )
             {
-                foreach( var service in m_Services )
+                foreach( var service in services )
                     service.GetServiceStatus( OnServiceStatus );
 
-                while( (DateTime.Now - lastCheck).TotalSeconds < 60.0f && !m_CheckServicesNow )
+                while( (DateTime.Now - lastCheck).TotalSeconds < 60.0f && !checkServicesNow )
                     yield return null;
                 lastCheck = DateTime.Now;
-                m_CheckServicesNow = false;
+                checkServicesNow = false;
             }
         }
 
         private void OnServiceStatus( string serviceID, bool active )
         {
             //Log.Debug( "ConfigEditor", "Service Status for {0} is {1}.", serviceID, active ? "up" : "down" );
-            m_ServiceStatus[ serviceID ] = active;
+            serviceStatus[ serviceID ] = active;
         }
 
         private static void SaveConfig()
@@ -195,13 +195,13 @@ namespace IBM.Watson.DeveloperCloud.Editor
 
         private delegate void WizardStepDelegate( ConfigEditor editor );
 
-        private bool m_WizardMode = true;
-        private Texture m_WatsonIcon = null;
-        private Texture m_StatusUnknown = null;
-        private Texture m_StatusUp = null;
-        private Texture m_StatusDown = null;
-        private Vector2 m_ScrollPos = Vector2.zero;
-        private string m_PastedCredentials = "\n\n\n\n\n\n\n";
+        private bool wizardMode = true;
+        private Texture watsonIcon = null;
+        private Texture statusUnknown = null;
+        private Texture statusUp = null;
+        private Texture statusDown = null;
+        private Vector2 scrollPos = Vector2.zero;
+        private string pastedCredentials = "\n\n\n\n\n\n\n";
 
         private bool GetIsValid(ServiceSetup setup)
         {
@@ -210,7 +210,7 @@ namespace IBM.Watson.DeveloperCloud.Editor
             Config.CredentialInfo info = cfg.FindCredentials( setup.ServiceID );
             if(info != null)
             {
-                if((!string.IsNullOrEmpty(info.m_URL) && !string.IsNullOrEmpty(info.m_Password)) || !string.IsNullOrEmpty(info.m_Apikey))
+                if((!string.IsNullOrEmpty(info.URL) && !string.IsNullOrEmpty(info.password)) || !string.IsNullOrEmpty(info.apikey))
                     isValid = true;
             }
 
@@ -221,10 +221,10 @@ namespace IBM.Watson.DeveloperCloud.Editor
         {
             Config cfg = Config.Instance;
 
-            GUILayout.Label(m_WatsonIcon);
+            GUILayout.Label(watsonIcon);
 
-            m_ScrollPos = EditorGUILayout.BeginScrollView(m_ScrollPos);
-            if ( m_WizardMode )
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
+            if ( wizardMode )
             {
                 //GUILayout.Label( "Use this dialog to generate your configuration file for the Watson Unity SDK." );
                 //GUILayout.Label( "If you have never registered for Watson BlueMix services, click on the button below to begin registration." );
@@ -240,15 +240,15 @@ namespace IBM.Watson.DeveloperCloud.Editor
 
                     GUILayout.BeginHorizontal();
 
-                    if ( m_ServiceStatus.ContainsKey( setup.ServiceID ) )
+                    if ( serviceStatus.ContainsKey( setup.ServiceID ) )
                     {
-                        if ( m_ServiceStatus[setup.ServiceID] )
-                            GUILayout.Label( m_StatusUp, GUILayout.Width( 20 ) );
+                        if ( serviceStatus[setup.ServiceID] )
+                            GUILayout.Label( statusUp, GUILayout.Width( 20 ) );
                         else
-                            GUILayout.Label( m_StatusDown, GUILayout.Width( 20 ) );
+                            GUILayout.Label( statusDown, GUILayout.Width( 20 ) );
                     }
                     else
-                        GUILayout.Label( m_StatusUnknown, GUILayout.Width( 20 ) );
+                        GUILayout.Label( statusUnknown, GUILayout.Width( 20 ) );
 
                     GUIStyle labelStyle = new GUIStyle(GUI.skin.label);
                     labelStyle.normal.textColor = bValid ? Color.green : Color.grey;
@@ -264,7 +264,7 @@ namespace IBM.Watson.DeveloperCloud.Editor
                 }
 
                 GUILayout.Label( "PASTE CREDENTIALS BELOW:" );
-                m_PastedCredentials = EditorGUILayout.TextArea( m_PastedCredentials );
+                pastedCredentials = EditorGUILayout.TextArea( pastedCredentials );
 
                 GUI.SetNextControlName("Apply");
                 if ( GUILayout.Button( "Apply Credentials" ) )
@@ -272,18 +272,18 @@ namespace IBM.Watson.DeveloperCloud.Editor
                     bool bParsed = false;
 
                     Config.CredentialInfo newInfo = new Config.CredentialInfo();
-                    if ( newInfo.ParseJSON( m_PastedCredentials ) )
+                    if ( newInfo.ParseJSON( pastedCredentials ) )
                     {
                         foreach (var setup in SERVICE_SETUP)
                         {
-                            if (newInfo.m_URL.EndsWith(setup.ServiceAPI))
+                            if (newInfo.URL.EndsWith(setup.ServiceAPI))
                             {
-                                newInfo.m_ServiceID = setup.ServiceID;
+                                newInfo.serviceID = setup.ServiceID;
 
                                 bool bAdd = true;
                                 // remove any previous credentials with the same service ID
                                 for( int i=0;i<cfg.Credentials.Count;++i)
-                                    if ( cfg.Credentials[i].m_ServiceID == newInfo.m_ServiceID )
+                                    if ( cfg.Credentials[i].serviceID == newInfo.serviceID )
                                     {
                                         bAdd = false;
 
@@ -306,16 +306,16 @@ namespace IBM.Watson.DeveloperCloud.Editor
 
                     if ( bParsed )
                     {
-                        m_CheckServicesNow = true;
+                        checkServicesNow = true;
 
                         EditorUtility.DisplayDialog( "Complete", "Credentials applied.", OK );
-                        m_PastedCredentials = "\n\n\n\n\n\n\n";
+                        pastedCredentials = "\n\n\n\n\n\n\n";
                         GUI.FocusControl("Apply");
 
                         SaveConfig();
                     }
                     else
-                        EditorUtility.DisplayDialog( "Error", "Failed to parse credentials:\n" + m_PastedCredentials, OK );
+                        EditorUtility.DisplayDialog( "Error", "Failed to parse credentials:\n" + pastedCredentials, OK );
                 }
 
                 if ( GUILayout.Button( "Save" ) )
@@ -323,7 +323,7 @@ namespace IBM.Watson.DeveloperCloud.Editor
 
                 if ( GUILayout.Button( "Advanced Mode" ) )
                 {
-                    m_WizardMode = false;
+                    wizardMode = false;
                     PlayerPrefs.SetInt( "WizardMode", 0 );
                 }
             }
@@ -340,29 +340,29 @@ namespace IBM.Watson.DeveloperCloud.Editor
                     Config.CredentialInfo info = cfg.Credentials[i];
 
                     GUILayout.BeginHorizontal();
-                    info.m_ServiceID = EditorGUILayout.TextField("ServiceID", info.m_ServiceID);
+                    info.serviceID = EditorGUILayout.TextField("ServiceID", info.serviceID);
 
-                    if ( !string.IsNullOrEmpty(info.m_ServiceID) && m_ServiceStatus.ContainsKey( info.m_ServiceID ) )
+                    if ( !string.IsNullOrEmpty(info.serviceID) && serviceStatus.ContainsKey( info.serviceID ) )
                     {
-                        if ( m_ServiceStatus[info.m_ServiceID] )
-                            GUILayout.Label( m_StatusUp, GUILayout.Width( 20 ) );
+                        if ( serviceStatus[info.serviceID] )
+                            GUILayout.Label( statusUp, GUILayout.Width( 20 ) );
                         else
-                            GUILayout.Label( m_StatusDown, GUILayout.Width( 20 ) );
+                            GUILayout.Label( statusDown, GUILayout.Width( 20 ) );
                     }
                     else
-                        GUILayout.Label( m_StatusUnknown, GUILayout.Width( 20 ) );
+                        GUILayout.Label( statusUnknown, GUILayout.Width( 20 ) );
                     GUILayout.EndHorizontal();
 
-                    info.m_URL = EditorGUILayout.TextField("URL", info.m_URL);
+                    info.URL = EditorGUILayout.TextField("URL", info.URL);
 
-                    if(!string.IsNullOrEmpty(info.m_URL))
+                    if(!string.IsNullOrEmpty(info.URL))
                     {
-                        if(info.m_URL.StartsWith("https://gateway-a"))
-                            info.m_Apikey = EditorGUILayout.TextField("API Key", info.m_Apikey);
+                        if(info.URL.StartsWith("https://gateway-a"))
+                            info.apikey = EditorGUILayout.TextField("API Key", info.apikey);
                         else
                         {
-                            info.m_User = EditorGUILayout.TextField("User", info.m_User);
-                            info.m_Password = EditorGUILayout.TextField("Password", info.m_Password);
+                            info.user = EditorGUILayout.TextField("User", info.user);
+                            info.password = EditorGUILayout.TextField("Password", info.password);
                         }
                     }
 
@@ -398,13 +398,13 @@ namespace IBM.Watson.DeveloperCloud.Editor
 
                 if (GUILayout.Button("Save"))
                 {
-                    m_CheckServicesNow = true;
+                    checkServicesNow = true;
                     SaveConfig();
                 }
 
                 if ( GUILayout.Button( "Basic Mode" ) )
                 {
-                    m_WizardMode = true;
+                    wizardMode = true;
                     PlayerPrefs.SetInt( "WizardMode", 1 );
                 }
             }

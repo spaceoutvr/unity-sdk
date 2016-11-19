@@ -64,7 +64,7 @@ namespace IBM.Watson.DeveloperCloud.Editor
     public OnTestsComplete OnTestCompleteCallback { get; set; }
 
     [SerializeField]
-    private string m_ProjectNameToTest = "";
+    private string projectNameToTest = "";
     public static string ProjectToTest = null;
 
     /// <summary>
@@ -74,7 +74,7 @@ namespace IBM.Watson.DeveloperCloud.Editor
     /// <param name="run">If true, then the test co-routine will be started after queueing.</param>
     public void QueueTest(Type test, bool run = false)
     {
-      m_QueuedTests.Enqueue(test);
+      queuedTests.Enqueue(test);
       if (run)
         RunTests();
     }
@@ -82,7 +82,7 @@ namespace IBM.Watson.DeveloperCloud.Editor
     public void QueueTests(Type[] tests, bool run = false)
     {
       foreach (var t in tests)
-        m_QueuedTests.Enqueue(t);
+        queuedTests.Enqueue(t);
       if (run)
         RunTests();
     }
@@ -98,22 +98,22 @@ namespace IBM.Watson.DeveloperCloud.Editor
     }
 
     #region Private Data
-    private Queue<Type> m_QueuedTests = new Queue<Type>();
-    private Type[] m_TestsAvailable = null;
-    private UnitTest m_ActiveTest = null;
+    private Queue<Type> queuedTests = new Queue<Type>();
+    private Type[] testsAvailable = null;
+    private UnitTest activeTest = null;
     #endregion
 
     #region Private Functions
     private IEnumerator RunTestsCR()
     {
-      while (m_QueuedTests.Count > 0)
+      while (queuedTests.Count > 0)
       {
-        Type testType = m_QueuedTests.Dequeue();
+        Type testType = queuedTests.Dequeue();
 
-        m_ActiveTest = Activator.CreateInstance(testType) as UnitTest;
-        if (m_ActiveTest != null)
+        activeTest = Activator.CreateInstance(testType) as UnitTest;
+        if (activeTest != null)
         {
-          if ((string.IsNullOrEmpty(m_ActiveTest.ProjectToTest()) && string.IsNullOrEmpty(ProjectToTest)) || (m_ActiveTest.ProjectToTest() == ProjectToTest) || (!string.IsNullOrEmpty(m_ActiveTest.ProjectToTest()) && !string.IsNullOrEmpty(ProjectToTest) && ProjectToTest.ToLower().Contains(m_ActiveTest.ProjectToTest().ToLower())))
+          if ((string.IsNullOrEmpty(activeTest.ProjectToTest()) && string.IsNullOrEmpty(ProjectToTest)) || (activeTest.ProjectToTest() == ProjectToTest) || (!string.IsNullOrEmpty(activeTest.ProjectToTest()) && !string.IsNullOrEmpty(ProjectToTest) && ProjectToTest.ToLower().Contains(activeTest.ProjectToTest().ToLower())))
           {
             Log.Status("UnitTestManager", "STARTING UnitTest {0} ...", testType.Name);
 
@@ -122,23 +122,23 @@ namespace IBM.Watson.DeveloperCloud.Editor
             DateTime startTime = DateTime.Now;
             try
             {
-              IEnumerator e = m_ActiveTest.RunTest();
+              IEnumerator e = activeTest.RunTest();
               while (e.MoveNext())
               {
-                if (m_ActiveTest.TestFailed)
+                if (activeTest.TestFailed)
                   break;
 
                 yield return null;
                 if ((DateTime.Now - startTime).TotalSeconds > TEST_TIMEOUT)
                 {
                   Log.Error("UnitTestManager", "UnitTest {0} has timed out.", testType.Name);
-                  m_ActiveTest.TestFailed = true;
+                  activeTest.TestFailed = true;
                   break;
                 }
               }
 
               bTestException = false;
-              if (m_ActiveTest.TestFailed)
+              if (activeTest.TestFailed)
               {
                 Log.Error("UnitTestManager", "... UnitTest {0} FAILED.", testType.Name);
                 TestsFailed += 1;
@@ -198,18 +198,18 @@ namespace IBM.Watson.DeveloperCloud.Editor
 
     private void OnGUI()
     {
-      if (m_TestsAvailable == null)
-        m_TestsAvailable = Utility.FindAllDerivedTypes(typeof(UnitTest));
+      if (testsAvailable == null)
+        testsAvailable = Utility.FindAllDerivedTypes(typeof(UnitTest));
 
-      if (m_TestsAvailable != null)
+      if (testsAvailable != null)
       {
         GUILayout.BeginArea(new Rect(Screen.width * 0.3f, Screen.height * 0.15f, Screen.width * 0.4f, Screen.height * 0.85f));
-        foreach (var t in m_TestsAvailable)
+        foreach (var t in testsAvailable)
         {
           string sButtonLabel = "Run " + t.Name;
           if (GUILayout.Button(sButtonLabel, GUILayout.MinWidth(Screen.width * 0.4f), GUILayout.MinHeight(Screen.height * 0.04f)))
           {
-            IBM.Watson.DeveloperCloud.Editor.UnitTestManager.ProjectToTest = m_ProjectNameToTest;
+            IBM.Watson.DeveloperCloud.Editor.UnitTestManager.ProjectToTest = projectNameToTest;
             QueueTest(t, true);
           }
         }

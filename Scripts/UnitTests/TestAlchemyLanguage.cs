@@ -28,78 +28,78 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
 {
   public class TestAlchemyAPI : UnitTest
   {
-    AlchemyAPI m_AlchemyAPI = new AlchemyAPI();
-    bool m_GetAuthorsURLTested = false;
-    bool m_GetAuthorsHTMLTested = false;
+    AlchemyAPI alchemyAPI = new AlchemyAPI();
+    bool getAuthorsURLTested = false;
+    bool getAuthorsHTMLTested = false;
 
-    bool m_GetRankedConceptsHTMLTested = false;
-    bool m_GetRankedConceptsURLTested = false;
-    bool m_GetRankedConceptsTextTested = false;
+    bool getRankedConceptsHTMLTested = false;
+    bool getRankedConceptsURLTested = false;
+    bool getRankedConceptsTextTested = false;
 
-    bool m_GetDatesHTMLTested = false;
-    bool m_GetDatesURLTested = false;
-    bool m_GetDatesTextTested = false;
+    bool getDatesHTMLTested = false;
+    bool getDatesURLTested = false;
+    bool getDatesTextTested = false;
 
-    bool m_GetEmotionHTMLTested = false;
-    bool m_GetEmotionURLTested = false;
-    bool m_GetEmotionTextTested = false;
+    bool getEmotionHTMLTested = false;
+    bool getEmotionURLTested = false;
+    bool getEmotionTextTested = false;
 
-    bool m_GetEntityExtractionHTMLTested = false;
-    bool m_GetEntityExtractionURLTested = false;
-    bool m_GetEntityExtractionTextTested = false;
+    bool getEntityExtractionHTMLTested = false;
+    bool getEntityExtractionURLTested = false;
+    bool getEntityExtractionTextTested = false;
 
-    bool m_DetectFeedsURLTested = false;
-    bool m_DetectFeedsHTMLTested = false;
+    bool detectFeedsURLTested = false;
+    bool detectFeedsHTMLTested = false;
 
-    bool m_GetKeywordExtractionHTMLTested = false;
-    bool m_GetKeywordExtractionURLTested = false;
-    bool m_GetKeywordExtractionTextTested = false;
+    bool getKeywordExtractionHTMLTested = false;
+    bool getKeywordExtractionURLTested = false;
+    bool getKeywordExtractionTextTested = false;
 
-    bool m_GetLanguageHTMLTested = false;
-    bool m_GetLanguageURLTested = false;
-    bool m_GetLanguageTextTested = false;
+    bool getLanguageHTMLTested = false;
+    bool getLanguageURLTested = false;
+    bool getLanguageTextTested = false;
 
-    bool m_GetMicroformatURLTested = false;
-    bool m_GetMicroformatHTMLTested = false;
+    bool getMicroformatURLTested = false;
+    bool getMicroformatHTMLTested = false;
 
-    bool m_GetPubDateURLTested = false;
-    bool m_GetPubldateHTMLTested = false;
+    bool getPubDateURLTested = false;
+    bool getPubldateHTMLTested = false;
 
-    bool m_GetRelationsHTMLTested = false;
-    bool m_GetRelationsURLTested = false;
-    bool m_GetRelationsTextTested = false;
+    bool getRelationsHTMLTested = false;
+    bool getRelationsURLTested = false;
+    bool getRelationsTextTested = false;
 
-    bool m_GetTextSentimentHTMLTested = false;
-    bool m_GetTextSentimentURLTested = false;
-    bool m_GetTextSentimentTextTested = false;
+    bool getTextSentimentHTMLTested = false;
+    bool getTextSentimentURLTested = false;
+    bool getTextSentimentTextTested = false;
 
-    bool m_GetTargetedSentimentHTMLTested = false;
-    bool m_GetTargetedSentimentURLTested = false;
-    bool m_GetTargetedSentimentTextTested = false;
+    bool getTargetedSentimentHTMLTested = false;
+    bool getTargetedSentimentURLTested = false;
+    bool getTargetedSentimentTextTested = false;
 
-    bool m_GetRankedTaxonomyHTMLTested = false;
-    bool m_GetRankedTaxonomyURLTested = false;
-    bool m_GetRankedTaxonomyTextTested = false;
+    bool getRankedTaxonomyHTMLTested = false;
+    bool getRankedTaxonomyURLTested = false;
+    bool getRankedTaxonomyTextTested = false;
 
-    bool m_GetTextHTMLTested = false;
-    bool m_GetTextURLTested = false;
+    bool getTextHTMLTested = false;
+    bool getTextURLTested = false;
 
-    bool m_GetRawTextHTMLTested = false;
-    bool m_GetRawTextURLTested = false;
+    bool getRawTextHTMLTested = false;
+    bool getRawTextURLTested = false;
 
-    bool m_GetTitleHTMLTested = false;
-    bool m_GetTitleURLTested = false;
+    bool getTitleHTMLTested = false;
+    bool getTitleURLTested = false;
 
-    bool m_GetCombinedDataHTMLTested = false;
-    bool m_GetCombinedDataURLTested = false;
-    bool m_GetCombinedDataTextTested = false;
+    bool getCombinedDataHTMLTested = false;
+    bool getCombinedDataURLTested = false;
+    bool getCombinedDataTextTested = false;
 
-    bool m_GetNewsTested = false;
+    bool getNewsTested = false;
 
-    private string m_ExampleURL_article = "http://www.nytimes.com/2011/02/17/science/17jeopardy-watson.html";
-    private string m_ExampleURL_microformats = "http://microformats.org/wiki/hcard";
-    private string m_ExampleURL_feed = "https://news.ycombinator.com/";
-    private string m_ExampleText_article = "Computer Wins on 'Jeopardy!': Trivial, It's Not\nBy JOHN MARKOFF\nYORKTOWN HEIGHTS, N.Y. — In the end, the humans on \"Jeopardy!\" surrendered meekly.\n\nFacing certain defeat at the hands of a room-size I.B.M. computer on Wednesday evening, Ken Jennings, famous for winning 74 games in a row on the TV quiz show, acknowledged the obvious. \"I, for one, welcome our new computer overlords,\" he wrote on his video screen, borrowing a line from a \"Simpsons\" episode.\n\nFrom now on, if the answer is \"the computer champion on \"Jeopardy!,\" the question will be, \"What is Watson?\"\n\nFor I.B.M., the showdown was not merely a well-publicized stunt and a $1 million prize, but proof that the company has taken a big step toward a world in which intelligent machines will understand and respond to humans, and perhaps inevitably, replace some of them.\n\nWatson, specifically, is a \"question answering machine\" of a type that artificial intelligence researchers have struggled with for decades — a computer akin to the one on \"Star Trek\" that can understand questions posed in natural language and answer them.\n\nWatson showed itself to be imperfect, but researchers at I.B.M. and other companies are already developing uses for Watson's technologies that could have a significant impact on the way doctors practice and consumers buy products.\n\n\"Cast your mind back 20 years and who would have thought this was possible?\" said Edward Feigenbaum, a Stanford University computer scientist and a pioneer in the field.\n\nIn its \"Jeopardy!\" project, I.B.M. researchers were tackling a game that requires not only encyclopedic recall, but also the ability to untangle convoluted and often opaque statements, a modicum of luck, and quick, strategic button pressing.\n\nThe contest, which was taped in January here at the company's T. J. Watson Research Laboratory before an audience of I.B.M. executives and company clients, played out in three televised episodes concluding Wednesday. At the end of the first day, Watson was in a tie with Brad Rutter, another ace human player, at $5,000 each, with Mr. Jennings trailing with $2,000.\n\nBut on the second day, Watson went on a tear. By night's end, Watson had a commanding lead with a total of $35,734, compared with Mr. Rutter's $10,400 and Mr. Jennings's $4,800.\n\nVictory was not cemented until late in the third match, when Watson was in Nonfiction. \"Same category for $1,200,\" it said in a manufactured tenor, and lucked into a Daily Double. Mr. Jennings grimaced.\n\nEven later in the match, however, had Mr. Jennings won another key Daily Double it might have come down to Final Jeopardy, I.B.M. researchers acknowledged.\n\nThe final tally was $77,147 to Mr. Jennings's $24,000 and Mr. Rutter's $21,600.\n\nMore than anything, the contest was a vindication for the academic field of artificial intelligence, which began with great promise in the 1960s with the vision of creating a thinking machine and which became the laughingstock of Silicon Valley in the 1980s, when a series of heavily financed start-up companies went bankrupt.\n\nDespite its intellectual prowess, Watson was by no means omniscient. On Tuesday evening during Final Jeopardy, the category was U.S. Cities and the clue was: \"Its largest airport is named for a World War II hero; its second largest for a World War II battle.\"\n\nWatson drew guffaws from many in the television audience when it responded \"What is Toronto?????\"\n\nThe string of question marks indicated that the system had very low confidence in its response, I.B.M. researchers said, but because it was Final Jeopardy, it was forced to give a response. The machine did not suffer much damage. It had wagered just $947 on its result. (The correct answer is, \"What is Chicago?\")\n\n\"We failed to deeply understand what was going on there,\" said David Ferrucci, an I.B.M. researcher who led the development of Watson. \"The reality is that there's lots of data where the title is U.S. cities and the answers are countries, European cities, people, mayors. Even though it says U.S. cities, we had very little confidence that that's the distinguishing feature.\"\n\nThe researchers also acknowledged that the machine had benefited from the \"buzzer factor.\"\n\nBoth Mr. Jennings and Mr. Rutter are accomplished at anticipating the light that signals it is possible to \"buzz in,\" and can sometimes get in with virtually zero lag time. The danger is to buzz too early, in which case the contestant is penalized and \"locked out\" for roughly a quarter of a second.\n\nWatson, on the other hand, does not anticipate the light, but has a weighted scheme that allows it, when it is highly confident, to hit the buzzer in as little as 10 milliseconds, making it very hard for humans to beat. When it was less confident, it took longer to  buzz in. In the second round, Watson beat the others to the buzzer in 24 out of 30 Double Jeopardy questions.\n\n\"It sort of wants to get beaten when it doesn't have high confidence,\" Dr. Ferrucci said. \"It doesn't want to look stupid.\"\n\nBoth human players said that Watson's button pushing skill was not necessarily an unfair advantage. \"I beat Watson a couple of times,\" Mr. Rutter said.\n\nWhen Watson did buzz in, it made the most of it. Showing the ability to parse language, it responded to, \"A recent best seller by Muriel Barbery is called 'This of the Hedgehog,' \" with \"What is Elegance?\"\n\nIt showed its facility with medical diagnosis. With the answer: \"You just need a nap. You don't have this sleep disorder that can make sufferers nod off while standing up,\" Watson replied, \"What is narcolepsy?\"\n\nThe coup de grâce came with the answer, \"William Wilkenson's 'An Account of the Principalities of Wallachia and Moldavia' inspired this author's most famous novel.\" Mr. Jennings wrote, correctly, Bram Stoker, but realized that he could not catch up with Watson's winnings and wrote out his surrender.\n\nBoth players took the contest and its outcome philosophically.\n\n\"I had a great time and I would do it again in a heartbeat,\" said Mr. Jennings. \"It's not about the results; this is about being part of the future.\"\n\nFor I.B.M., the future will happen very quickly, company executives said. On Thursday it plans to announce that it will collaborate with Columbia University and the University of Maryland to create a physician's assistant service that will allow doctors to query a cybernetic assistant. The company also plans to work with Nuance Communications Inc. to add voice recognition to the physician's assistant, possibly making the service available in as little as 18 months.\n\n\"I have been in medical education for 40 years and we're still a very memory-based curriculum,\" said Dr. Herbert Chase, a professor of clinical medicine at Columbia University who is working with I.B.M. on the physician's assistant. \"The power of Watson- like tools will cause us to reconsider what it is we want students to do.\"\n\nI.B.M. executives also said they are in discussions with a major consumer electronics retailer to develop a version of Watson, named after I.B.M.'s founder, Thomas J. Watson, that would be able to interact with consumers on a variety of subjects like buying decisions and technical support.\n\nDr. Ferrucci sees none of the fears that have been expressed by theorists and science fiction writers about the potential of computers to usurp humans.\n\n\"People ask me if this is HAL,\" he said, referring to the computer in \"2001: A Space Odyssey.\" \"HAL's not the focus; the focus is on the computer on 'Star Trek,' where you have this intelligent information seek dialogue, where you can ask follow-up questions and the computer can look at all the evidence and tries to ask follow-up questions. That's very cool.\"\n\nThis article has been revised to reflect the following correction:\n\nCorrection: February 24, 2011\n\n\nAn article last Thursday about the I.B.M. computer Watson misidentified the academic field vindicated by Watson's besting of two human opponents on \"Jeopardy!\" It is artificial intelligence — not computer science, a broader field that includes artificial intelligence.";
+    private string exampleURL_article = "http://www.nytimes.com/2011/02/17/science/17jeopardy-watson.html";
+    private string exampleURL_microformats = "http://microformats.org/wiki/hcard";
+    private string exampleURL_feed = "https://news.ycombinator.com/";
+    private string exampleText_article = "Computer Wins on 'Jeopardy!': Trivial, It's Not\nBy JOHN MARKOFF\nYORKTOWN HEIGHTS, N.Y. — In the end, the humans on \"Jeopardy!\" surrendered meekly.\n\nFacing certain defeat at the hands of a room-size I.B.M. computer on Wednesday evening, Ken Jennings, famous for winning 74 games in a row on the TV quiz show, acknowledged the obvious. \"I, for one, welcome our new computer overlords,\" he wrote on his video screen, borrowing a line from a \"Simpsons\" episode.\n\nFrom now on, if the answer is \"the computer champion on \"Jeopardy!,\" the question will be, \"What is Watson?\"\n\nFor I.B.M., the showdown was not merely a well-publicized stunt and a $1 million prize, but proof that the company has taken a big step toward a world in which intelligent machines will understand and respond to humans, and perhaps inevitably, replace some of them.\n\nWatson, specifically, is a \"question answering machine\" of a type that artificial intelligence researchers have struggled with for decades — a computer akin to the one on \"Star Trek\" that can understand questions posed in natural language and answer them.\n\nWatson showed itself to be imperfect, but researchers at I.B.M. and other companies are already developing uses for Watson's technologies that could have a significant impact on the way doctors practice and consumers buy products.\n\n\"Cast your mind back 20 years and who would have thought this was possible?\" said Edward Feigenbaum, a Stanford University computer scientist and a pioneer in the field.\n\nIn its \"Jeopardy!\" project, I.B.M. researchers were tackling a game that requires not only encyclopedic recall, but also the ability to untangle convoluted and often opaque statements, a modicum of luck, and quick, strategic button pressing.\n\nThe contest, which was taped in January here at the company's T. J. Watson Research Laboratory before an audience of I.B.M. executives and company clients, played out in three televised episodes concluding Wednesday. At the end of the first day, Watson was in a tie with Brad Rutter, another ace human player, at $5,000 each, with Mr. Jennings trailing with $2,000.\n\nBut on the second day, Watson went on a tear. By night's end, Watson had a commanding lead with a total of $35,734, compared with Mr. Rutter's $10,400 and Mr. Jennings's $4,800.\n\nVictory was not cemented until late in the third match, when Watson was in Nonfiction. \"Same category for $1,200,\" it said in a manufactured tenor, and lucked into a Daily Double. Mr. Jennings grimaced.\n\nEven later in the match, however, had Mr. Jennings won another key Daily Double it might have come down to Final Jeopardy, I.B.M. researchers acknowledged.\n\nThe final tally was $77,147 to Mr. Jennings's $24,000 and Mr. Rutter's $21,600.\n\nMore than anything, the contest was a vindication for the academic field of artificial intelligence, which began with great promise in the 1960s with the vision of creating a thinking machine and which became the laughingstock of Silicon Valley in the 1980s, when a series of heavily financed start-up companies went bankrupt.\n\nDespite its intellectual prowess, Watson was by no means omniscient. On Tuesday evening during Final Jeopardy, the category was U.S. Cities and the clue was: \"Its largest airport is named for a World War II hero; its second largest for a World War II battle.\"\n\nWatson drew guffaws from many in the television audience when it responded \"What is Toronto?????\"\n\nThe string of question marks indicated that the system had very low confidence in its response, I.B.M. researchers said, but because it was Final Jeopardy, it was forced to give a response. The machine did not suffer much damage. It had wagered just $947 on its result. (The correct answer is, \"What is Chicago?\")\n\n\"We failed to deeply understand what was going on there,\" said David Ferrucci, an I.B.M. researcher who led the development of Watson. \"The reality is that there's lots of data where the title is U.S. cities and the answers are countries, European cities, people, mayors. Even though it says U.S. cities, we had very little confidence that that's the distinguishing feature.\"\n\nThe researchers also acknowledged that the machine had benefited from the \"buzzer factor.\"\n\nBoth Mr. Jennings and Mr. Rutter are accomplished at anticipating the light that signals it is possible to \"buzz in,\" and can sometimes get in with virtually zero lag time. The danger is to buzz too early, in which case the contestant is penalized and \"locked out\" for roughly a quarter of a second.\n\nWatson, on the other hand, does not anticipate the light, but has a weighted scheme that allows it, when it is highly confident, to hit the buzzer in as little as 10 milliseconds, making it very hard for humans to beat. When it was less confident, it took longer to  buzz in. In the second round, Watson beat the others to the buzzer in 24 out of 30 Double Jeopardy questions.\n\n\"It sort of wants to get beaten when it doesn't have high confidence,\" Dr. Ferrucci said. \"It doesn't want to look stupid.\"\n\nBoth human players said that Watson's button pushing skill was not necessarily an unfair advantage. \"I beat Watson a couple of times,\" Mr. Rutter said.\n\nWhen Watson did buzz in, it made the most of it. Showing the ability to parse language, it responded to, \"A recent best seller by Muriel Barbery is called 'This of the Hedgehog,' \" with \"What is Elegance?\"\n\nIt showed its facility with medical diagnosis. With the answer: \"You just need a nap. You don't have this sleep disorder that can make sufferers nod off while standing up,\" Watson replied, \"What is narcolepsy?\"\n\nThe coup de grâce came with the answer, \"William Wilkenson's 'An Account of the Principalities of Wallachia and Moldavia' inspired this author's most famous novel.\" Mr. Jennings wrote, correctly, Bram Stoker, but realized that he could not catch up with Watson's winnings and wrote out his surrender.\n\nBoth players took the contest and its outcome philosophically.\n\n\"I had a great time and I would do it again in a heartbeat,\" said Mr. Jennings. \"It's not about the results; this is about being part of the future.\"\n\nFor I.B.M., the future will happen very quickly, company executives said. On Thursday it plans to announce that it will collaborate with Columbia University and the University of Maryland to create a physician's assistant service that will allow doctors to query a cybernetic assistant. The company also plans to work with Nuance Communications Inc. to add voice recognition to the physician's assistant, possibly making the service available in as little as 18 months.\n\n\"I have been in medical education for 40 years and we're still a very memory-based curriculum,\" said Dr. Herbert Chase, a professor of clinical medicine at Columbia University who is working with I.B.M. on the physician's assistant. \"The power of Watson- like tools will cause us to reconsider what it is we want students to do.\"\n\nI.B.M. executives also said they are in discussions with a major consumer electronics retailer to develop a version of Watson, named after I.B.M.'s founder, Thomas J. Watson, that would be able to interact with consumers on a variety of subjects like buying decisions and technical support.\n\nDr. Ferrucci sees none of the fears that have been expressed by theorists and science fiction writers about the potential of computers to usurp humans.\n\n\"People ask me if this is HAL,\" he said, referring to the computer in \"2001: A Space Odyssey.\" \"HAL's not the focus; the focus is on the computer on 'Star Trek,' where you have this intelligent information seek dialogue, where you can ask follow-up questions and the computer can look at all the evidence and tries to ask follow-up questions. That's very cool.\"\n\nThis article has been revised to reflect the following correction:\n\nCorrection: February 24, 2011\n\n\nAn article last Thursday about the I.B.M. computer Watson misidentified the academic field vindicated by Watson's besting of two human opponents on \"Jeopardy!\" It is artificial intelligence — not computer science, a broader field that includes artificial intelligence.";
 
     public override IEnumerator RunTest()
     {
@@ -108,255 +108,255 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       string example_feed_html = Application.dataPath + "/Watson/Examples/ServiceExamples/TestData/ycombinator_news.html";
 
       Log.Debug("TestAlchemyAPI", "Attempting GetAuthors URL");
-      m_AlchemyAPI.GetAuthors(OnGetAuthorsURL, m_ExampleURL_article, "OnGetAuthorsURL");
-      while (!m_GetAuthorsURLTested)
+      alchemyAPI.GetAuthors(OnGetAuthorsURL, exampleURL_article, "OnGetAuthorsURL");
+      while (!getAuthorsURLTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetAuthors HTML");
-      m_AlchemyAPI.GetAuthors(OnGetAuthorsHTML, example_article_html, "OnGetAuthorsHTML");
-      while (!m_GetAuthorsHTMLTested)
+      alchemyAPI.GetAuthors(OnGetAuthorsHTML, example_article_html, "OnGetAuthorsHTML");
+      while (!getAuthorsHTMLTested)
         yield return null;
 
 
       Log.Debug("TestAlchemyAPI", "Attempting GetRankedConcepts HTML");
-      m_AlchemyAPI.GetRankedConcepts(OnGetRankedConceptsHTML, example_article_html, 8, true, true, true, "OnGetRankedConceptsHTML");
-      while (!m_GetRankedConceptsHTMLTested)
+      alchemyAPI.GetRankedConcepts(OnGetRankedConceptsHTML, example_article_html, 8, true, true, true, "OnGetRankedConceptsHTML");
+      while (!getRankedConceptsHTMLTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetRankedConcepts URL");
-      m_AlchemyAPI.GetRankedConcepts(OnGetRankedConceptsURL, m_ExampleURL_article, 8, true, true, true, "OnGetRankedConceptsURL");
-      while (!m_GetRankedConceptsHTMLTested)
+      alchemyAPI.GetRankedConcepts(OnGetRankedConceptsURL, exampleURL_article, 8, true, true, true, "OnGetRankedConceptsURL");
+      while (!getRankedConceptsHTMLTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetRankedConcepts Text");
-      m_AlchemyAPI.GetRankedConcepts(OnGetRankedConceptsText, m_ExampleText_article, 8, true, true, true, "OnGetRankedConceptsText");
-      while (!m_GetRankedConceptsHTMLTested)
+      alchemyAPI.GetRankedConcepts(OnGetRankedConceptsText, exampleText_article, 8, true, true, true, "OnGetRankedConceptsText");
+      while (!getRankedConceptsHTMLTested)
         yield return null;
 
 
       Log.Debug("TestAlchemyAPI", "Attempting GetDates URL");
-      m_AlchemyAPI.GetDates(OnGetDatesURL, m_ExampleURL_article, null, true, "OnGetDatesURL");
-      while (!m_GetDatesURLTested)
+      alchemyAPI.GetDates(OnGetDatesURL, exampleURL_article, null, true, "OnGetDatesURL");
+      while (!getDatesURLTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetDates Text");
-      m_AlchemyAPI.GetDates(OnGetDatesText, m_ExampleText_article, null, true, "OnGetDatesText");
-      while (!m_GetDatesTextTested)
+      alchemyAPI.GetDates(OnGetDatesText, exampleText_article, null, true, "OnGetDatesText");
+      while (!getDatesTextTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetDates HTML");
-      m_AlchemyAPI.GetDates(OnGetDatesHTML, example_article_html, null, true, "OnGetDatesHTML");
-      while (!m_GetDatesHTMLTested)
+      alchemyAPI.GetDates(OnGetDatesHTML, example_article_html, null, true, "OnGetDatesHTML");
+      while (!getDatesHTMLTested)
         yield return null;
 
 
       Log.Debug("TestAlchemyAPI", "Attempting GetDates URL");
-      m_AlchemyAPI.GetEmotions(OnGetEmotionsURL, m_ExampleURL_article, true, "OnGetEmotionsURL");
-      while (!m_GetEmotionURLTested)
+      alchemyAPI.GetEmotions(OnGetEmotionsURL, exampleURL_article, true, "OnGetEmotionsURL");
+      while (!getEmotionURLTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetDates Text");
-      m_AlchemyAPI.GetEmotions(OnGetEmotionsText, m_ExampleText_article, true, "OnGetEmotionsText");
-      while (!m_GetEmotionTextTested)
+      alchemyAPI.GetEmotions(OnGetEmotionsText, exampleText_article, true, "OnGetEmotionsText");
+      while (!getEmotionTextTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetDates HTML");
-      m_AlchemyAPI.GetEmotions(OnGetEmotionsHTML, example_article_html, true, "OnGetEmotionsHTML");
-      while (!m_GetEmotionHTMLTested)
+      alchemyAPI.GetEmotions(OnGetEmotionsHTML, example_article_html, true, "OnGetEmotionsHTML");
+      while (!getEmotionHTMLTested)
         yield return null;
 
 
       Log.Debug("TestAlchemyAPI", "Attempting ExtractEntities URL");
-      m_AlchemyAPI.ExtractEntities(OnExtractEntitiesURL, m_ExampleURL_article);
-      while (!m_GetEntityExtractionURLTested)
+      alchemyAPI.ExtractEntities(OnExtractEntitiesURL, exampleURL_article);
+      while (!getEntityExtractionURLTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting ExtractEntities Text");
-      m_AlchemyAPI.ExtractEntities(OnExtractEntitiesText, m_ExampleText_article, 50, true, true, true, true, true, true, true, true, "OnExtractEntitiesText");
-      while (!m_GetEntityExtractionTextTested)
+      alchemyAPI.ExtractEntities(OnExtractEntitiesText, exampleText_article, 50, true, true, true, true, true, true, true, true, "OnExtractEntitiesText");
+      while (!getEntityExtractionTextTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting ExtractEntities HTML");
-      m_AlchemyAPI.ExtractEntities(OnExtractEntitiesHTML, example_article_html, 50, true, true, true, true, true, true, true, true, "OnExtractEntitiesHTML");
-      while (!m_GetEntityExtractionHTMLTested)
+      alchemyAPI.ExtractEntities(OnExtractEntitiesHTML, example_article_html, 50, true, true, true, true, true, true, true, true, "OnExtractEntitiesHTML");
+      while (!getEntityExtractionHTMLTested)
         yield return null;
 
 
       Log.Debug("TestAlchemyAPI", "Attempting DetectFeeds URL");
-      m_AlchemyAPI.DetectFeeds(OnDetectFeedsURL, m_ExampleURL_feed, "OnDetectFeedsURL");
-      while (!m_DetectFeedsURLTested)
+      alchemyAPI.DetectFeeds(OnDetectFeedsURL, exampleURL_feed, "OnDetectFeedsURL");
+      while (!detectFeedsURLTested)
         yield return null;
 
       //            Log.Debug("TestAlchemyAPI", "Attempting DetectFeeds HTML");
-      //            m_AlchemyLanguage.DetectFeeds(OnDetectFeedsHTML, example_feed_html, "OnDetectFeedsHTML");
-      //            while(!m_DetectFeedsHTMLTested)
+      //            alchemyLanguage.DetectFeeds(OnDetectFeedsHTML, example_feed_html, "OnDetectFeedsHTML");
+      //            while(!detectFeedsHTMLTested)
       //                yield return null;
 
 
       Log.Debug("TestAlchemyAPI", "Attempting ExtractKeywords URL");
-      m_AlchemyAPI.ExtractKeywords(OnExtractKeywordsURL, m_ExampleURL_article, 50, true, true, true, "OnExtractKeywordsURL");
-      while (!m_GetKeywordExtractionURLTested)
+      alchemyAPI.ExtractKeywords(OnExtractKeywordsURL, exampleURL_article, 50, true, true, true, "OnExtractKeywordsURL");
+      while (!getKeywordExtractionURLTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting ExtractKeywords Text");
-      m_AlchemyAPI.ExtractKeywords(OnExtractKeywordsText, m_ExampleText_article, 50, true, true, true, "OnExtractKeywordsText");
-      while (!m_GetKeywordExtractionTextTested)
+      alchemyAPI.ExtractKeywords(OnExtractKeywordsText, exampleText_article, 50, true, true, true, "OnExtractKeywordsText");
+      while (!getKeywordExtractionTextTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting ExtractKeywords HTML");
-      m_AlchemyAPI.ExtractKeywords(OnExtractKeywordsHTML, example_article_html, 50, true, true, true, "OnExtractKeywordsHTML");
-      while (!m_GetKeywordExtractionHTMLTested)
+      alchemyAPI.ExtractKeywords(OnExtractKeywordsHTML, example_article_html, 50, true, true, true, "OnExtractKeywordsHTML");
+      while (!getKeywordExtractionHTMLTested)
         yield return null;
 
 
       Log.Debug("TestAlchemyAPI", "Attempting GetLanguages URL");
-      m_AlchemyAPI.GetLanguages(OnGetLanguagesURL, m_ExampleURL_article, true, "OnGetLanguagesURL");
-      while (!m_GetLanguageURLTested)
+      alchemyAPI.GetLanguages(OnGetLanguagesURL, exampleURL_article, true, "OnGetLanguagesURL");
+      while (!getLanguageURLTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetLanguages Text");
-      m_AlchemyAPI.GetLanguages(OnGetLanguagesText, m_ExampleText_article, true, "OnGetLanguagesText");
-      while (!m_GetLanguageTextTested)
+      alchemyAPI.GetLanguages(OnGetLanguagesText, exampleText_article, true, "OnGetLanguagesText");
+      while (!getLanguageTextTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetLanguages HTML");
-      m_AlchemyAPI.GetLanguages(OnGetLanguagesHTML, example_article_html, true, "OnGetLanguagesHTML");
-      while (!m_GetLanguageHTMLTested)
+      alchemyAPI.GetLanguages(OnGetLanguagesHTML, example_article_html, true, "OnGetLanguagesHTML");
+      while (!getLanguageHTMLTested)
         yield return null;
 
 
       Log.Debug("TestAlchemyAPI", "Attempting GetMicroformats URL");
-      m_AlchemyAPI.GetMicroformats(OnGetMicroformatsURL, m_ExampleURL_microformats, "OnGetMicroformatsURL");
-      while (!m_GetMicroformatURLTested)
+      alchemyAPI.GetMicroformats(OnGetMicroformatsURL, exampleURL_microformats, "OnGetMicroformatsURL");
+      while (!getMicroformatURLTested)
         yield return null;
 
       //            Log.Debug("TestAlchemyAPI", "Attempting GetMicroformats HTML");
-      //            m_AlchemyLanguage.GetMicroformats(OnGetMicroformatsHTML, example_microformats_html, "OnGetMicroformatsHTML");
-      //            while(!m_GetMicroformatHTMLTested)
+      //            alchemyLanguage.GetMicroformats(OnGetMicroformatsHTML, example_microformats_html, "OnGetMicroformatsHTML");
+      //            while(!getMicroformatHTMLTested)
       //                yield return null;
 
 
       Log.Debug("TestAlchemyAPI", "Attempting GetPublicationDate URL");
-      m_AlchemyAPI.GetPublicationDate(OnGetPublicationDateURL, m_ExampleURL_article, "OnGetPublicationDateURL");
-      while (!m_GetPubDateURLTested)
+      alchemyAPI.GetPublicationDate(OnGetPublicationDateURL, exampleURL_article, "OnGetPublicationDateURL");
+      while (!getPubDateURLTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetPublicationDate HTML");
-      m_AlchemyAPI.GetPublicationDate(OnGetPublicationDateHTML, example_article_html, "OnGetPublicationDateHTML");
-      while (!m_GetPubldateHTMLTested)
+      alchemyAPI.GetPublicationDate(OnGetPublicationDateHTML, example_article_html, "OnGetPublicationDateHTML");
+      while (!getPubldateHTMLTested)
         yield return null;
 
 
       Log.Debug("TestAlchemyAPI", "Attempting GetRelations URL");
-      m_AlchemyAPI.GetRelations(OnGetRelationsURL, m_ExampleURL_article, 50, true, true, true, true, true, true, true, true, true, true, "OnGetRelationsURL");
-      while (!m_GetRelationsURLTested)
+      alchemyAPI.GetRelations(OnGetRelationsURL, exampleURL_article, 50, true, true, true, true, true, true, true, true, true, true, "OnGetRelationsURL");
+      while (!getRelationsURLTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetRelations Text");
-      m_AlchemyAPI.GetRelations(OnGetRelationsText, m_ExampleText_article, 50, true, true, true, true, true, true, true, true, true, true, "OnGetRelationsText");
-      while (!m_GetRelationsTextTested)
+      alchemyAPI.GetRelations(OnGetRelationsText, exampleText_article, 50, true, true, true, true, true, true, true, true, true, true, "OnGetRelationsText");
+      while (!getRelationsTextTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetRelations HTML");
-      m_AlchemyAPI.GetRelations(OnGetRelationsHTML, example_article_html, 50, true, true, true, true, true, true, true, true, true, true, "OnGetRelationsHTML");
-      while (!m_GetRelationsHTMLTested)
+      alchemyAPI.GetRelations(OnGetRelationsHTML, example_article_html, 50, true, true, true, true, true, true, true, true, true, true, "OnGetRelationsHTML");
+      while (!getRelationsHTMLTested)
         yield return null;
 
 
       Log.Debug("TestAlchemyAPI", "Attempting GetTextSentiment URL");
-      m_AlchemyAPI.GetTextSentiment(OnGetTextSentimentURL, m_ExampleURL_article, true, "OnGetTextSentimentURL");
-      while (!m_GetTextSentimentURLTested)
+      alchemyAPI.GetTextSentiment(OnGetTextSentimentURL, exampleURL_article, true, "OnGetTextSentimentURL");
+      while (!getTextSentimentURLTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetTextSentiment Text");
-      m_AlchemyAPI.GetTextSentiment(OnGetTextSentimentText, m_ExampleText_article, true, "OnGetTextSentimentText");
-      while (!m_GetTextSentimentTextTested)
+      alchemyAPI.GetTextSentiment(OnGetTextSentimentText, exampleText_article, true, "OnGetTextSentimentText");
+      while (!getTextSentimentTextTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetTextSentiment HTML");
-      m_AlchemyAPI.GetTextSentiment(OnGetTextSentimentHTML, example_article_html, true, "OnGetTextSentimentHTML");
-      while (!m_GetTextSentimentHTMLTested)
+      alchemyAPI.GetTextSentiment(OnGetTextSentimentHTML, example_article_html, true, "OnGetTextSentimentHTML");
+      while (!getTextSentimentHTMLTested)
         yield return null;
 
 
       Log.Debug("TestAlchemyAPI", "Attempting GetTargetedSentiment URL");
-      m_AlchemyAPI.GetTargetedSentiment(OnGetTargetedSentimentURL, m_ExampleURL_article, "Jeopardy|Jennings|Watson", true, "OnGetTargetedSentimentURL");
-      while (!m_GetTargetedSentimentURLTested)
+      alchemyAPI.GetTargetedSentiment(OnGetTargetedSentimentURL, exampleURL_article, "Jeopardy|Jennings|Watson", true, "OnGetTargetedSentimentURL");
+      while (!getTargetedSentimentURLTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetTargetedSentiment Text");
-      m_AlchemyAPI.GetTargetedSentiment(OnGetTargetedSentimentText, m_ExampleText_article, "Jeopardy|Jennings|Watson", true, "OnGetTargetedSentimentText");
-      while (!m_GetTargetedSentimentTextTested)
+      alchemyAPI.GetTargetedSentiment(OnGetTargetedSentimentText, exampleText_article, "Jeopardy|Jennings|Watson", true, "OnGetTargetedSentimentText");
+      while (!getTargetedSentimentTextTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetTargetedSentiment HTML");
-      m_AlchemyAPI.GetTargetedSentiment(OnGetTargetedSentimentHTML, example_article_html, "Jeopardy|Jennings|Watson", true, "OnGetTargetedSentimentHTML");
-      while (!m_GetTargetedSentimentHTMLTested)
+      alchemyAPI.GetTargetedSentiment(OnGetTargetedSentimentHTML, example_article_html, "Jeopardy|Jennings|Watson", true, "OnGetTargetedSentimentHTML");
+      while (!getTargetedSentimentHTMLTested)
         yield return null;
 
 
       Log.Debug("TestAlchemyAPI", "Attempting GetRankedTaxonomy URL");
-      m_AlchemyAPI.GetRankedTaxonomy(OnGetRankedTaxonomyURL, m_ExampleURL_article, true, "OnGetRankedTaxonomyURL");
-      while (!m_GetRankedTaxonomyURLTested)
+      alchemyAPI.GetRankedTaxonomy(OnGetRankedTaxonomyURL, exampleURL_article, true, "OnGetRankedTaxonomyURL");
+      while (!getRankedTaxonomyURLTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetRankedTaxonomy Text");
-      m_AlchemyAPI.GetRankedTaxonomy(OnGetRankedTaxonomyText, m_ExampleText_article, true, "OnGetRankedTaxonomyText");
-      while (!m_GetRankedTaxonomyTextTested)
+      alchemyAPI.GetRankedTaxonomy(OnGetRankedTaxonomyText, exampleText_article, true, "OnGetRankedTaxonomyText");
+      while (!getRankedTaxonomyTextTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetRankedTaxonomy HTML");
-      m_AlchemyAPI.GetRankedTaxonomy(OnGetRankedTaxonomyHTML, example_article_html, true, "OnGetRankedTaxonomyHTML");
-      while (!m_GetRankedTaxonomyHTMLTested)
+      alchemyAPI.GetRankedTaxonomy(OnGetRankedTaxonomyHTML, example_article_html, true, "OnGetRankedTaxonomyHTML");
+      while (!getRankedTaxonomyHTMLTested)
         yield return null;
 
 
       Log.Debug("TestAlchemyAPI", "Attempting GetText HTML");
-      m_AlchemyAPI.GetText(OnGetTextHTML, example_article_html, true, true, "OnGetTextHTML");
-      while (!m_GetTextHTMLTested)
+      alchemyAPI.GetText(OnGetTextHTML, example_article_html, true, true, "OnGetTextHTML");
+      while (!getTextHTMLTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetText URL");
-      m_AlchemyAPI.GetText(OnGetTextURL, m_ExampleURL_article, true, true, "OnGetTextURL");
-      while (!m_GetTextURLTested)
+      alchemyAPI.GetText(OnGetTextURL, exampleURL_article, true, true, "OnGetTextURL");
+      while (!getTextURLTested)
         yield return null;
 
 
       Log.Debug("TestAlchemyAPI", "Attempting GetRawText HTML");
-      m_AlchemyAPI.GetRawText(OnGetRawTextHTML, example_article_html, "OnGetTextHTML");
-      while (!m_GetRawTextHTMLTested)
+      alchemyAPI.GetRawText(OnGetRawTextHTML, example_article_html, "OnGetTextHTML");
+      while (!getRawTextHTMLTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetRawText URL");
-      m_AlchemyAPI.GetRawText(OnGetRawTextURL, m_ExampleURL_article, "OnGetTextURL");
-      while (!m_GetRawTextURLTested)
+      alchemyAPI.GetRawText(OnGetRawTextURL, exampleURL_article, "OnGetTextURL");
+      while (!getRawTextURLTested)
         yield return null;
 
 
       Log.Debug("TestAlchemyAPI", "Attempting GetTitle HTML");
-      m_AlchemyAPI.GetTitle(OnGetTitleHTML, example_article_html, true, "OnGetTitleHTML");
-      while (!m_GetTitleHTMLTested)
+      alchemyAPI.GetTitle(OnGetTitleHTML, example_article_html, true, "OnGetTitleHTML");
+      while (!getTitleHTMLTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetTitle URL");
-      m_AlchemyAPI.GetTitle(OnGetTitleURL, m_ExampleURL_article, true, "OnGetTitleURL");
-      while (!m_GetTitleURLTested)
+      alchemyAPI.GetTitle(OnGetTitleURL, exampleURL_article, true, "OnGetTitleURL");
+      while (!getTitleURLTested)
         yield return null;
 
 
       Log.Debug("TestAlchemyAPI", "Attempting GetCombinedData URL");
-      m_AlchemyAPI.GetCombinedData(OnGetCombinedDataURL, m_ExampleURL_article, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, "OnGetCombinedDataURL");
-      while (!m_GetCombinedDataURLTested)
+      alchemyAPI.GetCombinedData(OnGetCombinedDataURL, exampleURL_article, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, "OnGetCombinedDataURL");
+      while (!getCombinedDataURLTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetCombinedData Text");
-      m_AlchemyAPI.GetCombinedData(OnGetCombinedDataText, m_ExampleText_article, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, "OnGetCombinedDataText");
-      while (!m_GetCombinedDataTextTested)
+      alchemyAPI.GetCombinedData(OnGetCombinedDataText, exampleText_article, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, "OnGetCombinedDataText");
+      while (!getCombinedDataTextTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting GetCombinedData HTML");
-      m_AlchemyAPI.GetCombinedData(OnGetCombinedDataHTML, example_article_html, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, "OnGetCombinedDataHTML");
-      while (!m_GetCombinedDataHTMLTested)
+      alchemyAPI.GetCombinedData(OnGetCombinedDataHTML, example_article_html, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, "OnGetCombinedDataHTML");
+      while (!getCombinedDataHTMLTested)
         yield return null;
 
       Log.Debug("TestAlchemyAPI", "Attempting to GetNews");
@@ -365,8 +365,8 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       queryFields.Add(Fields.ENRICHED_URL_RELATIONS_RELATION_SUBJECT_TEXT, "Obama");
       queryFields.Add(Fields.ENRICHED_URL_CLEANEDTITLE, "Washington");
 
-      m_AlchemyAPI.GetNews(OnGetNews, returnFields, queryFields);
-      while (!m_GetNewsTested)
+      alchemyAPI.GetNews(OnGetNews, returnFields, queryFields);
+      while (!getNewsTested)
         yield return null;
 
       yield break;
@@ -378,7 +378,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(authors.status == "OK");
       if (authors != null)
       {
-        m_GetAuthorsURLTested = true;
+        getAuthorsURLTested = true;
         LogAuthorsData(authors, data);
       }
     }
@@ -388,7 +388,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(authors.status == "OK");
       if (authors != null)
       {
-        m_GetAuthorsHTMLTested = true;
+        getAuthorsHTMLTested = true;
         LogAuthorsData(authors, data);
       }
     }
@@ -417,7 +417,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(concepts.status == "OK");
       if (concepts != null)
       {
-        m_GetRankedConceptsURLTested = true;
+        getRankedConceptsURLTested = true;
         LogConceptsData(concepts, data);
       }
     }
@@ -427,7 +427,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(concepts.status == "OK");
       if (concepts != null)
       {
-        m_GetRankedConceptsHTMLTested = true;
+        getRankedConceptsHTMLTested = true;
         LogConceptsData(concepts, data);
       }
     }
@@ -437,7 +437,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(concepts.status == "OK");
       if (concepts != null)
       {
-        m_GetRankedConceptsTextTested = true;
+        getRankedConceptsTextTested = true;
         LogConceptsData(concepts, data);
       }
     }
@@ -469,7 +469,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(dates.status == "OK");
       if (dates != null)
       {
-        m_GetDatesURLTested = true;
+        getDatesURLTested = true;
         LogDatesData(dates, data);
       }
     }
@@ -479,7 +479,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(dates.status == "OK");
       if (dates != null)
       {
-        m_GetDatesHTMLTested = true;
+        getDatesHTMLTested = true;
         LogDatesData(dates, data);
       }
     }
@@ -489,7 +489,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(dates.status == "OK");
       if (dates != null)
       {
-        m_GetDatesTextTested = true;
+        getDatesTextTested = true;
         LogDatesData(dates, data);
       }
     }
@@ -521,7 +521,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(emotions.status == "OK");
       if (emotions != null)
       {
-        m_GetEmotionURLTested = true;
+        getEmotionURLTested = true;
         LogEmotionsData(emotions, data);
       }
     }
@@ -531,7 +531,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(emotions.status == "OK");
       if (emotions != null)
       {
-        m_GetEmotionHTMLTested = true;
+        getEmotionHTMLTested = true;
         LogEmotionsData(emotions, data);
       }
     }
@@ -541,7 +541,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(emotions.status == "OK");
       if (emotions != null)
       {
-        m_GetEmotionTextTested = true;
+        getEmotionTextTested = true;
         LogEmotionsData(emotions, data);
       }
     }
@@ -579,7 +579,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(entityData.status == "OK");
       if (entityData != null)
       {
-        m_GetEntityExtractionURLTested = true;
+        getEntityExtractionURLTested = true;
         LogEntityData(entityData, data);
       }
     }
@@ -589,7 +589,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(entityData.status == "OK");
       if (entityData != null)
       {
-        m_GetEntityExtractionHTMLTested = true;
+        getEntityExtractionHTMLTested = true;
         LogEntityData(entityData, data);
       }
     }
@@ -599,7 +599,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(entityData.status == "OK");
       if (entityData != null)
       {
-        m_GetEntityExtractionTextTested = true;
+        getEntityExtractionTextTested = true;
         LogEntityData(entityData, data);
       }
     }
@@ -632,7 +632,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(feedData.status == "OK");
       if (feedData != null)
       {
-        m_DetectFeedsURLTested = true;
+        detectFeedsURLTested = true;
         LogFeedData(feedData, data);
       }
     }
@@ -642,7 +642,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(feedData.status == "OK");
       if (feedData != null)
       {
-        m_DetectFeedsHTMLTested = true;
+        detectFeedsHTMLTested = true;
         LogFeedData(feedData, data);
       }
     }
@@ -672,7 +672,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(keywordData.status == "OK");
       if (keywordData != null)
       {
-        m_GetKeywordExtractionURLTested = true;
+        getKeywordExtractionURLTested = true;
         LogKeywordData(keywordData, data);
       }
     }
@@ -682,7 +682,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(keywordData.status == "OK");
       if (keywordData != null)
       {
-        m_GetKeywordExtractionHTMLTested = true;
+        getKeywordExtractionHTMLTested = true;
         LogKeywordData(keywordData, data);
       }
     }
@@ -692,7 +692,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(keywordData.status == "OK");
       if (keywordData != null)
       {
-        m_GetKeywordExtractionTextTested = true;
+        getKeywordExtractionTextTested = true;
         LogKeywordData(keywordData, data);
       }
     }
@@ -725,7 +725,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(languages.status == "OK");
       if (languages != null)
       {
-        m_GetLanguageURLTested = true;
+        getLanguageURLTested = true;
         LogLanguagesData(languages, data);
       }
     }
@@ -735,7 +735,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(languages.status == "OK");
       if (languages != null)
       {
-        m_GetLanguageHTMLTested = true;
+        getLanguageHTMLTested = true;
         LogLanguagesData(languages, data);
       }
     }
@@ -745,7 +745,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(languages.status == "OK");
       if (languages != null)
       {
-        m_GetLanguageTextTested = true;
+        getLanguageTextTested = true;
         LogLanguagesData(languages, data);
       }
     }
@@ -783,7 +783,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(microformats.status == "OK");
       if (microformats != null)
       {
-        m_GetMicroformatURLTested = true;
+        getMicroformatURLTested = true;
         LogMicroformatData(microformats, data);
       }
     }
@@ -793,7 +793,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(microformats.status == "OK");
       if (microformats != null)
       {
-        m_GetMicroformatHTMLTested = true;
+        getMicroformatHTMLTested = true;
         LogMicroformatData(microformats, data);
       }
     }
@@ -826,7 +826,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(pubDates.status == "OK");
       if (pubDates != null)
       {
-        m_GetPubDateURLTested = true;
+        getPubDateURLTested = true;
         LogPublicationDateData(pubDates, data);
       }
     }
@@ -836,7 +836,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(pubDates.status == "OK");
       if (pubDates != null)
       {
-        m_GetPubldateHTMLTested = true;
+        getPubldateHTMLTested = true;
         LogPublicationDateData(pubDates, data);
       }
     }
@@ -867,7 +867,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(relationsData.status == "OK");
       if (relationsData != null)
       {
-        m_GetRelationsURLTested = true;
+        getRelationsURLTested = true;
         LogRelationsData(relationsData, data);
       }
     }
@@ -877,7 +877,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(relationsData.status == "OK");
       if (relationsData != null)
       {
-        m_GetRelationsHTMLTested = true;
+        getRelationsHTMLTested = true;
         LogRelationsData(relationsData, data);
       }
     }
@@ -887,7 +887,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(relationsData.status == "OK");
       if (relationsData != null)
       {
-        m_GetRelationsTextTested = true;
+        getRelationsTextTested = true;
         LogRelationsData(relationsData, data);
       }
     }
@@ -921,7 +921,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(sentimentData.status == "OK");
       if (sentimentData != null)
       {
-        m_GetTextSentimentURLTested = true;
+        getTextSentimentURLTested = true;
         LogTextSentiment(sentimentData, data);
       }
     }
@@ -931,7 +931,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(sentimentData.status == "OK");
       if (sentimentData != null)
       {
-        m_GetTextSentimentHTMLTested = true;
+        getTextSentimentHTMLTested = true;
         LogTextSentiment(sentimentData, data);
       }
     }
@@ -941,7 +941,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(sentimentData.status == "OK");
       if (sentimentData != null)
       {
-        m_GetTextSentimentTextTested = true;
+        getTextSentimentTextTested = true;
         LogTextSentiment(sentimentData, data);
       }
     }
@@ -974,7 +974,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(sentimentData.status == "OK");
       if (sentimentData != null)
       {
-        m_GetTargetedSentimentURLTested = true;
+        getTargetedSentimentURLTested = true;
         LogTargetedSentiment(sentimentData, data);
       }
     }
@@ -984,7 +984,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(sentimentData.status == "OK");
       if (sentimentData != null)
       {
-        m_GetTargetedSentimentHTMLTested = true;
+        getTargetedSentimentHTMLTested = true;
         LogTargetedSentiment(sentimentData, data);
       }
     }
@@ -994,7 +994,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(sentimentData.status == "OK");
       if (sentimentData != null)
       {
-        m_GetTargetedSentimentTextTested = true;
+        getTargetedSentimentTextTested = true;
         LogTargetedSentiment(sentimentData, data);
       }
     }
@@ -1030,7 +1030,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(taxonomyData.status == "OK");
       if (taxonomyData != null)
       {
-        m_GetRankedTaxonomyURLTested = true;
+        getRankedTaxonomyURLTested = true;
         LogRankedTaxonomy(taxonomyData, data);
       }
     }
@@ -1040,7 +1040,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(taxonomyData.status == "OK");
       if (taxonomyData != null)
       {
-        m_GetRankedTaxonomyHTMLTested = true;
+        getRankedTaxonomyHTMLTested = true;
         LogRankedTaxonomy(taxonomyData, data);
       }
     }
@@ -1050,7 +1050,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(taxonomyData.status == "OK");
       if (taxonomyData != null)
       {
-        m_GetRankedTaxonomyTextTested = true;
+        getRankedTaxonomyTextTested = true;
         LogRankedTaxonomy(taxonomyData, data);
       }
     }
@@ -1086,7 +1086,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(textData.status == "OK");
       if (textData != null)
       {
-        m_GetTextURLTested = true;
+        getTextURLTested = true;
         LogTextData(textData, data);
       }
     }
@@ -1096,7 +1096,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(textData.status == "OK");
       if (textData != null)
       {
-        m_GetTextHTMLTested = true;
+        getTextHTMLTested = true;
         LogTextData(textData, data);
       }
     }
@@ -1124,7 +1124,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(textData.status == "OK");
       if (textData != null)
       {
-        m_GetRawTextURLTested = true;
+        getRawTextURLTested = true;
         LogRawTextData(textData, data);
       }
     }
@@ -1134,7 +1134,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(textData.status == "OK");
       if (textData != null)
       {
-        m_GetRawTextHTMLTested = true;
+        getRawTextHTMLTested = true;
         LogRawTextData(textData, data);
       }
     }
@@ -1162,7 +1162,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(titleData.status == "OK");
       if (titleData != null)
       {
-        m_GetTitleURLTested = true;
+        getTitleURLTested = true;
         LogTitleData(titleData, data);
       }
     }
@@ -1172,7 +1172,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(titleData.status == "OK");
       if (titleData != null)
       {
-        m_GetTitleHTMLTested = true;
+        getTitleHTMLTested = true;
         LogTitleData(titleData, data);
       }
     }
@@ -1200,7 +1200,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(combinedData.status == "OK");
       if (combinedData != null)
       {
-        m_GetCombinedDataURLTested = true;
+        getCombinedDataURLTested = true;
         LogCombinedData(combinedData, data);
       }
     }
@@ -1210,7 +1210,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(combinedData.status == "OK");
       if (combinedData != null)
       {
-        m_GetCombinedDataHTMLTested = true;
+        getCombinedDataHTMLTested = true;
         LogCombinedData(combinedData, data);
       }
     }
@@ -1220,7 +1220,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(combinedData.status == "OK");
       if (combinedData != null)
       {
-        m_GetCombinedDataTextTested = true;
+        getCombinedDataTextTested = true;
         LogCombinedData(combinedData, data);
       }
     }
@@ -1295,7 +1295,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(newsData.status == "OK");
       if (newsData != null)
       {
-        m_GetNewsTested = true;
+        getNewsTested = true;
         LogNewsData(newsData, data);
       }
     }

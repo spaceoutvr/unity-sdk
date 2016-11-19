@@ -20,13 +20,13 @@ using IBM.Watson.DeveloperCloud.Services.LanguageTranslation.v1;
 
 public class ExampleLanguageTranslation : MonoBehaviour
 {
-  private LanguageTranslation m_Translate = new LanguageTranslation();
-  private string m_PharseToTranslate = "How do I get to the disco?";
+  private LanguageTranslation translate = new LanguageTranslation();
+  private string pharseToTranslate = "How do I get to the disco?";
 
   void Start()
   {
-    Debug.Log("English Phrase to translate: " + m_PharseToTranslate);
-    m_Translate.GetTranslation(m_PharseToTranslate, "en", "es", OnGetTranslation);
+    Debug.Log("English Phrase to translate: " + pharseToTranslate);
+    translate.GetTranslation(pharseToTranslate, "en", "es", OnGetTranslation);
   }
 
   private void OnGetTranslation(Translations translation)

@@ -25,36 +25,36 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
 {
   public class TestLanguageTranslation : UnitTest
   {
-    private LanguageTranslation m_Translate = new LanguageTranslation();
-    private bool m_GetModelTested = false;
-    private bool m_GetModelsTested = false;
-    private bool m_GetLanguagesTested = false;
-    private bool m_IdentifyTested = false;
-    private bool m_TranslateTested = false;
+    private LanguageTranslation translate = new LanguageTranslation();
+    private bool getModelTested = false;
+    private bool getModelsTested = false;
+    private bool getLanguagesTested = false;
+    private bool identifyTested = false;
+    private bool translateTested = false;
 
     public override IEnumerator RunTest()
     {
-      if (Config.Instance.FindCredentials(m_Translate.GetServiceID()) == null)
+      if (Config.Instance.FindCredentials(translate.GetServiceID()) == null)
         yield break;
 
-      m_Translate.GetModel("en-es", OnGetModel);
-      while (!m_GetModelTested)
+      translate.GetModel("en-es", OnGetModel);
+      while (!getModelTested)
         yield return null;
 
-      m_Translate.GetModels(OnGetModels);
-      while (!m_GetModelsTested)
+      translate.GetModels(OnGetModels);
+      while (!getModelsTested)
         yield return null;
 
-      m_Translate.GetLanguages(OnGetLanguages);
-      while (!m_GetLanguagesTested)
+      translate.GetLanguages(OnGetLanguages);
+      while (!getLanguagesTested)
         yield return null;
 
-      m_Translate.Identify("What does the fox say?", OnIdentify);
-      while (!m_IdentifyTested)
+      translate.Identify("What does the fox say?", OnIdentify);
+      while (!identifyTested)
         yield return null;
 
-      m_Translate.GetTranslation("What does the fox say?", "en", "es", OnGetTranslation);
-      while (!m_TranslateTested)
+      translate.GetTranslation("What does the fox say?", "en", "es", OnGetTranslation);
+      while (!translateTested)
         yield return null;
 
       yield break;
@@ -68,7 +68,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
         Log.Status("TestTranslate", "ModelID: {0}, Source: {1}, Target: {2}, Domain: {3}",
             model.model_id, model.source, model.target, model.domain);
       }
-      m_GetModelTested = true;
+      getModelTested = true;
     }
 
     private void OnGetModels(TranslationModels models)
@@ -82,7 +82,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
               model.model_id, model.source, model.target, model.domain);
         }
       }
-      m_GetModelsTested = true;
+      getModelsTested = true;
     }
 
     private void OnGetTranslation(Translations translation)
@@ -90,7 +90,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(translation != null);
       if (translation != null && translation.translations.Length > 0)
         Log.Status("TestTranslate", "Translation: {0}", translation.translations[0].translation);
-      m_TranslateTested = true;
+      translateTested = true;
     }
 
     private void OnIdentify(string lang)
@@ -98,7 +98,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       Test(lang != null);
       if (lang != null)
         Log.Status("TestTranslate", "Identified Language as {0}", lang);
-      m_IdentifyTested = true;
+      identifyTested = true;
     }
 
     private void OnGetLanguages(Languages languages)
@@ -110,7 +110,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
           Log.Status("TestTranslate", "Language: {0}, Name: {1}", lang.language, lang.name);
       }
 
-      m_GetLanguagesTested = true;
+      getLanguagesTested = true;
     }
   }
 }

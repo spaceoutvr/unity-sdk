@@ -76,8 +76,8 @@ namespace IBM.Watson.DeveloperCloud.Services.NaturalLanguageClassifier.v1
 
     #region Private Data
     private const string SERVICE_ID = "NaturalLanguageClassifierV1";
-    private static fsSerializer sm_Serializer = new fsSerializer();
-    private Dictionary<string, DataCache> m_ClassifyCache = new Dictionary<string, DataCache>();
+    private static fsSerializer sserializer = new fsSerializer();
+    private Dictionary<string, DataCache> classifyCache = new Dictionary<string, DataCache>();
     #endregion
 
     #region FindClassifier
@@ -177,7 +177,7 @@ namespace IBM.Watson.DeveloperCloud.Services.NaturalLanguageClassifier.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = classifiers;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -234,7 +234,7 @@ namespace IBM.Watson.DeveloperCloud.Services.NaturalLanguageClassifier.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = classifier;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -304,7 +304,7 @@ namespace IBM.Watson.DeveloperCloud.Services.NaturalLanguageClassifier.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = classifier;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -366,12 +366,12 @@ namespace IBM.Watson.DeveloperCloud.Services.NaturalLanguageClassifier.v1
       if (!string.IsNullOrEmpty(classifierId))
       {
         DataCache cache = null;
-        if (m_ClassifyCache.TryGetValue(classifierId, out cache))
+        if (classifyCache.TryGetValue(classifierId, out cache))
           cache.Flush();
       }
       else
       {
-        foreach (var kp in m_ClassifyCache)
+        foreach (var kp in classifyCache)
           kp.Value.Flush();
       }
     }
@@ -396,10 +396,10 @@ namespace IBM.Watson.DeveloperCloud.Services.NaturalLanguageClassifier.v1
       if (!DisableCache)
       {
         DataCache cache = null;
-        if (!m_ClassifyCache.TryGetValue(classifierId, out cache))
+        if (!classifyCache.TryGetValue(classifierId, out cache))
         {
           cache = new DataCache("NaturalLanguageClassifier_" + classifierId);
-          m_ClassifyCache[classifierId] = cache;
+          classifyCache[classifierId] = cache;
         }
 
         byte[] cached = cache.Find(textId);
@@ -448,7 +448,7 @@ namespace IBM.Watson.DeveloperCloud.Services.NaturalLanguageClassifier.v1
         if (classify != null)
         {
           DataCache cache = null;
-          if (m_ClassifyCache.TryGetValue(((ClassifyReq)req).ClassiferId, out cache))
+          if (classifyCache.TryGetValue(((ClassifyReq)req).ClassiferId, out cache))
             cache.Save(((ClassifyReq)req).TextId, resp.Data);
         }
       }
@@ -470,7 +470,7 @@ namespace IBM.Watson.DeveloperCloud.Services.NaturalLanguageClassifier.v1
         classify = new ClassifyResult();
 
         object obj = classify;
-        r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+        r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
         if (!r.Succeeded)
           throw new WatsonException(r.FormattedMessages);
       }
@@ -502,34 +502,34 @@ namespace IBM.Watson.DeveloperCloud.Services.NaturalLanguageClassifier.v1
 
     private class CheckServiceStatus
     {
-      private NaturalLanguageClassifier m_Service = null;
-      private ServiceStatus m_Callback = null;
-      private int m_GetClassifierCount = 0;
-      private int m_ClassifyCount = 0;
+      private NaturalLanguageClassifier service = null;
+      private ServiceStatus callback = null;
+      private int getClassifierCount = 0;
+      private int classifyCount = 0;
 
-      public CheckServiceStatus(NaturalLanguageClassifier service, ServiceStatus callback)
+      public CheckServiceStatus(NaturalLanguageClassifier naturalLanguageClassifier, ServiceStatus serviceStatus)
       {
-        m_Service = service;
-        m_Callback = callback;
+        service = naturalLanguageClassifier;
+        callback = serviceStatus;
 
         string customClassifierID = Config.Instance.GetVariableValue(SERVICE_ID + "_ID");
-        m_Service.DisableCache = true;
+        service.DisableCache = true;
         //If custom classifierID is defined then we are using it to check the service health
         if (!string.IsNullOrEmpty(customClassifierID))
         {
 
-          if (!m_Service.GetClassifier(customClassifierID, OnCheckService))
+          if (!service.GetClassifier(customClassifierID, OnCheckService))
           {
             OnFailure("Failed to call GetClassifier()");
           }
           else
           {
-            m_GetClassifierCount += 1;
+            getClassifierCount += 1;
           }
         }
         else
         {
-          if (!m_Service.GetClassifiers(OnCheckServices))
+          if (!service.GetClassifiers(OnCheckServices))
             OnFailure("Failed to call GetClassifiers()");
         }
 
@@ -537,44 +537,44 @@ namespace IBM.Watson.DeveloperCloud.Services.NaturalLanguageClassifier.v1
 
       private void OnCheckServices(Classifiers classifiers)
       {
-        if (m_Callback != null)
+        if (callback != null)
         {
           if (classifiers.classifiers.Length > 0)
           {
             foreach (var classifier in classifiers.classifiers)
             {
               // check the status of one classifier, if it's listed as "Unavailable" then fail 
-              if (!m_Service.GetClassifier(classifier.classifier_id, OnCheckService))
+              if (!service.GetClassifier(classifier.classifier_id, OnCheckService))
               {
                 OnFailure("Failed to call GetClassifier()");
                 break;
               }
               else
-                m_GetClassifierCount += 1;
+                getClassifierCount += 1;
             }
           }
           else
           {
-            if (m_Callback != null && m_Callback.Target != null)
+            if (callback != null && callback.Target != null)
             {
-              m_Callback(SERVICE_ID, true);     // no classifiers to check, just return success then..
+              callback(SERVICE_ID, true);     // no classifiers to check, just return success then..
             }
           }
         }
         else
         {
-          if (m_Callback != null && m_Callback.Target != null)
+          if (callback != null && callback.Target != null)
           {
-            m_Callback(SERVICE_ID, false);
+            callback(SERVICE_ID, false);
           }
         }
       }
 
       private void OnCheckService(Classifier classifier)
       {
-        if (m_GetClassifierCount > 0)
+        if (getClassifierCount > 0)
         {
-          m_GetClassifierCount -= 1;
+          getClassifierCount -= 1;
           if (classifier != null)
           {
             if (classifier.status == "Unavailable" || classifier.status == "Failed")
@@ -585,10 +585,10 @@ namespace IBM.Watson.DeveloperCloud.Services.NaturalLanguageClassifier.v1
             else
             {
               // try to classify something with this classifier..
-              if (!m_Service.Classify(classifier.classifier_id, "Hello World", OnClassify))
+              if (!service.Classify(classifier.classifier_id, "Hello World", OnClassify))
                 OnFailure("Failed to invoke Classify");
               else
-                m_ClassifyCount += 1;
+                classifyCount += 1;
             }
           }
           else
@@ -598,15 +598,15 @@ namespace IBM.Watson.DeveloperCloud.Services.NaturalLanguageClassifier.v1
 
       private void OnClassify(ClassifyResult result)
       {
-        if (m_ClassifyCount > 0)
+        if (classifyCount > 0)
         {
-          m_ClassifyCount -= 1;
+          classifyCount -= 1;
           if (result != null)
           {
             // success!
-            if (m_ClassifyCount == 0 && m_Callback != null && m_Callback.Target != null)
+            if (classifyCount == 0 && callback != null && callback.Target != null)
             {
-              m_Callback(SERVICE_ID, true);
+              callback(SERVICE_ID, true);
             }
           }
           else
@@ -617,11 +617,11 @@ namespace IBM.Watson.DeveloperCloud.Services.NaturalLanguageClassifier.v1
       void OnFailure(string msg)
       {
         Log.Error("NaturalLanguageClassifier", msg);
-        if (m_Callback != null && m_Callback.Target != null)
+        if (callback != null && callback.Target != null)
         {
-          m_Callback(SERVICE_ID, false);
+          callback(SERVICE_ID, false);
         }
-        m_GetClassifierCount = m_ClassifyCount = 0;
+        getClassifierCount = classifyCount = 0;
       }
 
     };

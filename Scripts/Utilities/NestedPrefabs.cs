@@ -23,23 +23,23 @@ namespace IBM.Watson.DeveloperCloud.Utilities
   class NestedPrefabs : MonoBehaviour
   {
     [SerializeField]
-    private List<GameObject> m_Prefabs = new List<GameObject>();
-    private List<GameObject> m_GameObjectCreated = new List<GameObject>();
+    private List<GameObject> prefabs = new List<GameObject>();
+    private List<GameObject> gameObjectCreated = new List<GameObject>();
     [SerializeField]
-    private bool m_SetParent = true;
+    private bool setParent = true;
 
     private void Awake()
     {
-      foreach (GameObject prefab in m_Prefabs)
+      foreach (GameObject prefab in prefabs)
       {
         if (prefab == null)
           continue;
 
         GameObject instance = Instantiate(prefab);
-        if (m_SetParent)
+        if (setParent)
           instance.transform.SetParent(transform, false);
 
-        m_GameObjectCreated.Add(instance);
+        gameObjectCreated.Add(instance);
       }
     }
 
@@ -50,7 +50,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     /// </summary>
     public void DestroyCreatedObject()
     {
-      foreach (GameObject gameObject in m_GameObjectCreated)
+      foreach (GameObject gameObject in gameObjectCreated)
       {
         if (gameObject == null)
           continue;
@@ -58,7 +58,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
         gameObject.SendMessage("DestroyCreatedObject", SendMessageOptions.DontRequireReceiver);
         Destroy(gameObject);
       }
-      m_GameObjectCreated.Clear();
+      gameObjectCreated.Clear();
       Destroy(this.gameObject);
     }
     #endregion

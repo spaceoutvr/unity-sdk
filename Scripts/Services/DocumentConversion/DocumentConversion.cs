@@ -36,7 +36,7 @@ namespace IBM.Watson.DeveloperCloud.Services.DocumentConversion.v1
   {
     #region Private Data
     private const string SERVICE_ID = "DocumentConversionV1";
-    private static fsSerializer sm_Serializer = new fsSerializer();
+    private static fsSerializer sserializer = new fsSerializer();
     #endregion
 
     #region ConvertDocument
@@ -141,7 +141,7 @@ namespace IBM.Watson.DeveloperCloud.Services.DocumentConversion.v1
               throw new WatsonException(r.FormattedMessages);
 
             object obj = response;
-            r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+            r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
             if (!r.Succeeded)
               throw new WatsonException(r.FormattedMessages);
           }
@@ -185,22 +185,22 @@ namespace IBM.Watson.DeveloperCloud.Services.DocumentConversion.v1
 
     private class CheckServiceStatus
     {
-      private DocumentConversion m_Service = null;
-      private ServiceStatus m_Callback = null;
+      private DocumentConversion service = null;
+      private ServiceStatus callback = null;
 
-      public CheckServiceStatus(DocumentConversion service, ServiceStatus callback)
+      public CheckServiceStatus(DocumentConversion documentConversion, ServiceStatus serviceStatus)
       {
-        m_Service = service;
-        m_Callback = callback;
+        service = documentConversion;
+        callback = serviceStatus;
         string examplePath = Application.dataPath + "/Watson/Examples/ServiceExamples/TestData/watson_beats_jeopardy.html";
-        if (!m_Service.ConvertDocument(OnConvertDocument, examplePath))
-          m_Callback(SERVICE_ID, false);
+        if (!service.ConvertDocument(OnConvertDocument, examplePath))
+          callback(SERVICE_ID, false);
       }
 
       void OnConvertDocument(ConvertedDocument documentConversionData, string data)
       {
-        if (m_Callback != null)
-          m_Callback(SERVICE_ID, documentConversionData != null);
+        if (callback != null)
+          callback(SERVICE_ID, documentConversionData != null);
       }
 
     };

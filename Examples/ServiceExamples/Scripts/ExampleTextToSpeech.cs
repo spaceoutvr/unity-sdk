@@ -22,8 +22,8 @@ using IBM.Watson.DeveloperCloud.Logging;
 
 public class ExampleTextToSpeech : MonoBehaviour
 {
-  TextToSpeech m_TextToSpeech = new TextToSpeech();
-  string m_TestString = "<speak version=\"1.0\"><say-as interpret-as=\"letters\">I'm sorry</say-as>. <prosody pitch=\"150Hz\">This is Text to Speech!</prosody></express-as><express-as type=\"GoodNews\">I'm sorry. This is Text to Speech!</express-as></speak>";
+  TextToSpeech textToSpeech = new TextToSpeech();
+  string testString = "<speak version=\"1.0\"><say-as interpret-as=\"letters\">I'm sorry</say-as>. <prosody pitch=\"150Hz\">This is Text to Speech!</prosody></express-as><express-as type=\"GoodNews\">I'm sorry. This is Text to Speech!</express-as></speak>";
 
 
   void Start()
@@ -32,39 +32,39 @@ public class ExampleTextToSpeech : MonoBehaviour
 
     ////	Get Voices
     //Log.Debug("ExampleTextToSpeech", "Attempting to get voices.");
-    //m_TextToSpeech.GetVoices(OnGetVoices);
+    //textToSpeech.GetVoices(OnGetVoices);
 
     ////	Get Voice
     ////string selectedVoice = "en-US_AllisonVoice";
     //Log.Debug("ExampleTextToSpeech", "Attempting to get voice {0}.", VoiceType.en_US_Allison);
-    //m_TextToSpeech.GetVoice(OnGetVoice, VoiceType.en_US_Allison);
+    //textToSpeech.GetVoice(OnGetVoice, VoiceType.en_US_Allison);
 
     ////	Get Pronunciation
     //string testWord = "Watson";
     //Log.Debug("ExampleTextToSpeech", "Attempting to get pronunciation of {0}", testWord);
-    //m_TextToSpeech.GetPronunciation(OnGetPronunciation, testWord, VoiceType.en_US_Allison);
+    //textToSpeech.GetPronunciation(OnGetPronunciation, testWord, VoiceType.en_US_Allison);
 
     // Get Customizations
     //Log.Debug("ExampleTextToSpeech", "Attempting to get a list of customizations");
-    //m_TextToSpeech.GetCustomizations(OnGetCustomizations);
+    //textToSpeech.GetCustomizations(OnGetCustomizations);
 
     //	Create Customization
     //Log.Debug("ExampleTextToSpeech", "Attempting to create a customization");
     //string customizationName = "unity-example-customization";
     //string customizationLanguage = "en-US";
     //string customizationDescription = "A text to speech voice customization created within Unity.";
-    //m_TextToSpeech.CreateCustomization(OnCreateCustomization, customizationName, customizationLanguage, customizationDescription);
+    //textToSpeech.CreateCustomization(OnCreateCustomization, customizationName, customizationLanguage, customizationDescription);
 
     //	Delete Customization
     //Log.Debug("ExampleTextToSpeech", "Attempting to delete a customization");
     //string customizationIdentifierToDelete = "1476ea80-5355-4911-ac99-ba39162a2d34";
-    //if (!m_TextToSpeech.DeleteCustomization(OnDeleteCustomization, customizationIdentifierToDelete))
+    //if (!textToSpeech.DeleteCustomization(OnDeleteCustomization, customizationIdentifierToDelete))
     //	Log.Debug("ExampleTextToSpeech", "Failed to delete custom voice model!");
 
     //	Get Customization
     //Log.Debug("ExampleTextToSpeech", "Attempting to get a customization");
     //string customizationIdentifierToGet = "1476ea80-5355-4911-ac99-ba39162a2d34";
-    //if (!m_TextToSpeech.GetCustomization(OnGetCustomization, customizationIdentifierToGet))
+    //if (!textToSpeech.GetCustomization(OnGetCustomization, customizationIdentifierToGet))
     //	Log.Debug("ExampleTextToSpeech", "Failed to get custom voice model!");
 
     //	Update Customization
@@ -84,13 +84,13 @@ public class ExampleTextToSpeech : MonoBehaviour
     customVoiceUpdate.description = "My updated description";
     customVoiceUpdate.name = "My updated name";
     string customizationIdToUpdate = "1476ea80-5355-4911-ac99-ba39162a2d34";
-    if (!m_TextToSpeech.UpdateCustomization(OnUpdateCustomization, customizationIdToUpdate, customVoiceUpdate))
+    if (!textToSpeech.UpdateCustomization(OnUpdateCustomization, customizationIdToUpdate, customVoiceUpdate))
       Log.Debug("ExampleTextToSpeech", "Failed to update customization!");
 
     //	Get Customization Words
     //Log.Debug("ExampleTextToSpeech", "Attempting to get a customization's words");
     //string customIdentifierToGetWords = "1476ea80-5355-4911-ac99-ba39162a2d34";
-    //if (!m_TextToSpeech.GetCustomizationWords(OnGetCustomizationWords, customIdentifierToGetWords))
+    //if (!textToSpeech.GetCustomizationWords(OnGetCustomizationWords, customIdentifierToGetWords))
     //	Log.Debug("ExampleTextToSpeech", "Failed to get {0} words!", customIdentifierToGetWords);
 
     //	Add Customization Words
@@ -108,21 +108,21 @@ public class ExampleTextToSpeech : MonoBehaviour
     //word2.translation = "tomahto";
     //Word[] wordArray = { word0, word1, word2 };
     //words.words = wordArray;
-    //if (!m_TextToSpeech.AddCustomizationWords(OnAddCustomizationWords, customIdentifierToAddWords, words))
+    //if (!textToSpeech.AddCustomizationWords(OnAddCustomizationWords, customIdentifierToAddWords, words))
     //	Log.Debug("ExampleTextToSpeech", "Failed to add words to {0}!", customIdentifierToAddWords);
 
     //	Delete Customization Word
     //Log.Debug("ExampleTextToSpeech", "Attempting to delete customization word from custom voice model.");
     //string customIdentifierToDeleteWord = "1476ea80-5355-4911-ac99-ba39162a2d34";
     //string wordToDelete = "goodbye";
-    //if (!m_TextToSpeech.DeleteCustomizationWord(OnDeleteCustomizationWord, customIdentifierToDeleteWord, wordToDelete))
+    //if (!textToSpeech.DeleteCustomizationWord(OnDeleteCustomizationWord, customIdentifierToDeleteWord, wordToDelete))
     //	Log.Debug("ExampleTextToSpeech", "Failed to delete {0} from {1}!", wordToDelete, customIdentifierToDeleteWord);
 
     //	Get Customization Word
     //Log.Debug("ExampleTextToSpeech", "Attempting to get the translation of a custom voice model's word.");
     //string customIdentifierToGetWord = "1476ea80-5355-4911-ac99-ba39162a2d34";
     //string customIdentifierWord = "hello";
-    //if (!m_TextToSpeech.GetCustomizationWord(OnGetCustomizationWord, customIdentifierToGetWord, customIdentifierWord))
+    //if (!textToSpeech.GetCustomizationWord(OnGetCustomizationWord, customIdentifierToGetWord, customIdentifierWord))
     //	Log.Debug("ExampleTextToSpeech", "Failed to get the translation of {0} from {1}!", customIdentifierWord, customIdentifierToGetWord);
 
     //	Add Customization Word - This is not working. The PUT method is not supported by Unity.
@@ -130,12 +130,12 @@ public class ExampleTextToSpeech : MonoBehaviour
     //string customIdentifierToAddWordAndTranslation = "1476ea80-5355-4911-ac99-ba39162a2d34";
     //string word = "grasshopper";
     //string translation = "guhrasshoppe";
-    //if (!m_TextToSpeech.AddCustomizationWord(OnAddCustomizationWord, customIdentifierToAddWordAndTranslation, word, translation))
+    //if (!textToSpeech.AddCustomizationWord(OnAddCustomizationWord, customIdentifierToAddWordAndTranslation, word, translation))
     //	Log.Debug("ExampleTextToSpeech", "Failed to add {0}/{1} to {2}!", word, translation, customIdentifierToAddWordAndTranslation);
 
 
-    //m_TextToSpeech.Voice = VoiceType.en_US_Allison;
-    //m_TextToSpeech.ToSpeech(m_TestString, HandleToSpeechCallback, true);
+    //textToSpeech.Voice = VoiceType.en_US_Allison;
+    //textToSpeech.ToSpeech(testString, HandleToSpeechCallback, true);
 
   }
 

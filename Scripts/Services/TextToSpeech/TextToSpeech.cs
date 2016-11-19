@@ -34,10 +34,10 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
   public class TextToSpeech : IWatsonService
   {
     #region Private Data
-    private DataCache m_SpeechCache = null;
-    private VoiceType m_Voice = VoiceType.en_US_Michael;
-    private AudioFormatType m_AudioFormat = AudioFormatType.WAV;
-    private Dictionary<VoiceType, string> m_VoiceTypes = new Dictionary<VoiceType, string>()
+    private DataCache speechCache = null;
+    private VoiceType voiceType = VoiceType.en_US_Michael;
+    private AudioFormatType audioFormat = AudioFormatType.WAV;
+    private Dictionary<VoiceType, string> voiceTypes = new Dictionary<VoiceType, string>()
         {
             { VoiceType.en_US_Michael, "en-US_MichaelVoice" },
             { VoiceType.en_US_Lisa, "en-US_LisaVoice" },
@@ -53,14 +53,14 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
             { VoiceType.ja_JP_Emi, "ja-JP_EmiVoice" },
       { VoiceType.pt_BR_Isabela, "pt-BR_IsabelaVoice"},
         };
-    private Dictionary<AudioFormatType, string> m_AudioFormats = new Dictionary<AudioFormatType, string>()
+    private Dictionary<AudioFormatType, string> audioFormats = new Dictionary<AudioFormatType, string>()
         {
             { AudioFormatType.OGG, "audio/ogg;codecs=opus" },
             { AudioFormatType.WAV, "audio/wav" },
             { AudioFormatType.FLAC, "audio/flac" },
         };
     private const string SERVICE_ID = "TextToSpeechV1";
-    private static fsSerializer sm_Serializer = new fsSerializer();
+    private static fsSerializer sserializer = new fsSerializer();
     private const float REQUEST_TIMEOUT = 10.0f * 60.0f;
     #endregion
 
@@ -72,19 +72,19 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
     /// <summary>
     /// This property allows the user to set the AudioFormat to use. Currently, only WAV is supported.
     /// </summary>
-    public AudioFormatType AudioFormat { get { return m_AudioFormat; } set { m_AudioFormat = value; } }
+    public AudioFormatType AudioFormat { get { return audioFormat; } set { audioFormat = value; } }
     /// <summary>
     /// This property allows the user to specify the voice to use.
     /// </summary>
     public VoiceType Voice
     {
-      get { return m_Voice; }
+      get { return voiceType; }
       set
       {
-        if (m_Voice != value)
+        if (voiceType != value)
         {
-          m_Voice = value;
-          m_SpeechCache = null;
+          voiceType = value;
+          speechCache = null;
         }
       }
     }
@@ -93,10 +93,10 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
     #region GetVoiceType
     private string GetVoiceType(VoiceType voiceType)
     {
-      if (m_VoiceTypes.ContainsKey(voiceType))
+      if (voiceTypes.ContainsKey(voiceType))
       {
         string voiceName = "";
-        m_VoiceTypes.TryGetValue(voiceType, out voiceName);
+        voiceTypes.TryGetValue(voiceType, out voiceName);
         return voiceName;
       }
       else
@@ -150,7 +150,7 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = voices;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -183,7 +183,7 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
       if (callback == null)
         throw new ArgumentNullException("callback");
       if (voice == null)
-        voice = m_Voice;
+        voice = voiceType;
 
       string service = "/v1/voices/{0}";
       RESTConnector connector = RESTConnector.GetConnector(SERVICE_ID, string.Format(service, GetVoiceType((VoiceType)voice)));
@@ -213,7 +213,7 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = voice;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -259,24 +259,24 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
       if (callback == null)
         throw new ArgumentNullException("callback");
 
-      if (!m_AudioFormats.ContainsKey(m_AudioFormat))
+      if (!audioFormats.ContainsKey(audioFormat))
       {
-        Log.Error("TextToSpeech", "Unsupported audio format: {0}", m_AudioFormat.ToString());
+        Log.Error("TextToSpeech", "Unsupported audio format: {0}", audioFormat.ToString());
         return false;
       }
-      if (!m_VoiceTypes.ContainsKey(m_Voice))
+      if (!voiceTypes.ContainsKey(voiceType))
       {
-        Log.Error("TextToSpeech", "Unsupported voice: {0}", m_Voice.ToString());
+        Log.Error("TextToSpeech", "Unsupported voice: {0}", voiceType.ToString());
         return false;
       }
 
       string textId = Utility.GetMD5(text);
       if (!DisableCache)
       {
-        if (m_SpeechCache == null)
-          m_SpeechCache = new DataCache("TextToSpeech_" + m_VoiceTypes[m_Voice]);
+        if (speechCache == null)
+          speechCache = new DataCache("TextToSpeech_" + voiceTypes[voiceType]);
 
-        byte[] data = m_SpeechCache.Find(textId);
+        byte[] data = speechCache.Find(textId);
         if (data != null)
         {
           AudioClip clip = ProcessResponse(textId, data);
@@ -296,8 +296,8 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
       req.TextId = textId;
       req.Text = text;
       req.Callback = callback;
-      req.Parameters["accept"] = m_AudioFormats[m_AudioFormat];
-      req.Parameters["voice"] = m_VoiceTypes[m_Voice];
+      req.Parameters["accept"] = audioFormats[audioFormat];
+      req.Parameters["voice"] = voiceTypes[voiceType];
       req.OnResponse = ToSpeechResponse;
 
       if (usePost)
@@ -327,8 +327,8 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
       AudioClip clip = resp.Success ? ProcessResponse(speechReq.TextId, resp.Data) : null;
       if (clip == null)
         Log.Error("TextToSpeech", "Request Failed: {0}", resp.Error);
-      if (m_SpeechCache != null && clip != null)
-        m_SpeechCache.Save(speechReq.TextId, resp.Data);
+      if (speechCache != null && clip != null)
+        speechCache.Save(speechReq.TextId, resp.Data);
 
       if (speechReq.Callback != null)
         speechReq.Callback(clip);
@@ -336,7 +336,7 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
 
     private AudioClip ProcessResponse(string textId, byte[] data)
     {
-      switch (m_AudioFormat)
+      switch (audioFormat)
       {
         case AudioFormatType.WAV:
           return WaveFile.ParseWAV(textId, data);
@@ -344,7 +344,7 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
           break;
       }
 
-      Log.Error("TextToSpeech", "Unsupported audio format: {0}", m_AudioFormat.ToString());
+      Log.Error("TextToSpeech", "Unsupported audio format: {0}", audioFormat.ToString());
       return null;
     }
     #endregion
@@ -375,7 +375,7 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
       if (string.IsNullOrEmpty(text))
         throw new ArgumentNullException("text");
       if (voice == null)
-        voice = m_Voice;
+        voice = voiceType;
 
       RESTConnector connector = RESTConnector.GetConnector(SERVICE_ID, "/v1/pronunciation");
       if (connector == null)
@@ -419,7 +419,7 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = pronunciation;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -486,7 +486,7 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = customizations;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -533,7 +533,7 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
       customVoice.description = description;
 
       fsData data;
-      sm_Serializer.TrySerialize(customVoice.GetType(), customVoice, out data).AssertSuccessWithoutWarnings();
+      sserializer.TrySerialize(customVoice.GetType(), customVoice, out data).AssertSuccessWithoutWarnings();
       string customizationJson = fsJsonPrinter.CompressedJson(data);
 
       CreateCustomizationRequest req = new CreateCustomizationRequest();
@@ -572,7 +572,7 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = customizationID;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -696,7 +696,7 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = customization;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -739,7 +739,7 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
         throw new ArgumentNullException("Custom voice update data is required to update a custom voice model.");
 
       fsData data;
-      sm_Serializer.TrySerialize(customVoiceUpdate.GetType(), customVoiceUpdate, out data).AssertSuccessWithoutWarnings();
+      sserializer.TrySerialize(customVoiceUpdate.GetType(), customVoiceUpdate, out data).AssertSuccessWithoutWarnings();
       string customizationJson = fsJsonPrinter.CompressedJson(data);
 
       UpdateCustomizationRequest req = new UpdateCustomizationRequest();
@@ -833,7 +833,7 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = words;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -876,7 +876,7 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
         throw new ArgumentNullException("Words data is required to add words to a custom voice model.");
 
       fsData data;
-      sm_Serializer.TrySerialize(words.GetType(), words, out data).AssertSuccessWithoutWarnings();
+      sserializer.TrySerialize(words.GetType(), words, out data).AssertSuccessWithoutWarnings();
       string customizationJson = fsJsonPrinter.CompressedJson(data);
 
       AddCustomizationWordsRequest req = new AddCustomizationWordsRequest();
@@ -1032,7 +1032,7 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = translation;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1133,22 +1133,22 @@ namespace IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1
 
     private class CheckServiceStatus
     {
-      private TextToSpeech m_Service = null;
-      private ServiceStatus m_Callback = null;
+      private TextToSpeech service = null;
+      private ServiceStatus callback = null;
 
-      public CheckServiceStatus(TextToSpeech service, ServiceStatus callback)
+      public CheckServiceStatus(TextToSpeech textToSpeech, ServiceStatus serviceStatus)
       {
-        m_Service = service;
-        m_Callback = callback;
+        service = textToSpeech;
+        callback = serviceStatus;
 
-        if (!m_Service.GetVoices(OnCheckService))
-          m_Callback(SERVICE_ID, false);
+        if (!service.GetVoices(OnCheckService))
+          callback(SERVICE_ID, false);
       }
 
       private void OnCheckService(Voices voices)
       {
-        if (m_Callback != null && m_Callback.Target != null)
-          m_Callback(SERVICE_ID, voices != null);
+        if (callback != null && callback.Target != null)
+          callback(SERVICE_ID, voices != null);
       }
     };
     #endregion

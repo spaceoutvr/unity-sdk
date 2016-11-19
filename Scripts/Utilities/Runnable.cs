@@ -55,7 +55,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     public static void Stop(int ID)
     {
       Routine r = null;
-      if (Instance.m_Routines.TryGetValue(ID, out r))
+      if (Instance.routines.TryGetValue(ID, out r))
         r.Stop = true;
     }
 
@@ -66,20 +66,20 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     /// <returns>Returns true if the routine is still active.</returns>
     static public bool IsRunning(int id)
     {
-      return Instance.m_Routines.ContainsKey(id);
+      return Instance.routines.ContainsKey(id);
     }
 
 #if UNITY_EDITOR
-    private static bool sm_EditorRunnable = false;
+    private static bool editorRunnable = false;
 
     /// <summary>
     /// This function enables the Runnable in edit mode.
     /// </summary>
     public static void EnableRunnableInEditor()
     {
-      if (!sm_EditorRunnable)
+      if (!editorRunnable)
       {
-        sm_EditorRunnable = true;
+        editorRunnable = true;
         UnityEditor.EditorApplication.update += UpdateRunnable;
       }
     }
@@ -104,49 +104,49 @@ namespace IBM.Watson.DeveloperCloud.Utilities
       #endregion
 
       #region Private Data
-      private bool m_bMoveNext = false;
-      private IEnumerator m_Enumerator = null;
+      private bool bMoveNext = false;
+      private IEnumerator Enumerator = null;
       #endregion
 
       public Routine(IEnumerator a_enumerator)
       {
-        m_Enumerator = a_enumerator;
+        Enumerator = a_enumerator;
         Runnable.Instance.StartCoroutine(this);
         Stop = false;
-        ID = Runnable.Instance.m_NextRoutineId++;
+        ID = Runnable.Instance.NextRoutineId++;
 
-        Runnable.Instance.m_Routines[ID] = this;
+        Runnable.Instance.routines[ID] = this;
 #if ENABLE_RUNNABLE_DEBUGGING
                 Debug.Log( string.Format("Coroutine {0} started.", ID ) ); 
 #endif
       }
 
       #region IEnumerator Interface
-      public object Current { get { return m_Enumerator.Current; } }
+      public object Current { get { return Enumerator.Current; } }
       public bool MoveNext()
       {
-        m_bMoveNext = m_Enumerator.MoveNext();
-        if (m_bMoveNext && Stop)
-          m_bMoveNext = false;
+        bMoveNext = Enumerator.MoveNext();
+        if (bMoveNext && Stop)
+          bMoveNext = false;
 
-        if (!m_bMoveNext)
+        if (!bMoveNext)
         {
-          Runnable.Instance.m_Routines.Remove(ID);      // remove from the mapping
+          Runnable.Instance.routines.Remove(ID);      // remove from the mapping
 #if ENABLE_RUNNABLE_DEBUGGING
                     Debug.Log( string.Format("Coroutine {0} stopped.", ID ) );
 #endif
         }
 
-        return m_bMoveNext;
+        return bMoveNext;
       }
-      public void Reset() { m_Enumerator.Reset(); }
+      public void Reset() { Enumerator.Reset(); }
       #endregion
     }
     #endregion
 
     #region Private Data
-    private Dictionary<int, Routine> m_Routines = new Dictionary<int, Routine>();
-    private int m_NextRoutineId = 1;
+    private Dictionary<int, Routine> routines = new Dictionary<int, Routine>();
+    private int NextRoutineId = 1;
     #endregion
 
     /// <summary>
@@ -155,14 +155,14 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     /// </summary>
     public void UpdateRoutines()
     {
-      if (m_Routines.Count > 0)
+      if (routines.Count > 0)
       {
         // we are not in play mode, so we must manually update our co-routines ourselves
-        List<Routine> routines = new List<Routine>();
-        foreach (var kp in m_Routines)
-          routines.Add(kp.Value);
+        List<Routine> routinesList = new List<Routine>();
+        foreach (var kp in this.routines)
+          routinesList.Add(kp.Value);
 
-        foreach (var r in routines)
+        foreach (var r in routinesList)
           r.MoveNext();
       }
     }

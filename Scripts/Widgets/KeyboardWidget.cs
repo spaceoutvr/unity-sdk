@@ -40,29 +40,29 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     [Serializable]
     private class Mapping
     {
-      public KeyCode m_Key = (KeyCode)0;
-      public KeyModifiers m_Modifiers = KeyModifiers.NONE;
-      public string m_Event = "";
+      public KeyCode key = (KeyCode)0;
+      public KeyModifiers modifiers = KeyModifiers.NONE;
+      public string _event = "";
     };
 
     [SerializeField]
-    private List<Mapping> m_Mappings = new List<Mapping>();
+    private List<Mapping> mappings = new List<Mapping>();
     #endregion
 
     #region Event Handlers
     private void OnEnable()
     {
-      foreach (var mapping in m_Mappings)
+      foreach (var mapping in mappings)
       {
-        KeyEventManager.Instance.RegisterKeyEvent(mapping.m_Key, mapping.m_Modifiers, mapping.m_Event);
+        KeyEventManager.Instance.RegisterKeyEvent(mapping.key, mapping.modifiers, mapping._event);
       }
     }
 
     private void OnDisable()
     {
-      foreach (var mapping in m_Mappings)
+      foreach (var mapping in mappings)
       {
-        KeyEventManager.Instance.UnregisterKeyEvent(mapping.m_Key, mapping.m_Modifiers, mapping.m_Event);
+        KeyEventManager.Instance.UnregisterKeyEvent(mapping.key, mapping.modifiers, mapping._event);
       }
     }
     #endregion

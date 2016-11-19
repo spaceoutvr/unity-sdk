@@ -32,7 +32,7 @@ namespace IBM.Watson.DeveloperCloud.Widgets
   {
     #region Inputs
     [SerializeField]
-    private Input m_WebCamTextureInput = new Input("WebCamTexture", typeof(WebCamTextureData), "OnWebCamTexture");
+    private Input webCamTextureInput = new Input("WebCamTexture", typeof(WebCamTextureData), "OnWebCamTexture");
     #endregion
 
     #region Outputs
@@ -40,14 +40,14 @@ namespace IBM.Watson.DeveloperCloud.Widgets
 
     #region Private Data
     [SerializeField]
-    private RawImage m_RawImage;
+    private RawImage rawImage;
     [SerializeField]
-    private Material m_Material;
+    private Material material;
 
-    private WebCamTexture m_WebCamTexture;
-    private int m_RequestedWidth;
-    private int m_RequestedHeight;
-    private int m_RequestedFPS;
+    private WebCamTexture webCamTexture;
+    private int requestedWidth;
+    private int requestedHeight;
+    private int requestedFPS;
     #endregion
 
     #region Constants
@@ -59,15 +59,15 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     /// </summary>
     public RawImage RawImage
     {
-      get { return m_RawImage; }
-      set { m_RawImage = value; }
+      get { return rawImage; }
+      set { rawImage = value; }
     }
     /// <summary>
     /// The Material displaying the WebCam stream on Geometry.
     /// </summary>
     public Material Material
     {
-      get { return m_Material; }
+      get { return material; }
     }
     #endregion
 
@@ -92,21 +92,21 @@ namespace IBM.Watson.DeveloperCloud.Widgets
         throw new ArgumentNullException("A Material or RawImage is required to display WebCamTexture");
 
       WebCamTextureData webCamTextureData = (WebCamTextureData)data;
-      m_WebCamTexture = webCamTextureData.CamTexture;
-      m_RequestedWidth = webCamTextureData.RequestedWidth;
-      m_RequestedHeight = webCamTextureData.RequestedHeight;
-      m_RequestedFPS = webCamTextureData.RequestedFPS;
+      webCamTexture = webCamTextureData.CamTexture;
+      requestedWidth = webCamTextureData.RequestedWidth;
+      requestedHeight = webCamTextureData.RequestedHeight;
+      requestedFPS = webCamTextureData.RequestedFPS;
 
       if (Material != null)
-        Material.mainTexture = m_WebCamTexture;
+        Material.mainTexture = webCamTexture;
 
       if (RawImage != null)
       {
-        RawImage.texture = m_WebCamTexture;
-        RawImage.material.mainTexture = m_WebCamTexture;
+        RawImage.texture = webCamTexture;
+        RawImage.material.mainTexture = webCamTexture;
       }
-      if (!m_WebCamTexture.isPlaying)
-        m_WebCamTexture.Play();
+      if (!webCamTexture.isPlaying)
+        webCamTexture.Play();
     }
     #endregion
   }

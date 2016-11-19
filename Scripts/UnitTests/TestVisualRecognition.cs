@@ -30,172 +30,172 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
 {
   public class TestVisualRecognition : UnitTest
   {
-    VisualRecognition m_VisualRecognition = new VisualRecognition();
-    bool m_TrainClasifierTested = false;
-    bool m_GetClassifiersTested = false;
-    bool m_FindClassifierTested = false;
-    bool m_GetClassifierTested = false;
-    bool m_UpdateClassifierTested = false;
-    bool m_ClassifyGETTested = false;
-    bool m_ClassifyPOSTTested = false;
-    bool m_DetectFacesGETTested = false;
-    bool m_DetectFacesPOSTTested = false;
-    bool m_RecognizeTextGETTested = false;
-    bool m_RecognizeTextPOSTTested = false;
-    bool m_DeleteClassifierTested = false;
+    VisualRecognition visualRecognition = new VisualRecognition();
+    bool trainClasifierTested = false;
+    bool getClassifiersTested = false;
+    bool findClassifierTested = false;
+    bool getClassifierTested = false;
+    bool updateClassifierTested = false;
+    bool classifyGETTested = false;
+    bool classifyPOSTTested = false;
+    bool detectFacesGETTested = false;
+    bool detectFacesPOSTTested = false;
+    bool recognizeTextGETTested = false;
+    bool recognizeTextPOSTTested = false;
+    bool deleteClassifierTested = false;
 
-    bool m_ListCollectionsTested = false;
-    bool m_CreateCollectionTested = false;
-    bool m_DeleteCollectionTested = false;
-    bool m_RetrieveCollectionDetailsTested = false;
-    bool m_ListImagesTested = false;
-    bool m_AddImagesToCollectionTested = false;
-    bool m_DeleteImageFromCollectionTested = false;
-    bool m_ListImageDetailsTested = false;
-    bool m_DeleteImageMetadataTested = false;
-    bool m_ListImageMetadataTested = false;
-    bool m_FindSimilarTested = false;
+    bool listCollectionsTested = false;
+    bool createCollectionTested = false;
+    bool deleteCollectionTested = false;
+    bool retrieveCollectionDetailsTested = false;
+    bool listImagesTested = false;
+    bool addImagesToCollectionTested = false;
+    bool deleteImageFromCollectionTested = false;
+    bool listImageDetailsTested = false;
+    bool deleteImageMetadataTested = false;
+    bool listImageMetadataTested = false;
+    bool findSimilarTested = false;
 
 
-    bool m_TrainClassifier = false;
-    bool m_IsClassifierReady = false;
-    bool m_HasUpdatedClassifier = false;
-    bool m_IsUpdatedClassifierReady = false;
-    string m_ClassifierId = null;
-    string m_ClassifierName = "unity-integration-test-classifier";
-    string m_ClassName_Giraffe = "giraffe";
-    string m_ClassName_Turtle = "turtle";
-    private string m_ImageURL = "https://c2.staticflickr.com/2/1226/1173659064_8810a06fef_b.jpg";   //  giraffe image
-    private string m_ImageFaceURL = "https://upload.wikimedia.org/wikipedia/commons/e/e9/Official_portrait_of_Barack_Obama.jpg";    //  Obama image
-    private string m_ImageTextURL = "http://i.stack.imgur.com/ZS6nH.png";   //  image with text
+    bool trainClassifier = false;
+    bool isClassifierReady = false;
+    bool hasUpdatedClassifier = false;
+    bool isUpdatedClassifierReady = false;
+    string classifierId = null;
+    string classifierName = "unity-integration-test-classifier";
+    string className_Giraffe = "giraffe";
+    string className_Turtle = "turtle";
+    private string imageURL = "https://c2.staticflickr.com/2/1226/1173659064_8810a06fef_b.jpg";   //  giraffe image
+    private string imageFaceURL = "https://upload.wikimedia.org/wikipedia/commons/e/e9/Official_portrait_of_Barack_Obama.jpg";    //  Obama image
+    private string imageTextURL = "http://i.stack.imgur.com/ZS6nH.png";   //  image with text
 
-    private string m_CreatedCollectionID;
-    private string m_CreatedCollectionImage;
+    private string createdCollectionID;
+    private string createdCollectionImage;
 
     public override IEnumerator RunTest()
     {
       //  test get classifiers
       Log.Debug("TestVisualRecognition", "Getting all classifiers!");
-      m_VisualRecognition.GetClassifiers(OnGetClassifiers);
-      while (!m_GetClassifiersTested)
+      visualRecognition.GetClassifiers(OnGetClassifiers);
+      while (!getClassifiersTested)
         yield return null;
 
       //  test find classifier
-      Log.Debug("TestVisualRecognition", "Finding classifier {0}!", m_ClassifierName);
-      m_VisualRecognition.FindClassifier(OnFindClassifier, m_ClassifierName);
-      while (!m_FindClassifierTested)
+      Log.Debug("TestVisualRecognition", "Finding classifier {0}!", classifierName);
+      visualRecognition.FindClassifier(OnFindClassifier, classifierName);
+      while (!findClassifierTested)
         yield return null;
 
-      if (m_TrainClassifier)
+      if (trainClassifier)
       {
         //  test train classifier
         Log.Debug("TestVisualRecognition", "Training classifier!");
         string m_positiveExamplesPath = Application.dataPath + "/Watson/Examples/ServiceExamples/TestData/visual-recognition-classifiers/giraffe_positive_examples.zip";
         string m_negativeExamplesPath = Application.dataPath + "/Watson/Examples/ServiceExamples/TestData/visual-recognition-classifiers/negative_examples.zip";
         Dictionary<string, string> positiveExamples = new Dictionary<string, string>();
-        positiveExamples.Add(m_ClassName_Giraffe, m_positiveExamplesPath);
-        Test(m_VisualRecognition.TrainClassifier(OnTrainClassifier, m_ClassifierName, positiveExamples, m_negativeExamplesPath));
-        while (!m_TrainClasifierTested)
+        positiveExamples.Add(className_Giraffe, m_positiveExamplesPath);
+        Test(visualRecognition.TrainClassifier(OnTrainClassifier, classifierName, positiveExamples, m_negativeExamplesPath));
+        while (!trainClasifierTested)
           yield return null;
       }
 
       //  Wait until classifier is ready
-      if (!m_IsClassifierReady)
+      if (!isClassifierReady)
       {
-        Log.Debug("TestVisualRecognition", "Checking classifier {0} status!", m_ClassifierId);
+        Log.Debug("TestVisualRecognition", "Checking classifier {0} status!", classifierId);
         CheckClassifierStatus(OnCheckClassifierStatus);
-        while (!m_IsClassifierReady)
+        while (!isClassifierReady)
           yield return null;
       }
 
-      if (!string.IsNullOrEmpty(m_ClassifierId))
+      if (!string.IsNullOrEmpty(classifierId))
       {
         //  test get classifier
-        Log.Debug("TestVisualRecognition", "Getting classifier {0}!", m_ClassifierId);
-        m_VisualRecognition.GetClassifier(OnGetClassifier, m_ClassifierId);
-        while (!m_GetClassifierTested)
+        Log.Debug("TestVisualRecognition", "Getting classifier {0}!", classifierId);
+        visualRecognition.GetClassifier(OnGetClassifier, classifierId);
+        while (!getClassifierTested)
           yield return null;
 
         //  Update classifier
-        Log.Debug("TestVisualRecognition", "Updating classifier {0}", m_ClassifierId);
+        Log.Debug("TestVisualRecognition", "Updating classifier {0}", classifierId);
         string m_positiveUpdated = Application.dataPath + "/Watson/Examples/ServiceExamples/TestData/visual-recognition-classifiers/turtle_positive_examples.zip";
         Dictionary<string, string> positiveUpdatedExamples = new Dictionary<string, string>();
-        positiveUpdatedExamples.Add(m_ClassName_Turtle, m_positiveUpdated);
-        m_VisualRecognition.UpdateClassifier(OnUpdateClassifier, m_ClassifierId, m_ClassifierName, positiveUpdatedExamples);
-        while (!m_UpdateClassifierTested)
+        positiveUpdatedExamples.Add(className_Turtle, m_positiveUpdated);
+        visualRecognition.UpdateClassifier(OnUpdateClassifier, classifierId, classifierName, positiveUpdatedExamples);
+        while (!updateClassifierTested)
           yield return null;
 
         //  Wait for updated classifier to be ready.
-        Log.Debug("TestVisualRecognition", "Checking updated classifier {0} status!", m_ClassifierId);
+        Log.Debug("TestVisualRecognition", "Checking updated classifier {0} status!", classifierId);
         CheckClassifierStatus(OnCheckUpdatedClassifierStatus);
-        while (!m_IsUpdatedClassifierReady)
+        while (!isUpdatedClassifierReady)
           yield return null;
 
         string[] m_owners = { "IBM", "me" };
-        string[] m_classifierIds = { "default", m_ClassifierId };
+        string[] m_classifierIds = { "default", classifierId };
 
         //  test classify image get
         Log.Debug("TestVisualRecognition", "Classifying image using GET!");
-        m_VisualRecognition.Classify(OnClassifyGet, m_ImageURL, m_owners, m_classifierIds);
-        while (!m_ClassifyGETTested)
+        visualRecognition.Classify(OnClassifyGet, imageURL, m_owners, m_classifierIds);
+        while (!classifyGETTested)
           yield return null;
 
         //  test classify image post
         Log.Debug("TestVisualRecognition", "Classifying image using POST!");
         string m_classifyImagePath = Application.dataPath + "/Watson/Examples/ServiceExamples/TestData/visual-recognition-classifiers/giraffe_to_classify.jpg";
-        m_VisualRecognition.Classify(m_classifyImagePath, OnClassifyPost, m_owners, m_classifierIds);
-        while (!m_ClassifyPOSTTested)
+        visualRecognition.Classify(m_classifyImagePath, OnClassifyPost, m_owners, m_classifierIds);
+        while (!classifyPOSTTested)
           yield return null;
       }
 
       //  test detect faces get
       Log.Debug("TestVisualRecognition", "Detecting face image using GET!");
-      m_VisualRecognition.DetectFaces(OnDetectFacesGet, m_ImageFaceURL);
-      while (!m_DetectFacesGETTested)
+      visualRecognition.DetectFaces(OnDetectFacesGet, imageFaceURL);
+      while (!detectFacesGETTested)
         yield return null;
 
       //  test detect faces post
       Log.Debug("TestVisualRecognition", "Detecting face image using POST!");
       string m_detectFaceImagePath = Application.dataPath + "/Watson/Examples/ServiceExamples/TestData/visual-recognition-classifiers/obama.jpg";
-      m_VisualRecognition.DetectFaces(m_detectFaceImagePath, OnDetectFacesPost);
-      while (!m_DetectFacesPOSTTested)
+      visualRecognition.DetectFaces(m_detectFaceImagePath, OnDetectFacesPost);
+      while (!detectFacesPOSTTested)
         yield return null;
 
       //  test recognize text get
       Log.Debug("TestVisualRecognition", "Recognizing text image using GET!");
-      m_VisualRecognition.RecognizeText(OnRecognizeTextGet, m_ImageTextURL);
-      while (!m_RecognizeTextGETTested)
+      visualRecognition.RecognizeText(OnRecognizeTextGet, imageTextURL);
+      while (!recognizeTextGETTested)
         yield return null;
 
       //  test recognize text post
       Log.Debug("TestVisualRecognition", "Recognizing text image using POST!");
       string m_recognizeTextImagePath = Application.dataPath + "/Watson/Examples/ServiceExamples/TestData/visual-recognition-classifiers/from_platos_apology.png";
-      m_VisualRecognition.RecognizeText(m_recognizeTextImagePath, OnRecognizeTextPost);
-      while (!m_RecognizeTextPOSTTested)
+      visualRecognition.RecognizeText(m_recognizeTextImagePath, OnRecognizeTextPost);
+      while (!recognizeTextPOSTTested)
         yield return null;
 
       //  test delete classifier
-      Log.Debug("TestVisualRecognition", "Deleting classifier {0}!", m_ClassifierId);
-      m_VisualRecognition.DeleteClassifier(OnDeleteClassifier, m_ClassifierId);
-      while (!m_DeleteClassifierTested)
+      Log.Debug("TestVisualRecognition", "Deleting classifier {0}!", classifierId);
+      visualRecognition.DeleteClassifier(OnDeleteClassifier, classifierId);
+      while (!deleteClassifierTested)
         yield return null;
 
       //  test list collections
       Log.Debug("TestVisualRecognition", "Attempting to list collections!");
-      m_VisualRecognition.GetCollections(OnGetCollections);
-      while (!m_ListCollectionsTested)
+      visualRecognition.GetCollections(OnGetCollections);
+      while (!listCollectionsTested)
         yield return null;
 
       //  test create collection
       Log.Debug("TestVisualRecognition", "Attempting to create collection!");
-      m_VisualRecognition.CreateCollection(OnCreateCollection, "unity-integration-test-collection");
-      while (!m_CreateCollectionTested)
+      visualRecognition.CreateCollection(OnCreateCollection, "unity-integration-test-collection");
+      while (!createCollectionTested)
         yield return null;
 
       //  test retrive collection details
       Log.Debug("TestVisualRecognition", "Attempting to retrieve collection details!");
-      m_VisualRecognition.GetCollection(OnGetCollection, m_CreatedCollectionID);
-      while (!m_RetrieveCollectionDetailsTested)
+      visualRecognition.GetCollection(OnGetCollection, createdCollectionID);
+      while (!retrieveCollectionDetailsTested)
         yield return null;
 
       //  test add images to collection
@@ -205,50 +205,50 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       imageMetadata.Add("key1", "value1");
       imageMetadata.Add("key2", "value2");
       imageMetadata.Add("key3", "value3");
-      m_VisualRecognition.AddCollectionImage(OnAddImageToCollection, m_CreatedCollectionID, m_collectionImagePath, imageMetadata);
-      while (!m_AddImagesToCollectionTested)
+      visualRecognition.AddCollectionImage(OnAddImageToCollection, createdCollectionID, m_collectionImagePath, imageMetadata);
+      while (!addImagesToCollectionTested)
         yield return null;
 
       //  test list images
       Log.Debug("TestVisualRecognition", "Attempting to list images!");
-      m_VisualRecognition.GetCollectionImages(OnGetCollectionImages, m_CreatedCollectionID);
-      while (!m_ListImagesTested)
+      visualRecognition.GetCollectionImages(OnGetCollectionImages, createdCollectionID);
+      while (!listImagesTested)
         yield return null;
 
       //  test list image details
       Log.Debug("TestVisualRecognition", "Attempting to list image details!");
-      m_VisualRecognition.GetImage(OnGetImage, m_CreatedCollectionID, m_CreatedCollectionImage);
-      while (!m_ListImageDetailsTested)
+      visualRecognition.GetImage(OnGetImage, createdCollectionID, createdCollectionImage);
+      while (!listImageDetailsTested)
         yield return null;
 
       //  test list image metadata
       Log.Debug("TestVisualRecognition", "Attempting to list image metadata!");
-      m_VisualRecognition.GetMetadata(OnGetMetadata, m_CreatedCollectionID, m_CreatedCollectionImage);
-      while (!m_ListImageMetadataTested)
+      visualRecognition.GetMetadata(OnGetMetadata, createdCollectionID, createdCollectionImage);
+      while (!listImageMetadataTested)
         yield return null;
 
       //  test find similar
       Log.Debug("TestVisualRecognition", "Attempting to find similar!");
-      m_VisualRecognition.FindSimilar(OnFindSimilar, m_CreatedCollectionID, m_collectionImagePath);
-      while (!m_FindSimilarTested)
+      visualRecognition.FindSimilar(OnFindSimilar, createdCollectionID, m_collectionImagePath);
+      while (!findSimilarTested)
         yield return null;
 
       //  test delete image metadata
       Log.Debug("TestVisualRecognition", "Attempting to delete metadata!");
-      m_VisualRecognition.DeleteCollectionImageMetadata(OnDeleteMetadata, m_CreatedCollectionID, m_CreatedCollectionImage);
-      while (!m_DeleteImageMetadataTested)
+      visualRecognition.DeleteCollectionImageMetadata(OnDeleteMetadata, createdCollectionID, createdCollectionImage);
+      while (!deleteImageMetadataTested)
         yield return null;
 
       //  test delete image from collection
       Log.Debug("TestVisualRecognition", "Attempting to delete image from collection!");
-      m_VisualRecognition.DeleteCollectionImage(OnDeleteCollectionImage, m_CreatedCollectionID, m_CreatedCollectionImage);
-      while (!m_DeleteImageFromCollectionTested)
+      visualRecognition.DeleteCollectionImage(OnDeleteCollectionImage, createdCollectionID, createdCollectionImage);
+      while (!deleteImageFromCollectionTested)
         yield return null;
 
       //  test delete collection
       Log.Debug("TestVisualRecognition", "Attempting to delete collection!");
-      m_VisualRecognition.DeleteCollection(OnDeleteCollection, m_CreatedCollectionID);
-      while (!m_DeleteCollectionTested)
+      visualRecognition.DeleteCollection(OnDeleteCollection, createdCollectionID);
+      while (!deleteCollectionTested)
         yield return null;
       yield break;
     }
@@ -260,21 +260,21 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
         Log.Status("TestVisualRecognition", "Find Result, Classifier ID: {0}, Status: {1}", classifier.classifier_id, classifier.status);
         if (classifier.status == "ready")
         {
-          m_TrainClassifier = false;
-          m_IsClassifierReady = true;
-          m_ClassifierId = classifier.classifier_id;
+          trainClassifier = false;
+          isClassifierReady = true;
+          classifierId = classifier.classifier_id;
         }
         else
         {
-          m_TrainClassifier = false;
+          trainClassifier = false;
         }
       }
       else
       {
-        m_TrainClassifier = true;
+        trainClassifier = true;
       }
 
-      m_FindClassifierTested = true;
+      findClassifierTested = true;
     }
 
     private void OnTrainClassifier(GetClassifiersPerClassifierVerbose classifier, string customData)
@@ -284,10 +284,10 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       {
         Log.Status("TestVisualRecognition", "Classifier ID: {0}, Classifier name: {1}, Status: {2}", classifier.classifier_id, classifier.name, classifier.status);
         //  store classifier id
-        m_ClassifierId = classifier.classifier_id;
+        classifierId = classifier.classifier_id;
       }
 
-      m_TrainClasifierTested = true;
+      trainClasifierTested = true;
     }
 
     private void OnGetClassifiers(GetClassifiersTopLevelBrief classifiers, string customData)
@@ -306,7 +306,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
         Log.Debug("TestVisualRecognition", "Failed to get classifiers!");
       }
 
-      m_GetClassifiersTested = true;
+      getClassifiersTested = true;
     }
 
     private void OnGetClassifier(GetClassifiersPerClassifierVerbose classifier, string customData)
@@ -316,11 +316,11 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       {
         Log.Debug("TestVisualRecognition", "Classifier {0} found! Classifier name: {1}", classifier.classifier_id, classifier.name);
         foreach (Class classifierClass in classifier.classes)
-          if (classifierClass.m_Class == m_ClassName_Turtle)
-            m_HasUpdatedClassifier = true;
+          if (classifierClass._class == className_Turtle)
+            hasUpdatedClassifier = true;
       }
 
-      m_GetClassifierTested = true;
+      getClassifierTested = true;
     }
 
     private void OnUpdateClassifier(GetClassifiersPerClassifierVerbose classifier, string customData)
@@ -329,13 +329,13 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       {
         Log.Status("TestVisualRecognition", "Classifier ID: {0}, Classifier name: {1}, Status: {2}", classifier.classifier_id, classifier.name, classifier.status);
         foreach (Class classifierClass in classifier.classes)
-          if (classifierClass.m_Class == m_ClassName_Turtle)
-            m_HasUpdatedClassifier = true;
+          if (classifierClass._class == className_Turtle)
+            hasUpdatedClassifier = true;
         //  store classifier id
-        //m_ClassifierId = classifier.classifier_id;
+        //classifierId = classifier.classifier_id;
       }
 
-      m_UpdateClassifierTested = true;
+      updateClassifierTested = true;
     }
 
     private void OnClassifyGet(ClassifyTopLevelMultiple classify, string customData)
@@ -355,7 +355,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
           }
         }
 
-        m_ClassifyGETTested = true;
+        classifyGETTested = true;
       }
       else
       {
@@ -380,7 +380,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
           }
         }
 
-        m_ClassifyPOSTTested = true;
+        classifyPOSTTested = true;
       }
       else
       {
@@ -410,7 +410,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
           }
         }
 
-        m_DetectFacesGETTested = true;
+        detectFacesGETTested = true;
       }
       else
       {
@@ -440,7 +440,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
           }
         }
 
-        m_DetectFacesPOSTTested = true;
+        detectFacesPOSTTested = true;
       }
       else
       {
@@ -466,7 +466,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
           //                    }
         }
 
-        m_RecognizeTextGETTested = true;
+        recognizeTextGETTested = true;
       }
       else
       {
@@ -492,7 +492,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
           //                    }
         }
 
-        m_RecognizeTextPOSTTested = true;
+        recognizeTextPOSTTested = true;
       }
       else
       {
@@ -504,16 +504,16 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
     {
       if (success)
       {
-        m_VisualRecognition.FindClassifier(OnDeleteClassifierFinal, m_ClassifierName);
+        visualRecognition.FindClassifier(OnDeleteClassifierFinal, classifierName);
       }
 
-      m_DeleteClassifierTested = true;
+      deleteClassifierTested = true;
       Test(success);
     }
 
     private void CheckClassifierStatus(VisualRecognition.OnGetClassifier callback, string customData = default(string))
     {
-      if (!m_VisualRecognition.GetClassifier(callback, m_ClassifierId))
+      if (!visualRecognition.GetClassifier(callback, classifierId))
         Log.Debug("TestVisualRecognition", "Get classifier failed!");
     }
 
@@ -524,8 +524,8 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       {
         Log.Debug("TestVisualRecognition", "Deleting classifier!");
         //  classifier failed - delete!
-        if (!m_VisualRecognition.DeleteClassifier(OnCheckClassifierStatusDelete, classifier.classifier_id))
-          Log.Debug("TestVisualRecognition", "Failed to delete classifier {0}!", m_ClassifierId);
+        if (!visualRecognition.DeleteClassifier(OnCheckClassifierStatusDelete, classifier.classifier_id))
+          Log.Debug("TestVisualRecognition", "Failed to delete classifier {0}!", classifierId);
 
       }
       else if (classifier.status == "training")
@@ -534,8 +534,8 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       }
       else if (classifier.status == "ready")
       {
-        m_IsClassifierReady = true;
-        m_ClassifierId = classifier.classifier_id;
+        isClassifierReady = true;
+        classifierId = classifier.classifier_id;
       }
     }
 
@@ -549,7 +549,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       }
       else if (classifier.status == "ready")
       {
-        m_IsUpdatedClassifierReady = true;
+        isUpdatedClassifierReady = true;
       }
     }
 
@@ -558,7 +558,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       if (success)
       {
         //  train classifier again!
-        m_TrainClasifierTested = false;
+        trainClasifierTested = false;
       }
     }
 
@@ -590,7 +590,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
         Log.Debug("TestVisualRecognition", "Get Collections failed!");
       }
 
-      m_ListCollectionsTested = true;
+      listCollectionsTested = true;
       Test(collections != null);
     }
 
@@ -601,14 +601,14 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
         Log.Debug("TestVisualRecognition", "Create Collection succeeded!");
         Log.Debug("TestVisualRecognition", "collectionID: {0} | collection name: {1} | collection images: {2}", collection.collection_id, collection.name, collection.images);
 
-        m_CreatedCollectionID = collection.collection_id;
+        createdCollectionID = collection.collection_id;
       }
       else
       {
         Log.Debug("TestVisualRecognition", "Create Collection failed!");
       }
 
-      m_CreateCollectionTested = true;
+      createCollectionTested = true;
       Test(collection != null);
     }
 
@@ -619,7 +619,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       else
         Log.Debug("TestVisualRecognition", "Delete Collection failed!");
 
-      m_DeleteCollectionTested = true;
+      deleteCollectionTested = true;
       Test(success);
     }
 
@@ -636,7 +636,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
 
       }
 
-      m_RetrieveCollectionDetailsTested = true;
+      retrieveCollectionDetailsTested = true;
       Test(collection != null);
     }
 
@@ -654,7 +654,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       }
 
       Test(collections != null);
-      m_ListImagesTested = true;
+      listImagesTested = true;
     }
 
     private void OnAddImageToCollection(CollectionsConfig images, string customData)
@@ -662,7 +662,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       if (images != null)
       {
         Log.Debug("TestVisualRecognition", "Add image to collection succeeded!");
-        m_CreatedCollectionImage = images.images[0].image_id;
+        createdCollectionImage = images.images[0].image_id;
         Log.Debug("TestVisualRecognition", "images processed: {0}", images.images_processed);
         foreach (CollectionImagesConfig image in images.images)
           Log.Debug("TestVisualRecognition", "imageID: {0} | image_file: {1} | image metadata: {1}", image.image_id, image.image_file, image.metadata.ToString());
@@ -673,7 +673,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       }
 
       Test(images != null);
-      m_AddImagesToCollectionTested = true;
+      addImagesToCollectionTested = true;
     }
 
     private void OnDeleteCollectionImage(bool success, string customData)
@@ -684,7 +684,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
         Log.Debug("TestVisualRecognition", "Delete collection image failed!");
 
       Test(success);
-      m_DeleteImageFromCollectionTested = true;
+      deleteImageFromCollectionTested = true;
     }
 
     private void OnGetImage(GetCollectionsBrief image, string customData)
@@ -700,7 +700,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       }
 
       Test(image != null);
-      m_ListImageDetailsTested = true;
+      listImageDetailsTested = true;
 
     }
 
@@ -712,7 +712,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
         Log.Debug("TestVisualRecognition", "Delete image metadata failed!");
 
       Test(success);
-      m_DeleteImageMetadataTested = true;
+      deleteImageMetadataTested = true;
     }
 
     private void OnGetMetadata(object responseObject, string customData)
@@ -721,7 +721,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
         Log.Debug("TestVisualRecognition", "ResponseObject: {0}", responseObject);
 
       Test(responseObject != null);
-      m_ListImageMetadataTested = true;
+      listImageMetadataTested = true;
     }
 
     private void OnFindSimilar(SimilarImagesConfig images, string customData)
@@ -739,7 +739,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
       }
 
       Test(images != null);
-      m_FindSimilarTested = true;
+      findSimilarTested = true;
     }
   }
 }

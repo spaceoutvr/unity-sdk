@@ -23,21 +23,21 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
 {
   public class TestRunnable : UnitTest
   {
-    bool m_CoroutineRan = false;
+    bool coroutineRan = false;
 
     public override IEnumerator RunTest()
     {
       Runnable.Run(TestCoroutine("Test"));
       yield return new WaitForSeconds(1.0f);
 
-      Test(m_CoroutineRan);
+      Test(coroutineRan);
       yield break;
     }
 
     private IEnumerator TestCoroutine(string a_Argument)
     {
       Test(a_Argument == "Test");
-      m_CoroutineRan = true;
+      coroutineRan = true;
       yield break;
     }
   }

@@ -35,40 +35,40 @@ namespace IBM.Watson.DeveloperCloud.Widgets
   {
     #region Inputs
     [SerializeField]
-    private Input m_TextInput = new Input("Text", typeof(TextToSpeechData), "OnTextInput");
+    private Input textInput = new Input("Text", typeof(TextToSpeechData), "OnTextInput");
     [SerializeField]
-    private Input m_VoiceInput = new Input("Voice", typeof(VoiceData), "OnVoiceSelect");
+    private Input voiceInput = new Input("Voice", typeof(VoiceData), "OnVoiceSelect");
     #endregion
 
     #region Outputs
     [SerializeField]
-    private Output m_Speaking = new Output(typeof(SpeakingStateData));
+    private Output speaking = new Output(typeof(SpeakingStateData));
     [SerializeField]
-    private Output m_DisableMic = new Output(typeof(DisableMicData));
+    private Output disableMic = new Output(typeof(DisableMicData));
     [SerializeField]
-    private Output m_LevelOut = new Output(typeof(LevelData));
+    private Output levelOut = new Output(typeof(LevelData));
     #endregion
 
     #region Private Data
-    TextToSpeech m_TextToSpeech = new TextToSpeech();
+    TextToSpeech textToSpeech = new TextToSpeech();
 
     [SerializeField, Tooltip("How often to send level out data in seconds.")]
-    private float m_LevelOutInterval = 0.05f;
+    private float levelOutInterval = 0.05f;
     [SerializeField]
-    private float m_LevelOutputModifier = 1.0f;
+    private float levelOutputModifier = 1.0f;
     [SerializeField]
-    private Button m_TextToSpeechButton = null;
+    private Button textToSpeechButton = null;
     [SerializeField]
-    private InputField m_Input = null;
+    private InputField input = null;
     [SerializeField]
-    private Text m_StatusText = null;
+    private Text statusText = null;
     [SerializeField]
-    private VoiceType m_Voice = VoiceType.en_US_Michael;
+    private VoiceType voice = VoiceType.en_US_Michael;
     [SerializeField]
-    private bool m_UsePost = false;
+    private bool usePost = false;
 
-    private AudioSource m_Source = null;
-    private int m_LastPlayPos = 0;
+    private AudioSource source = null;
+    private int lastPlayPos = 0;
 
     private class Speech
     {
@@ -94,8 +94,8 @@ namespace IBM.Watson.DeveloperCloud.Widgets
 
     };
 
-    private Queue<Speech> m_SpeechQueue = new Queue<Speech>();
-    private Speech m_ActiveSpeech = null;
+    private Queue<Speech> speechQueue = new Queue<Speech>();
+    private Speech activeSpeech = null;
     #endregion
 
     #region Public Memebers
@@ -108,11 +108,11 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     {
       get
       {
-        return m_Voice;
+        return voice;
       }
       set
       {
-        m_Voice = value;
+        voice = value;
       }
     }
 
@@ -124,14 +124,14 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     /// </summary>
     public void OnTextToSpeech()
     {
-      if (m_TextToSpeech.Voice != m_Voice)
-        m_TextToSpeech.Voice = m_Voice;
-      if (m_Input != null)
-        m_SpeechQueue.Enqueue(new Speech(m_TextToSpeech, m_Input.text, m_UsePost));
-      if (m_StatusText != null)
-        m_StatusText.text = "THINKING";
-      if (m_TextToSpeechButton != null)
-        m_TextToSpeechButton.interactable = false;
+      if (textToSpeech.Voice != voice)
+        textToSpeech.Voice = voice;
+      if (input != null)
+        speechQueue.Enqueue(new Speech(textToSpeech, input.text, usePost));
+      if (statusText != null)
+        statusText.text = "THINKING";
+      if (textToSpeechButton != null)
+        textToSpeechButton.interactable = false;
     }
     #endregion
 
@@ -144,63 +144,63 @@ namespace IBM.Watson.DeveloperCloud.Widgets
 
       if (!string.IsNullOrEmpty(text.Text))
       {
-        if (m_TextToSpeech.Voice != m_Voice)
-          m_TextToSpeech.Voice = m_Voice;
+        if (textToSpeech.Voice != voice)
+          textToSpeech.Voice = voice;
 
-        m_SpeechQueue.Enqueue(new Speech(m_TextToSpeech, text.Text, m_UsePost));
+        speechQueue.Enqueue(new Speech(textToSpeech, text.Text, usePost));
       }
     }
 
     private void OnVoiceSelect(Data data)
     {
-      VoiceData voice = data as VoiceData;
-      if (voice == null)
+      VoiceData voiceData = data as VoiceData;
+      if (voiceData == null)
         throw new WatsonException("Unexpected data type");
 
-      m_Voice = voice.Voice;
+      voice = voiceData.Voice;
     }
 
     private void OnEnable()
     {
       UnityObjectUtil.StartDestroyQueue();
 
-      if (m_StatusText != null)
-        m_StatusText.text = "READY";
+      if (statusText != null)
+        statusText.text = "READY";
     }
 
     /// <exclude />
     protected override void Start()
     {
       base.Start();
-      m_Source = GetComponent<AudioSource>();
+      source = GetComponent<AudioSource>();
     }
 
     private void Update()
     {
-      if (m_Source != null && !m_Source.isPlaying
-          && m_SpeechQueue.Count > 0
-          && m_SpeechQueue.Peek().Ready)
+      if (source != null && !source.isPlaying
+          && speechQueue.Count > 0
+          && speechQueue.Peek().Ready)
       {
         CancelInvoke("OnEndSpeech");
 
-        m_ActiveSpeech = m_SpeechQueue.Dequeue();
-        if (m_ActiveSpeech.Clip != null)
+        activeSpeech = speechQueue.Dequeue();
+        if (activeSpeech.Clip != null)
         {
-          if (m_Speaking.IsConnected)
-            m_Speaking.SendData(new SpeakingStateData(true));
-          if (m_DisableMic.IsConnected)
-            m_DisableMic.SendData(new DisableMicData(true));
+          if (speaking.IsConnected)
+            speaking.SendData(new SpeakingStateData(true));
+          if (disableMic.IsConnected)
+            disableMic.SendData(new DisableMicData(true));
 
-          m_Source.spatialBlend = 0.0f;     // 2D sound
-          m_Source.loop = false;            // do not loop
-          m_Source.clip = m_ActiveSpeech.Clip;             // clip
-          m_Source.Play();
+          source.spatialBlend = 0.0f;     // 2D sound
+          source.loop = false;            // do not loop
+          source.clip = activeSpeech.Clip;             // clip
+          source.Play();
 
-          Invoke("OnEndSpeech", ((float)m_ActiveSpeech.Clip.samples / (float)m_ActiveSpeech.Clip.frequency) + 0.1f);
-          if (m_LevelOut.IsConnected)
+          Invoke("OnEndSpeech", ((float)activeSpeech.Clip.samples / (float)activeSpeech.Clip.frequency) + 0.1f);
+          if (levelOut.IsConnected)
           {
-            m_LastPlayPos = 0;
-            InvokeRepeating("OnLevelOut", m_LevelOutInterval, m_LevelOutInterval);
+            lastPlayPos = 0;
+            InvokeRepeating("OnLevelOut", levelOutInterval, levelOutInterval);
           }
         }
         else
@@ -209,23 +209,23 @@ namespace IBM.Watson.DeveloperCloud.Widgets
         }
       }
 
-      if (m_TextToSpeechButton != null)
-        m_TextToSpeechButton.interactable = true;
-      if (m_StatusText != null)
-        m_StatusText.text = "READY";
+      if (textToSpeechButton != null)
+        textToSpeechButton.interactable = true;
+      if (statusText != null)
+        statusText.text = "READY";
     }
 
     private void OnLevelOut()
     {
-      if (m_Source != null && m_Source.isPlaying)
+      if (source != null && source.isPlaying)
       {
-        int currentPos = m_Source.timeSamples;
-        if (currentPos > m_LastPlayPos)
+        int currentPos = source.timeSamples;
+        if (currentPos > lastPlayPos)
         {
-          float[] samples = new float[currentPos - m_LastPlayPos];
-          m_Source.clip.GetData(samples, m_LastPlayPos);
-          m_LevelOut.SendData(new LevelData(Mathf.Max(samples) * m_LevelOutputModifier, m_LevelOutputModifier));
-          m_LastPlayPos = currentPos;
+          float[] samples = new float[currentPos - lastPlayPos];
+          source.clip.GetData(samples, lastPlayPos);
+          levelOut.SendData(new LevelData(Mathf.Max(samples) * levelOutputModifier, levelOutputModifier));
+          lastPlayPos = currentPos;
         }
       }
       else
@@ -233,14 +233,14 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     }
     private void OnEndSpeech()
     {
-      if (m_Speaking.IsConnected)
-        m_Speaking.SendData(new SpeakingStateData(false));
-      if (m_DisableMic.IsConnected)
-        m_DisableMic.SendData(new DisableMicData(false));
-      if (m_Source.isPlaying)
-        m_Source.Stop();
+      if (speaking.IsConnected)
+        speaking.SendData(new SpeakingStateData(false));
+      if (disableMic.IsConnected)
+        disableMic.SendData(new DisableMicData(false));
+      if (source.isPlaying)
+        source.Stop();
 
-      m_ActiveSpeech = null;
+      activeSpeech = null;
     }
 
     /// <exclude />

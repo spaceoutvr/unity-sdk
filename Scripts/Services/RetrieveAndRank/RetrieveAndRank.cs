@@ -36,7 +36,7 @@ namespace IBM.Watson.DeveloperCloud.Services.RetrieveAndRank.v1
   {
     #region Private Data
     private const string SERVICE_ID = "RetrieveAndRankV1";
-    private static fsSerializer sm_Serializer = new fsSerializer();
+    private static fsSerializer sserializer = new fsSerializer();
     private const float REQUEST_TIMEOUT = 10.0f * 60.0f;
 
     //  List clusters or create cluster.
@@ -148,7 +148,7 @@ namespace IBM.Watson.DeveloperCloud.Services.RetrieveAndRank.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = clustersData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -238,7 +238,7 @@ namespace IBM.Watson.DeveloperCloud.Services.RetrieveAndRank.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = clusterResponseData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -398,7 +398,7 @@ namespace IBM.Watson.DeveloperCloud.Services.RetrieveAndRank.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = clusterData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -488,7 +488,7 @@ namespace IBM.Watson.DeveloperCloud.Services.RetrieveAndRank.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = configData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -785,7 +785,7 @@ namespace IBM.Watson.DeveloperCloud.Services.RetrieveAndRank.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = uploadResponse;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -912,7 +912,7 @@ namespace IBM.Watson.DeveloperCloud.Services.RetrieveAndRank.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = collectionsData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1031,7 +1031,7 @@ namespace IBM.Watson.DeveloperCloud.Services.RetrieveAndRank.v1
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
           object obj = indexResponseData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1154,7 +1154,7 @@ namespace IBM.Watson.DeveloperCloud.Services.RetrieveAndRank.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = searchData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1230,7 +1230,7 @@ namespace IBM.Watson.DeveloperCloud.Services.RetrieveAndRank.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = rankersData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1344,7 +1344,7 @@ namespace IBM.Watson.DeveloperCloud.Services.RetrieveAndRank.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = rankerResponseData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1462,7 +1462,7 @@ namespace IBM.Watson.DeveloperCloud.Services.RetrieveAndRank.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = rankData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1621,7 +1621,7 @@ namespace IBM.Watson.DeveloperCloud.Services.RetrieveAndRank.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = rankerData;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1655,22 +1655,22 @@ namespace IBM.Watson.DeveloperCloud.Services.RetrieveAndRank.v1
 
     private class CheckServiceStatus
     {
-      private RetrieveAndRank m_Service = null;
-      private ServiceStatus m_Callback = null;
+      private RetrieveAndRank service = null;
+      private ServiceStatus callback = null;
 
-      public CheckServiceStatus(RetrieveAndRank service, ServiceStatus callback)
+      public CheckServiceStatus(RetrieveAndRank retrieveAndRank, ServiceStatus serviceStatus)
       {
-        m_Service = service;
-        m_Callback = callback;
+        service = retrieveAndRank;
+        callback = serviceStatus;
 
-        if (!m_Service.GetClusters(OnGetClusters))
-          m_Callback(SERVICE_ID, false);
+        if (!service.GetClusters(OnGetClusters))
+          callback(SERVICE_ID, false);
       }
 
       void OnGetClusters(SolrClusterListResponse clustersData, string data)
       {
-        if (m_Callback != null)
-          m_Callback(SERVICE_ID, clustersData != null);
+        if (callback != null)
+          callback(SERVICE_ID, clustersData != null);
       }
     };
     #endregion

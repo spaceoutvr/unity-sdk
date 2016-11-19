@@ -63,7 +63,7 @@ namespace IBM.Watson.DeveloperCloud.Services.LanguageTranslator.v1
 
     #region Private Data
     private const string SERVICE_ID = "LanguageTranslatorV1";
-    private static fsSerializer sm_Serializer = new fsSerializer();
+    private static fsSerializer sserializer = new fsSerializer();
     #endregion
 
     #region GetTranslation Functions
@@ -147,7 +147,7 @@ namespace IBM.Watson.DeveloperCloud.Services.LanguageTranslator.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = translations;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -237,7 +237,7 @@ namespace IBM.Watson.DeveloperCloud.Services.LanguageTranslator.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = models;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -295,7 +295,7 @@ namespace IBM.Watson.DeveloperCloud.Services.LanguageTranslator.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = model;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -351,7 +351,7 @@ namespace IBM.Watson.DeveloperCloud.Services.LanguageTranslator.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = langs;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -437,22 +437,22 @@ namespace IBM.Watson.DeveloperCloud.Services.LanguageTranslator.v1
 
     private class CheckServiceStatus
     {
-      private LanguageTranslator m_Service = null;
-      private ServiceStatus m_Callback = null;
+      private LanguageTranslator service = null;
+      private ServiceStatus callback = null;
 
-      public CheckServiceStatus(LanguageTranslator service, ServiceStatus callback)
+      public CheckServiceStatus(LanguageTranslator languageTranslator, ServiceStatus serviceStatus)
       {
-        m_Service = service;
-        m_Callback = callback;
+        service = languageTranslator;
+        callback = serviceStatus;
 
-        if (!m_Service.GetLanguages(OnCheckService))
-          m_Callback(SERVICE_ID, false);
+        if (!service.GetLanguages(OnCheckService))
+          callback(SERVICE_ID, false);
       }
 
       private void OnCheckService(Languages langs)
       {
-        if (m_Callback != null)
-          m_Callback(SERVICE_ID, langs != null);
+        if (callback != null)
+          callback(SERVICE_ID, langs != null);
       }
     };
     #endregion

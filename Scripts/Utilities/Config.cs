@@ -56,27 +56,27 @@ namespace IBM.Watson.DeveloperCloud.Utilities
       /// <summary>
       /// The ID of the service this is the credentials.
       /// </summary>
-      public string m_ServiceID;
+      public string serviceID;
       /// <summary>
       /// The URL for these credentials.
       /// </summary>
-      public string m_URL;
+      public string URL;
       /// <summary>
       /// The user name for these credentials.
       /// </summary>
-      public string m_User;
+      public string user;
       /// <summary>
       /// The password for these credentials.
       /// </summary>
-      public string m_Password;
+      public string password;
       /// <summary>
       /// The API key for this service.
       /// </summary>
-      public string m_Apikey;
+      public string apikey;
       /// <summary>
       /// A note for the applied service.
       /// </summary>
-      public string m_Note;
+      public string note;
 
       /// <summary>
       /// Generate JSON credentials.
@@ -84,7 +84,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
       /// <returns>Returns a string of the JSON.</returns>
       public string MakeJSON()
       {
-        return "{\n\t\"credentials\": {\n\t\t\"url\": \"" + m_URL + "\",\n\t\t\"username\": \"" + m_User + "\",\n\t\t\"password\": \"" + m_Password + "\",\n\t\t\"apikey\": \"" + m_Apikey + "\",\n\t\t\"note\": \"" + m_Note + "\"\n\t}\n}";
+        return "{\n\t\"credentials\": {\n\t\t\"url\": \"" + URL + "\",\n\t\t\"username\": \"" + user + "\",\n\t\t\"password\": \"" + password + "\",\n\t\t\"apikey\": \"" + apikey + "\",\n\t\t\"note\": \"" + note + "\"\n\t}\n}";
       }
 
       /// <summary>
@@ -98,14 +98,14 @@ namespace IBM.Watson.DeveloperCloud.Utilities
         {
           IDictionary iParse = Json.Deserialize(json) as IDictionary;
           IDictionary iCredentials = iParse["credentials"] as IDictionary;
-          m_URL = (string)iCredentials["url"];
-          m_User = (string)iCredentials["username"];
-          m_Password = (string)iCredentials["password"];
-          m_Note = (string)iCredentials["note"];
+          URL = (string)iCredentials["url"];
+          user = (string)iCredentials["username"];
+          password = (string)iCredentials["password"];
+          note = (string)iCredentials["note"];
           if (!string.IsNullOrEmpty((string)iCredentials["apikey"]))
-            m_Apikey = (string)iCredentials["apikey"];
+            apikey = (string)iCredentials["apikey"];
           if (!string.IsNullOrEmpty((string)iCredentials["api_key"]))
-            m_Apikey = (string)iCredentials["api_key"];
+            apikey = (string)iCredentials["api_key"];
 
           return true;
         }
@@ -114,14 +114,14 @@ namespace IBM.Watson.DeveloperCloud.Utilities
           try
           {
             IDictionary iParse = Json.Deserialize(json) as IDictionary;
-            m_URL = (string)iParse["url"];
-            m_User = (string)iParse["username"];
-            m_Password = (string)iParse["password"];
-            m_Note = (string)iParse["note"];
+            URL = (string)iParse["url"];
+            user = (string)iParse["username"];
+            password = (string)iParse["password"];
+            note = (string)iParse["note"];
             if (!string.IsNullOrEmpty((string)iParse["apikey"]))
-              m_Apikey = (string)iParse["apikey"];
+              apikey = (string)iParse["apikey"];
             if (!string.IsNullOrEmpty((string)iParse["api_key"]))
-              m_Apikey = (string)iParse["api_key"];
+              apikey = (string)iParse["api_key"];
 
             return true;
           }
@@ -141,7 +141,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
       /// <returns><c>true</c> if this instance has credentials; otherwise, <c>false</c>.</returns>
       public bool HasCredentials()
       {
-        return (!string.IsNullOrEmpty(m_User) && !string.IsNullOrEmpty(m_Password));
+        return (!string.IsNullOrEmpty(user) && !string.IsNullOrEmpty(password));
       }
 
       /// <summary>
@@ -150,23 +150,23 @@ namespace IBM.Watson.DeveloperCloud.Utilities
       /// <returns><c>true</c> if this instance has API key; otherwise, <c>false</c>.</returns>
       public bool HasAPIKey()
       {
-        return !string.IsNullOrEmpty(m_Apikey);
+        return !string.IsNullOrEmpty(apikey);
       }
     }
 
     #region Private Data
     [fsProperty]
-    private string m_ClassifierDirectory = "Watson/Scripts/Editor/Classifiers/";
+    private string classifierDirectory = "Watson/Scripts/Editor/Classifiers/";
     [fsProperty]
-    private float m_TimeOut = 30.0f;
+    private float timeOut = 30.0f;
     [fsProperty]
-    private int m_MaxRestConnections = 5;
+    private int maxRestConnections = 5;
     [fsProperty]
-    private List<CredentialInfo> m_Credentials = new List<CredentialInfo>();
+    private List<CredentialInfo> credentials = new List<CredentialInfo>();
     [fsProperty]
-    private List<Variable> m_Variables = new List<Variable>();
+    private List<Variable> variables = new List<Variable>();
 
-    private static fsSerializer sm_Serializer = new fsSerializer();
+    private static fsSerializer sserializer = new fsSerializer();
     #endregion
 
     #region Public Properties
@@ -182,23 +182,23 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     /// <summary>
     /// Returns the location of the classifiers
     /// </summary>
-    public string ClassifierDirectory { get { return m_ClassifierDirectory; } set { m_ClassifierDirectory = value; } }
+    public string ClassifierDirectory { get { return classifierDirectory; } set { classifierDirectory = value; } }
     /// <summary>
     /// Returns the Timeout for requests made to the server.
     /// </summary>
-    public float TimeOut { get { return m_TimeOut; } set { m_TimeOut = value; } }
+    public float TimeOut { get { return timeOut; } set { timeOut = value; } }
     /// <summary>
     /// Maximum number of connections Watson will make to the server back-end at any one time.
     /// </summary>
-    public int MaxRestConnections { get { return m_MaxRestConnections; } set { m_MaxRestConnections = value; } }
+    public int MaxRestConnections { get { return maxRestConnections; } set { maxRestConnections = value; } }
     /// <summary>
     /// Returns the list of credentials used to login to the various services.
     /// </summary>
-    public List<CredentialInfo> Credentials { get { return m_Credentials; } set { m_Credentials = value; } }
+    public List<CredentialInfo> Credentials { get { return credentials; } set { credentials = value; } }
     /// <summary>
     /// Returns a list of variables which can hold key/value data.
     /// </summary>
-    public List<Variable> Variables { get { return m_Variables; } set { m_Variables = value; } }
+    public List<Variable> Variables { get { return variables; } set { variables = value; } }
     #endregion
 
     /// <summary>
@@ -216,8 +216,8 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     /// <returns>Returns null if the credentials cannot be found.</returns>
     public CredentialInfo FindCredentials(string serviceID)
     {
-      foreach (var info in m_Credentials)
-        if (info.m_ServiceID == serviceID)
+      foreach (var info in credentials)
+        if (info.serviceID == serviceID)
           return info;
       return null;
     }
@@ -264,7 +264,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
         }
 
         object obj = this;
-        r = sm_Serializer.TryDeserialize(data, GetType(), ref obj);
+        r = sserializer.TryDeserialize(data, GetType(), ref obj);
         if (!r.Succeeded)
         {
           Log.Error("Config", "Failed to parse Config.json: {0}", r.ToString());
@@ -291,7 +291,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     public string SaveConfig(bool pretty = true)
     {
       fsData data = null;
-      sm_Serializer.TrySerialize(GetType(), this, out data);
+      sserializer.TrySerialize(GetType(), this, out data);
 
       if (!System.IO.Directory.Exists(Application.streamingAssetsPath))
         System.IO.Directory.CreateDirectory(Application.streamingAssetsPath);
@@ -328,7 +328,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     /// <returns>Returns the Variable object or null if not found.</returns>
     public Variable GetVariable(string key)
     {
-      foreach (var var in m_Variables)
+      foreach (var var in variables)
         if (var.Key == key)
           return var;
 
@@ -342,9 +342,9 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     /// <returns></returns>
     public string GetAPIKey(string serviceID)
     {
-      foreach (var info in m_Credentials)
-        if (info.m_ServiceID == serviceID)
-          return info.m_Apikey;
+      foreach (var info in credentials)
+        if (info.serviceID == serviceID)
+          return info.apikey;
       return null;
     }
 
@@ -378,7 +378,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
 
         v = new Variable();
         v.Key = key;
-        m_Variables.Add(v);
+        variables.Add(v);
       }
 
       v.Value = value;
@@ -393,7 +393,7 @@ namespace IBM.Watson.DeveloperCloud.Utilities
     public string ResolveVariables(string input, bool recursive = true)
     {
       string output = input;
-      foreach (var var in m_Variables)
+      foreach (var var in variables)
       {
         string value = var.Value;
         if (recursive && value.Contains("${"))

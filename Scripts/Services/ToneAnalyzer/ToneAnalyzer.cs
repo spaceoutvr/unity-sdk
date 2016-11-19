@@ -35,7 +35,7 @@ namespace IBM.Watson.DeveloperCloud.Services.ToneAnalyzer.v3
   {
     #region Private Data
     private const string SERVICE_ID = "ToneAnalyzerV3";
-    private static fsSerializer sm_Serializer = new fsSerializer();
+    private static fsSerializer sserializer = new fsSerializer();
     #endregion
 
     #region Get Tone
@@ -97,7 +97,7 @@ namespace IBM.Watson.DeveloperCloud.Services.ToneAnalyzer.v3
             throw new WatsonException(r.FormattedMessages);
 
           object obj = response;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -133,22 +133,22 @@ namespace IBM.Watson.DeveloperCloud.Services.ToneAnalyzer.v3
 
     private class CheckServiceStatus
     {
-      private ToneAnalyzer m_Service = null;
-      private ServiceStatus m_Callback = null;
+      private ToneAnalyzer service = null;
+      private ServiceStatus callback = null;
 
-      public CheckServiceStatus(ToneAnalyzer service, ServiceStatus callback)
+      public CheckServiceStatus(ToneAnalyzer toneAnalyzer, ServiceStatus serviceStatus)
       {
-        m_Service = service;
-        m_Callback = callback;
+        service = toneAnalyzer;
+        callback = serviceStatus;
 
-        if (!m_Service.GetToneAnalyze(OnGetToneAnalyzed, "Test"))
-          m_Callback(SERVICE_ID, false);
+        if (!service.GetToneAnalyze(OnGetToneAnalyzed, "Test"))
+          callback(SERVICE_ID, false);
       }
 
       private void OnGetToneAnalyzed(ToneAnalyzerResponse resp, string data)
       {
-        if (m_Callback != null)
-          m_Callback(SERVICE_ID, resp != null);
+        if (callback != null)
+          callback(SERVICE_ID, resp != null);
       }
     };
     #endregion

@@ -202,11 +202,11 @@ namespace IBM.Watson.DeveloperCloud.Connection
     #endregion
 
     #region Public Properties
-    private static float sm_LogResponseTime = 3.0f;
+    private static float slogResponseTime = 3.0f;
     /// <summary>
     /// Specify a time to log to the logging system when a response takes longer than this amount.
     /// </summary>
-    public static float LogResponseTime { get { return sm_LogResponseTime; } set { sm_LogResponseTime = value; } }
+    public static float LogResponseTime { get { return slogResponseTime; } set { slogResponseTime = value; } }
     /// <summary>
     /// Base URL for REST requests.
     /// </summary>
@@ -223,7 +223,7 @@ namespace IBM.Watson.DeveloperCloud.Connection
 
     #region Private Data
     //! Dictionary of connectors by service & function.
-    private static Dictionary<string, RESTConnector> sm_Connectors = new Dictionary<string, RESTConnector>();
+    private static Dictionary<string, RESTConnector> sconnectors = new Dictionary<string, RESTConnector>();
     #endregion
 
     /// <summary>
@@ -238,7 +238,7 @@ namespace IBM.Watson.DeveloperCloud.Connection
       RESTConnector connector = null;
 
       string connectorID = serviceID + function;
-      if (useCache && sm_Connectors.TryGetValue(connectorID, out connector))
+      if (useCache && sconnectors.TryGetValue(connectorID, out connector))
         return connector;
 
       Config cfg = Config.Instance;
@@ -250,11 +250,11 @@ namespace IBM.Watson.DeveloperCloud.Connection
       }
 
       connector = new RESTConnector();
-      connector.URL = cred.m_URL + function;
+      connector.URL = cred.URL + function;
       if (cred.HasCredentials())
-        connector.Authentication = new Credentials(cred.m_User, cred.m_Password);
+        connector.Authentication = new Credentials(cred.user, cred.password);
       if (useCache)
-        sm_Connectors[connectorID] = connector;
+        sconnectors[connectorID] = connector;
 
       return connector;
     }
@@ -264,7 +264,7 @@ namespace IBM.Watson.DeveloperCloud.Connection
     /// </summary>
     public static void FlushConnectors()
     {
-      sm_Connectors.Clear();
+      sconnectors.Clear();
     }
 
     #region Send Interface
@@ -280,13 +280,13 @@ namespace IBM.Watson.DeveloperCloud.Connection
       if (request == null)
         throw new ArgumentNullException("request");
 
-      m_Requests.Enqueue(request);
+      requests.Enqueue(request);
 
       // if we are not already running a co-routine to send the Requests
       // then start one at this point.
-      if (m_ActiveConnections < Config.Instance.MaxRestConnections)
+      if (activeConnections < Config.Instance.MaxRestConnections)
       {
-        // This co-routine will increment m_ActiveConnections then yield back to us so
+        // This co-routine will increment activeConnections then yield back to us so
         // we can return from the Send() as quickly as possible.
         Runnable.Run(ProcessRequestQueue());
       }
@@ -296,8 +296,8 @@ namespace IBM.Watson.DeveloperCloud.Connection
     #endregion
 
     #region Private Data
-    private int m_ActiveConnections = 0;
-    private Queue<Request> m_Requests = new Queue<Request>();
+    private int activeConnections = 0;
+    private Queue<Request> requests = new Queue<Request>();
     #endregion
 
     #region Private Functions
@@ -322,7 +322,7 @@ namespace IBM.Watson.DeveloperCloud.Connection
     private IEnumerator ProcessRequestQueue()
     {
       // yield AFTER we increment the connection count, so the Send() function can return immediately
-      m_ActiveConnections += 1;
+      activeConnections += 1;
 #if UNITY_EDITOR
       if (!UnityEditorInternal.InternalEditorUtility.inBatchMode)
         yield return null;
@@ -330,9 +330,9 @@ namespace IBM.Watson.DeveloperCloud.Connection
                 yield return null;
 #endif
 
-      while (m_Requests.Count > 0)
+      while (requests.Count > 0)
       {
-        Request req = m_Requests.Dequeue();
+        Request req = requests.Dequeue();
         if (req.Cancel)
           continue;
         string url = URL;
@@ -535,7 +535,7 @@ namespace IBM.Watson.DeveloperCloud.Connection
       }
 
       // reduce the connection count before we exit..
-      m_ActiveConnections -= 1;
+      activeConnections -= 1;
       yield break;
     }
 
@@ -547,14 +547,14 @@ namespace IBM.Watson.DeveloperCloud.Connection
       public bool IsComplete { get; set; }
       public bool Success { get; set; }
 
-      private Thread m_Thread = null;
+      private Thread thread = null;
 
       public bool Send(string url, Dictionary<string, string> headers)
       {
 #if ENABLE_DEBUGGING
-                Log.Debug("RESTConnector", "DeleteRequest, Send: {0}, m_Thread:{1}", url, m_Thread);
+                Log.Debug("RESTConnector", "DeleteRequest, Send: {0}, thread:{1}", url, thread);
 #endif
-        if (m_Thread != null && m_Thread.IsAlive)
+        if (thread != null && thread.IsAlive)
           return false;
 
         URL = url;
@@ -565,9 +565,9 @@ namespace IBM.Watson.DeveloperCloud.Connection
             Headers[kp.Key] = kp.Value;
         }
 
-        m_Thread = new Thread(ProcessRequest);
+        thread = new Thread(ProcessRequest);
 
-        m_Thread.Start();
+        thread.Start();
         return true;
       }
 

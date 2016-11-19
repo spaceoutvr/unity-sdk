@@ -24,32 +24,32 @@ using IBM.Watson.DeveloperCloud.Logging;
 
 public class TestConversation : UnitTest
 {
-  private Conversation m_Conversation = new Conversation();
-  private string m_WorkspaceID;
-  private string m_Input = "Can you unlock the door?";
-  private bool m_MessageInputTested = false;
-  private bool m_MessageObjectTested = false;
+  private Conversation conversation = new Conversation();
+  private string workspaceID;
+  private string input = "Can you unlock the door?";
+  private bool messageInputTested = false;
+  private bool messageObjectTested = false;
 
   public override IEnumerator RunTest()
   {
-    m_WorkspaceID = Config.Instance.GetVariableValue("ConversationV1_ID");
+    workspaceID = Config.Instance.GetVariableValue("ConversationV1_ID");
 
-    if (Config.Instance.FindCredentials(m_Conversation.GetServiceID()) == null)
+    if (Config.Instance.FindCredentials(conversation.GetServiceID()) == null)
       yield break;
 
-    if (!m_MessageInputTested)
+    if (!messageInputTested)
     {
-      m_Conversation.Message(OnMessageInput, m_WorkspaceID, m_Input);
-      while (!m_MessageInputTested)
+      conversation.Message(OnMessageInput, workspaceID, input);
+      while (!messageInputTested)
         yield return null;
     }
 
-    if (!m_MessageObjectTested)
+    if (!messageObjectTested)
     {
       MessageRequest messageRequest = new MessageRequest();
-      messageRequest.InputText = m_Input;
-      m_Conversation.Message(OnMessageObject, m_WorkspaceID, messageRequest);
-      while (!m_MessageObjectTested)
+      messageRequest.InputText = input;
+      conversation.Message(OnMessageObject, workspaceID, messageRequest);
+      while (!messageObjectTested)
         yield return null;
     }
 
@@ -68,7 +68,7 @@ public class TestConversation : UnitTest
           Debug.Log("output: " + txt);
     }
 
-    m_MessageInputTested = true;
+    messageInputTested = true;
   }
 
   private void OnMessageObject(MessageResponse resp, string customData)
@@ -83,6 +83,6 @@ public class TestConversation : UnitTest
           Debug.Log("output: " + txt);
     }
 
-    m_MessageObjectTested = true;
+    messageObjectTested = true;
   }
 }

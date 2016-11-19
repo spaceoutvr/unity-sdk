@@ -34,23 +34,23 @@ public class MenuScene
   /// <summary>
   /// The name of the scene.
   /// </summary>
-  public string m_SceneName;
+  public string sceneName;
   /// <summary>
   /// the description of the scene.
   /// </summary>
-  public string m_SceneDesc;
+  public string sceneDesc;
   /// <summary>
   /// Back button position for this scene.
   /// </summary>
-  public Vector3 m_CustomBackButtonPosition = Vector3.zero;
+  public Vector3 customBackButtonPosition = Vector3.zero;
   /// <summary>
   /// Back button scale for this scene.
   /// </summary>
-  public Vector2 m_CustomBackButtonScale = Vector2.zero;
+  public Vector2 customBackButtonScale = Vector2.zero;
   /// <summary>
   /// Is the back button visible.
   /// </summary>
-  public bool m_IsVisibleBackButton = true;
+  public bool isVisibleBackButton = true;
 }
 
 /// <summary>
@@ -59,19 +59,19 @@ public class MenuScene
 public class MainUI : MonoBehaviour
 {
   [SerializeField]
-  private LayoutGroup m_ButtonLayout = null;
+  private LayoutGroup buttonLayout = null;
   [SerializeField]
-  private Button m_ButtonPrefab = null;
+  private Button buttonPrefab = null;
   [SerializeField]
-  private GameObject m_BackgroundUI = null;
+  private GameObject backgroundUI = null;
   [SerializeField]
-  private RectTransform m_ButtonBack = null;
-  private Vector3 m_InitialBackButtonPosition;
-  private Vector3 m_InitialBackButtonScale;
-  private Color m_InitialBackButtonColor;
+  private RectTransform buttonBack = null;
+  private Vector3 initialBackButtonPosition;
+  private Vector3 initialBackButtonScale;
+  private Color initialBackButtonColor;
 
   [SerializeField]
-  private MenuScene[] m_Scenes = null;
+  private MenuScene[] scenes = null;
 
   private const string MAIN_SCENE = "Main";
 
@@ -93,45 +93,45 @@ public class MainUI : MonoBehaviour
       scenes.Add(name);
     }
     scenes.Sort();
-    context.m_Scenes = new MenuScene[scenes.Count];
+    context.scenes = new MenuScene[scenes.Count];
     for (int i = 0; i < scenes.Count; i++)
     {
-      context.m_Scenes[i] = new MenuScene();
-      context.m_Scenes[i].m_SceneName = scenes[i];
-      context.m_Scenes[i].m_SceneDesc = scenes[i];
+      context.scenes[i] = new MenuScene();
+      context.scenes[i].sceneName = scenes[i];
+      context.scenes[i].sceneDesc = scenes[i];
     }
   }
 #endif
 
   private IEnumerator Start()
   {
-    if (m_BackgroundUI == null)
-      throw new WatsonException("m_BackgroundUI is null.");
-    if (m_ButtonLayout == null)
-      throw new WatsonException("m_ButtonLayout is null.");
-    if (m_ButtonPrefab == null)
-      throw new WatsonException("m_ButtonPrefab is null.");
-    if (m_ButtonBack == null)
-      throw new WatsonException("m_ButtonBack is null.");
+    if (backgroundUI == null)
+      throw new WatsonException("backgroundUI is null.");
+    if (buttonLayout == null)
+      throw new WatsonException("buttonLayout is null.");
+    if (buttonPrefab == null)
+      throw new WatsonException("buttonPrefab is null.");
+    if (buttonBack == null)
+      throw new WatsonException("buttonBack is null.");
     else
     {
-      if (m_ButtonBack.GetComponent<RectTransform>() != null)
+      if (buttonBack.GetComponent<RectTransform>() != null)
       {
-        m_InitialBackButtonPosition = m_ButtonBack.GetComponent<RectTransform>().anchoredPosition3D;
-        m_InitialBackButtonScale = m_ButtonBack.GetComponent<RectTransform>().sizeDelta;
+        initialBackButtonPosition = buttonBack.GetComponent<RectTransform>().anchoredPosition3D;
+        initialBackButtonScale = buttonBack.GetComponent<RectTransform>().sizeDelta;
       }
       else
       {
-        throw new WatsonException("m_ButtonBack doesn't have RectTransform");
+        throw new WatsonException("buttonBack doesn't have RectTransform");
       }
 
-      if (m_ButtonBack.GetComponent<Image>() != null)
+      if (buttonBack.GetComponent<Image>() != null)
       {
-        m_InitialBackButtonColor = m_ButtonBack.GetComponentInChildren<Image>().color;
+        initialBackButtonColor = buttonBack.GetComponentInChildren<Image>().color;
       }
       else
       {
-        throw new WatsonException("m_ButtonBack doesn't have Image");
+        throw new WatsonException("buttonBack doesn't have Image");
       }
 
     }
@@ -150,34 +150,34 @@ public class MainUI : MonoBehaviour
 
   private void UpdateButtons()
   {
-    while (m_ButtonLayout.transform.childCount > 0)
-      DestroyImmediate(m_ButtonLayout.transform.GetChild(0).gameObject);
+    while (buttonLayout.transform.childCount > 0)
+      DestroyImmediate(buttonLayout.transform.GetChild(0).gameObject);
 
     //Log.Debug( "MainUI", "UpdateBottons, level = {0}", Application.loadedLevelName );
     if (SceneManager.GetActiveScene().name == MAIN_SCENE)
     {
-      m_BackgroundUI.SetActive(true);
+      backgroundUI.SetActive(true);
 
-      foreach (var scene in m_Scenes)
+      foreach (var scene in scenes)
       {
-        if (string.IsNullOrEmpty(scene.m_SceneName))
+        if (string.IsNullOrEmpty(scene.sceneName))
           continue;
 
-        GameObject buttonObj = GameObject.Instantiate(m_ButtonPrefab.gameObject);
-        buttonObj.transform.SetParent(m_ButtonLayout.transform, false);
+        GameObject buttonObj = GameObject.Instantiate(buttonPrefab.gameObject);
+        buttonObj.transform.SetParent(buttonLayout.transform, false);
 
         Text buttonText = buttonObj.GetComponentInChildren<Text>();
         if (buttonText != null)
-          buttonText.text = scene.m_SceneDesc;
+          buttonText.text = scene.sceneDesc;
         Button button = buttonObj.GetComponentInChildren<Button>();
 
-        string captured = scene.m_SceneName;
+        string captured = scene.sceneName;
         button.onClick.AddListener(() => OnLoadLevel(captured));
       }
     }
     else
     {
-      m_BackgroundUI.SetActive(false);
+      backgroundUI.SetActive(false);
     }
   }
 
@@ -203,28 +203,28 @@ public class MainUI : MonoBehaviour
     while (!asyncOperation.isDone)
       yield return new WaitForSeconds(0.1f);
 
-    for (int i = 0; m_Scenes != null && i < m_Scenes.Length; i++)
+    for (int i = 0; scenes != null && i < scenes.Length; i++)
     {
-      if (m_Scenes[i].m_SceneName == name)
+      if (scenes[i].sceneName == name)
       {
-        if (m_Scenes[i].m_CustomBackButtonPosition != Vector3.zero)
+        if (scenes[i].customBackButtonPosition != Vector3.zero)
         {
-          m_ButtonBack.anchoredPosition3D = m_Scenes[i].m_CustomBackButtonPosition;
-          ChangeVisibilityOfButton(m_ButtonBack, m_Scenes[i].m_IsVisibleBackButton);
+          buttonBack.anchoredPosition3D = scenes[i].customBackButtonPosition;
+          ChangeVisibilityOfButton(buttonBack, scenes[i].isVisibleBackButton);
         }
         else
         {
-          m_ButtonBack.anchoredPosition3D = m_InitialBackButtonPosition;
-          ChangeVisibilityOfButton(m_ButtonBack, true);
+          buttonBack.anchoredPosition3D = initialBackButtonPosition;
+          ChangeVisibilityOfButton(buttonBack, true);
         }
 
-        if (m_Scenes[i].m_CustomBackButtonScale != Vector2.zero)
+        if (scenes[i].customBackButtonScale != Vector2.zero)
         {
-          m_ButtonBack.sizeDelta = m_Scenes[i].m_CustomBackButtonScale;
+          buttonBack.sizeDelta = scenes[i].customBackButtonScale;
         }
         else
         {
-          m_ButtonBack.sizeDelta = m_InitialBackButtonScale;
+          buttonBack.sizeDelta = initialBackButtonScale;
         }
 
         break;
@@ -237,8 +237,8 @@ public class MainUI : MonoBehaviour
     if (buttonBack.GetComponentInChildren<Text>() != null)
       buttonBack.GetComponentInChildren<Text>().enabled = isVisible;
     if (buttonBack.GetComponentInChildren<Image>() != null)
-      buttonBack.GetComponentInChildren<Image>().color = isVisible ? m_InitialBackButtonColor :
-          new Color(m_InitialBackButtonColor.r, m_InitialBackButtonColor.g, m_InitialBackButtonColor.b, 0.0f);
+      buttonBack.GetComponentInChildren<Image>().color = isVisible ? initialBackButtonColor :
+          new Color(initialBackButtonColor.r, initialBackButtonColor.g, initialBackButtonColor.b, 0.0f);
   }
 
   /// <summary>

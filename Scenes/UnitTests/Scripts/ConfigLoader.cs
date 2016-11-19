@@ -23,8 +23,8 @@ using IBM.Watson.DeveloperCloud.Utilities;
 public class ConfigLoader : MonoBehaviour
 {
   [SerializeField]
-  private GameObject m_Prefab = null;
-  private GameObject m_CreatedObject = null;
+  private GameObject prefab = null;
+  private GameObject createdObject = null;
 
   #region OnEnable / OnDisable - Registering events
   void OnEnable()
@@ -45,7 +45,7 @@ public class ConfigLoader : MonoBehaviour
       yield return null;
 
     // then initiate a prefab after we are done loading the config.
-    m_CreatedObject = GameObject.Instantiate(m_Prefab);
+    createdObject = GameObject.Instantiate(prefab);
   }
 
   /// <summary>
@@ -54,12 +54,12 @@ public class ConfigLoader : MonoBehaviour
   /// <param name="args"></param>
   public void OnUserLogOut(System.Object[] args)
   {
-    if (m_CreatedObject != null)
+    if (createdObject != null)
     {
-      if (!m_CreatedObject.activeSelf)
-        m_CreatedObject.SetActive(true);
+      if (!createdObject.activeSelf)
+        createdObject.SetActive(true);
 
-      m_CreatedObject.SendMessage("DestroyCreatedObject", SendMessageOptions.DontRequireReceiver);
+      createdObject.SendMessage("DestroyCreatedObject", SendMessageOptions.DontRequireReceiver);
     }
     StartCoroutine(Start());
   }

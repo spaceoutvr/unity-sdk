@@ -408,7 +408,7 @@ namespace IBM.Watson.DeveloperCloud.Services.VisualRecognition.v3
     /// The class.
     /// </summary>
     [fsProperty("class")]
-    public string m_Class { get; set; }
+    public string _class { get; set; }
   }
   #endregion
 

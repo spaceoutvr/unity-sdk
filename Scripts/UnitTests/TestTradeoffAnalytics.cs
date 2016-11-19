@@ -26,12 +26,12 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
 {
   public class TestTradeoffAnalytics : UnitTest
   {
-    TradeoffAnalytics m_TradeoffAnalytics = new TradeoffAnalytics();
-    bool m_GetDilemmaTested = false;
+    TradeoffAnalytics tradeoffAnalytics = new TradeoffAnalytics();
+    bool getDilemmaTested = false;
 
     public override IEnumerator RunTest()
     {
-      if (Utilities.Config.Instance.FindCredentials(m_TradeoffAnalytics.GetServiceID()) == null)
+      if (Utilities.Config.Instance.FindCredentials(tradeoffAnalytics.GetServiceID()) == null)
         yield break;
 
 
@@ -109,8 +109,8 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
 
       problemToSolve.options = listOption.ToArray();
 
-      m_TradeoffAnalytics.GetDilemma(OnGetDilemma, problemToSolve, false);
-      while (!m_GetDilemmaTested)
+      tradeoffAnalytics.GetDilemma(OnGetDilemma, problemToSolve, false);
+      while (!getDilemmaTested)
         yield return null;
 
       yield break;
@@ -119,7 +119,7 @@ namespace IBM.Watson.DeveloperCloud.UnitTests
     private void OnGetDilemma(DilemmasResponse resp)
     {
       Test(resp != null);
-      m_GetDilemmaTested = true;
+      getDilemmaTested = true;
     }
 
     /// <summary>

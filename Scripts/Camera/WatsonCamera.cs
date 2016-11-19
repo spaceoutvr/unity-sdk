@@ -31,25 +31,25 @@ namespace IBM.Watson.DeveloperCloud.Camera
 
     #region Private Variables
     private static WatsonCamera mp_Instance;
-    private List<CameraTarget> m_ListCameraTarget = new List<CameraTarget>();
-    private CameraTarget m_TargetCamera = null;
+    private List<CameraTarget> listCameraTarget = new List<CameraTarget>();
+    private CameraTarget targetCamera = null;
 
-    protected Vector3 m_CameraInitialLocation;
-    protected Quaternion m_CameraInitialRotation;
+    protected Vector3 cameraInitialLocation;
+    protected Quaternion cameraInitialRotation;
     [SerializeField]
-    protected float m_PanSpeed = 0.07f;
+    protected float panSpeed = 0.07f;
     [SerializeField]
-    protected float m_ZoomSpeed = 20.0f;
+    protected float zoomSpeed = 20.0f;
     [SerializeField]
-    protected float m_SpeedForCameraAnimation = 2f;
+    protected float speedForCameraAnimation = 2f;
 
-    private float m_CommandMovementModifier = 10.0f;
+    private float commandMovementModifier = 10.0f;
 
     [SerializeField]
-    private MonoBehaviour m_AntiAliasing;
+    private MonoBehaviour antiAliasing;
     [SerializeField]
-    private MonoBehaviour m_DepthOfField;
-    protected bool m_DisableInteractivity = false;
+    private MonoBehaviour depthOfField;
+    protected bool disableInteractivity = false;
 
     #endregion
 
@@ -73,35 +73,35 @@ namespace IBM.Watson.DeveloperCloud.Camera
     {
       get
       {
-        if (m_TargetCamera == null)
+        if (targetCamera == null)
         {
           InitializeCameraTargetList();
         }
 
-        return m_TargetCamera;
+        return targetCamera;
       }
       set
       {
         if (value != null)
         {
-          m_TargetCamera = value;
+          targetCamera = value;
 
-          if (!m_ListCameraTarget.Contains(value))
+          if (!listCameraTarget.Contains(value))
           {
-            m_ListCameraTarget.Add(value);
+            listCameraTarget.Add(value);
           }
         }
         else
         {   //Delete current camera and clear from the list
 
-          if (m_ListCameraTarget.Contains(m_TargetCamera))
+          if (listCameraTarget.Contains(targetCamera))
           {
-            m_ListCameraTarget.Remove(m_TargetCamera);
+            listCameraTarget.Remove(targetCamera);
           }
 
-          if (m_ListCameraTarget.Count > 0)
+          if (listCameraTarget.Count > 0)
           {
-            m_TargetCamera = m_ListCameraTarget[m_ListCameraTarget.Count - 1];
+            targetCamera = listCameraTarget[listCameraTarget.Count - 1];
           }
           else
           {
@@ -118,10 +118,10 @@ namespace IBM.Watson.DeveloperCloud.Camera
     {
       get
       {
-        if (m_ListCameraTarget == null || m_ListCameraTarget.Count == 0)
+        if (listCameraTarget == null || listCameraTarget.Count == 0)
           InitializeCameraTargetList();
 
-        return m_ListCameraTarget[0];
+        return listCameraTarget[0];
       }
     }
 
@@ -156,8 +156,8 @@ namespace IBM.Watson.DeveloperCloud.Camera
 
     protected virtual void Start()
     {
-      m_CameraInitialLocation = transform.localPosition;
-      m_CameraInitialRotation = transform.rotation;
+      cameraInitialLocation = transform.localPosition;
+      cameraInitialRotation = transform.rotation;
     }
 
     protected virtual void Update()
@@ -170,40 +170,40 @@ namespace IBM.Watson.DeveloperCloud.Camera
       //For Zooming and Panning
       if (CurrentCameraTarget != null)
       {
-        transform.localPosition = Vector3.Lerp(transform.localPosition, CurrentCameraTarget.TargetPosition, Time.deltaTime * m_SpeedForCameraAnimation);
-        transform.rotation = Quaternion.Slerp(transform.localRotation, CurrentCameraTarget.TargetRotation, Time.deltaTime * m_SpeedForCameraAnimation);
+        transform.localPosition = Vector3.Lerp(transform.localPosition, CurrentCameraTarget.TargetPosition, Time.deltaTime * speedForCameraAnimation);
+        transform.rotation = Quaternion.Slerp(transform.localRotation, CurrentCameraTarget.TargetRotation, Time.deltaTime * speedForCameraAnimation);
       }
     }
 
     protected virtual void InitializeCameraTargetList()
     {
-      if (m_ListCameraTarget == null)
-        m_ListCameraTarget = new List<CameraTarget>();
+      if (listCameraTarget == null)
+        listCameraTarget = new List<CameraTarget>();
 
-      for (int i = 0; m_ListCameraTarget != null && i < m_ListCameraTarget.Count; i++)
+      for (int i = 0; listCameraTarget != null && i < listCameraTarget.Count; i++)
       {
-        Destroy(m_ListCameraTarget[i]);
+        Destroy(listCameraTarget[i]);
       }
 
-      m_ListCameraTarget.Clear();
+      listCameraTarget.Clear();
 
       CameraTarget defaultCameraTarget = this.gameObject.GetComponent<CameraTarget>();
       if (defaultCameraTarget == null)
         defaultCameraTarget = this.gameObject.AddComponent<CameraTarget>();
 
-      defaultCameraTarget.TargetPosition = m_CameraInitialLocation;
+      defaultCameraTarget.TargetPosition = cameraInitialLocation;
       if (defaultCameraTarget.TargetObject == null)
       {
-        defaultCameraTarget.TargetRotation = m_CameraInitialRotation;
+        defaultCameraTarget.TargetRotation = cameraInitialRotation;
       }
       else
       {
         defaultCameraTarget.TargetObject = defaultCameraTarget.TargetObject;
       }
 
-      m_ListCameraTarget.Add(defaultCameraTarget);
+      listCameraTarget.Add(defaultCameraTarget);
 
-      m_TargetCamera = m_ListCameraTarget[0];
+      targetCamera = listCameraTarget[0];
     }
 
     #endregion
@@ -216,7 +216,7 @@ namespace IBM.Watson.DeveloperCloud.Camera
     /// <param name="args">Arguments.</param>
     public virtual void DragTwoFinger(System.Object[] args)
     {
-      if (m_DisableInteractivity)
+      if (disableInteractivity)
         return;
 
       if (args != null && args.Length > 0 && args[0] is TouchScript.Gestures.ScreenTransformGesture)
@@ -224,9 +224,9 @@ namespace IBM.Watson.DeveloperCloud.Camera
         TouchScript.Gestures.ScreenTransformGesture transformGesture = args[0] as TouchScript.Gestures.ScreenTransformGesture;
 
         //Pannning with 2-finger
-        DefaultCameraTarget.TargetPosition += (transformGesture.DeltaPosition * m_PanSpeed * -1.0f);
+        DefaultCameraTarget.TargetPosition += (transformGesture.DeltaPosition * panSpeed * -1.0f);
         //Zooming with 2-finger
-        DefaultCameraTarget.TargetPosition += transform.forward * (transformGesture.DeltaScale - 1.0f) * m_ZoomSpeed;
+        DefaultCameraTarget.TargetPosition += transform.forward * (transformGesture.DeltaScale - 1.0f) * zoomSpeed;
       }
       else
       {
@@ -247,9 +247,9 @@ namespace IBM.Watson.DeveloperCloud.Camera
       {
         bool valueSet = (bool)args[0];
 
-        if (m_AntiAliasing != null)
+        if (antiAliasing != null)
         {
-          m_AntiAliasing.enabled = valueSet;
+          antiAliasing.enabled = valueSet;
         }
       }
     }
@@ -264,9 +264,9 @@ namespace IBM.Watson.DeveloperCloud.Camera
       {
         bool valueSet = (bool)args[0];
 
-        if (m_DepthOfField != null)
+        if (depthOfField != null)
         {
-          m_DepthOfField.enabled = valueSet;
+          depthOfField.enabled = valueSet;
         }
       }
     }
@@ -279,7 +279,7 @@ namespace IBM.Watson.DeveloperCloud.Camera
     {
       if (args != null && args.Length > 0 && args[0] is bool)
       {
-        m_DisableInteractivity = !(bool)args[0];
+        disableInteractivity = !(bool)args[0];
       }
     }
 
@@ -290,7 +290,7 @@ namespace IBM.Watson.DeveloperCloud.Camera
     /// <param name="args">Arguments.</param>
     protected virtual void ResetCamera(System.Object[] args)
     {
-      if (m_DisableInteractivity)
+      if (disableInteractivity)
         return;
 
       InitializeCameraTargetList();
@@ -302,11 +302,11 @@ namespace IBM.Watson.DeveloperCloud.Camera
     /// <param name="args">Arguments.</param>
     protected virtual void ResetCameraPosition(System.Object[] args)
     {
-      if (m_DisableInteractivity)
+      if (disableInteractivity)
         return;
       //Log.Status("WatsonCamera", "Reset Camera Position");
-      CurrentCameraTarget.TargetPosition = m_CameraInitialLocation;
-      CurrentCameraTarget.TargetRotation = m_CameraInitialRotation;
+      CurrentCameraTarget.TargetPosition = cameraInitialLocation;
+      CurrentCameraTarget.TargetRotation = cameraInitialRotation;
     }
 
 
@@ -316,10 +316,10 @@ namespace IBM.Watson.DeveloperCloud.Camera
     /// <param name="args">Arguments.</param>
     protected virtual void MoveUp(System.Object[] args)
     {
-      if (m_DisableInteractivity)
+      if (disableInteractivity)
         return;
 
-      DefaultCameraTarget.TargetPosition += this.transform.up * m_CommandMovementModifier;
+      DefaultCameraTarget.TargetPosition += this.transform.up * commandMovementModifier;
     }
 
     /// <summary>
@@ -328,10 +328,10 @@ namespace IBM.Watson.DeveloperCloud.Camera
     /// <param name="args">Arguments.</param>
     protected virtual void MoveDown(System.Object[] args)
     {
-      if (m_DisableInteractivity)
+      if (disableInteractivity)
         return;
 
-      DefaultCameraTarget.TargetPosition += this.transform.up * -m_CommandMovementModifier;
+      DefaultCameraTarget.TargetPosition += this.transform.up * -commandMovementModifier;
     }
 
     /// <summary>
@@ -340,10 +340,10 @@ namespace IBM.Watson.DeveloperCloud.Camera
     /// <param name="args">Arguments.</param>
     protected virtual void MoveLeft(System.Object[] args)
     {
-      if (m_DisableInteractivity)
+      if (disableInteractivity)
         return;
 
-      DefaultCameraTarget.TargetPosition += this.transform.right * -m_CommandMovementModifier;
+      DefaultCameraTarget.TargetPosition += this.transform.right * -commandMovementModifier;
     }
 
     /// <summary>
@@ -352,10 +352,10 @@ namespace IBM.Watson.DeveloperCloud.Camera
     /// <param name="args">Arguments.</param>
     protected virtual void MoveRight(System.Object[] args)
     {
-      if (m_DisableInteractivity)
+      if (disableInteractivity)
         return;
 
-      DefaultCameraTarget.TargetPosition += this.transform.right * m_CommandMovementModifier;
+      DefaultCameraTarget.TargetPosition += this.transform.right * commandMovementModifier;
     }
 
     /// <summary>
@@ -364,10 +364,10 @@ namespace IBM.Watson.DeveloperCloud.Camera
     /// <param name="args">Arguments.</param>
     protected virtual void ZoomIn(System.Object[] args)
     {
-      if (m_DisableInteractivity)
+      if (disableInteractivity)
         return;
 
-      DefaultCameraTarget.TargetPosition += transform.forward * m_ZoomSpeed;
+      DefaultCameraTarget.TargetPosition += transform.forward * zoomSpeed;
     }
 
     /// <summary>
@@ -376,10 +376,10 @@ namespace IBM.Watson.DeveloperCloud.Camera
     /// <param name="args">Arguments.</param>
     protected virtual void ZoomOut(System.Object[] args)
     {
-      if (m_DisableInteractivity)
+      if (disableInteractivity)
         return;
 
-      DefaultCameraTarget.TargetPosition += transform.forward * m_ZoomSpeed * -1.0f;
+      DefaultCameraTarget.TargetPosition += transform.forward * zoomSpeed * -1.0f;
     }
 
     #endregion

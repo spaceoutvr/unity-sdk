@@ -55,7 +55,7 @@ namespace IBM.Watson.DeveloperCloud.Services.ConversationExperimental.v1
 
     #region Private Data
     private const string SERVICE_ID = "ConversationExperimentalV1";
-    private static fsSerializer sm_Serializer = new fsSerializer();
+    private static fsSerializer sserializer = new fsSerializer();
     #endregion
 
     #region Message
@@ -112,7 +112,7 @@ namespace IBM.Watson.DeveloperCloud.Services.ConversationExperimental.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = response;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -151,14 +151,14 @@ namespace IBM.Watson.DeveloperCloud.Services.ConversationExperimental.v1
 
     private class CheckServiceStatus
     {
-      private ConversationExperimental m_Service = null;
-      private ServiceStatus m_Callback = null;
-      private int m_ConversationCount = 0;
+      private ConversationExperimental service = null;
+      private ServiceStatus callback = null;
+      private int conversationCount = 0;
 
-      public CheckServiceStatus(ConversationExperimental service, ServiceStatus callback)
+      public CheckServiceStatus(ConversationExperimental conversationExperimental, ServiceStatus serviceStatus)
       {
-        m_Service = service;
-        m_Callback = callback;
+        service = conversationExperimental;
+        callback = serviceStatus;
 
         string customServiceID = Config.Instance.GetVariableValue(SERVICE_ID + "_ID");
 
@@ -166,10 +166,10 @@ namespace IBM.Watson.DeveloperCloud.Services.ConversationExperimental.v1
         if (!string.IsNullOrEmpty(customServiceID))
         {
 
-          if (!m_Service.Message(customServiceID, "Ping", OnMessage))
+          if (!service.Message(customServiceID, "Ping", OnMessage))
             OnFailure("Failed to invoke Converse().");
           else
-            m_ConversationCount += 1;
+            conversationCount += 1;
         }
         else
         {
@@ -179,13 +179,13 @@ namespace IBM.Watson.DeveloperCloud.Services.ConversationExperimental.v1
 
       private void OnMessage(MessageResponse resp)
       {
-        if (m_ConversationCount > 0)
+        if (conversationCount > 0)
         {
-          m_ConversationCount -= 1;
+          conversationCount -= 1;
           if (resp != null)
           {
-            if (m_ConversationCount == 0 && m_Callback != null && m_Callback.Target != null)
-              m_Callback(SERVICE_ID, true);
+            if (conversationCount == 0 && callback != null && callback.Target != null)
+              callback(SERVICE_ID, true);
           }
           else
             OnFailure("ConverseResponse is null.");
@@ -195,8 +195,8 @@ namespace IBM.Watson.DeveloperCloud.Services.ConversationExperimental.v1
       private void OnFailure(string msg)
       {
         Log.Error("Dialog", msg);
-        m_Callback(SERVICE_ID, false);
-        m_ConversationCount = 0;
+        callback(SERVICE_ID, false);
+        conversationCount = 0;
       }
     };
     #endregion

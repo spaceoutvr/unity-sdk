@@ -23,15 +23,15 @@ using System;
 
 public class ExampleConversation : MonoBehaviour
 {
-  private Conversation m_Conversation = new Conversation();
-  private string m_WorkspaceID;
-  private bool m_UseAlternateIntents = true;
+  private Conversation conversation = new Conversation();
+  private string workspaceID;
+  private bool useAlternateIntents = true;
   private string[] questionArray = { "can you turn up the AC", "can you turn on the wipers", "can you turn off the wipers", "can you turn down the ac", "can you unlock the door" };
 
   void Start()
   {
     LogSystem.InstallDefaultReactors();
-    m_WorkspaceID = Config.Instance.GetVariableValue("ConversationV1_ID");
+    workspaceID = Config.Instance.GetVariableValue("ConversationV1_ID");
 
     Debug.Log("**********User: Hello!");
     MessageWithOnlyInput("Hello!");
@@ -42,7 +42,7 @@ public class ExampleConversation : MonoBehaviour
     if (string.IsNullOrEmpty(input))
       throw new ArgumentNullException("input");
 
-    m_Conversation.Message(OnMessageWithOnlyInput, m_WorkspaceID, input);
+    conversation.Message(OnMessageWithOnlyInput, workspaceID, input);
   }
 
 
@@ -62,7 +62,7 @@ public class ExampleConversation : MonoBehaviour
 
       MessageRequest messageRequest = new MessageRequest();
       messageRequest.InputText = questionStr;
-      messageRequest.alternate_intents = m_UseAlternateIntents;
+      messageRequest.alternate_intents = useAlternateIntents;
       messageRequest.ContextData = resp.context;
 
       MessageWithFullMessageRequest(messageRequest);
@@ -77,7 +77,7 @@ public class ExampleConversation : MonoBehaviour
   {
     if (messageRequest == null)
       throw new ArgumentNullException("messageRequest");
-    m_Conversation.Message(OnMessageWithFullRequest, m_WorkspaceID, messageRequest);
+    conversation.Message(OnMessageWithFullRequest, workspaceID, messageRequest);
   }
 
   private void OnMessageWithFullRequest(MessageResponse resp, string customData)
@@ -96,7 +96,7 @@ public class ExampleConversation : MonoBehaviour
 
       MessageRequest messageRequest = new MessageRequest();
       messageRequest.InputText = questionStr;
-      messageRequest.alternate_intents = m_UseAlternateIntents;
+      messageRequest.alternate_intents = useAlternateIntents;
       messageRequest.ContextData = resp.context;
     }
     else

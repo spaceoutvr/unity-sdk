@@ -34,7 +34,7 @@ namespace IBM.Watson.DeveloperCloud.Services.PersonalityInsights.v2
   {
     #region Private Data
     private const string SERVICE_ID = "PersonalityInsightsV2";
-    private static fsSerializer sm_Serializer = new fsSerializer();
+    private static fsSerializer sserializer = new fsSerializer();
     #endregion
 
     #region Profile
@@ -130,7 +130,7 @@ namespace IBM.Watson.DeveloperCloud.Services.PersonalityInsights.v2
             throw new WatsonException(r.FormattedMessages);
 
           object obj = response;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -164,22 +164,22 @@ namespace IBM.Watson.DeveloperCloud.Services.PersonalityInsights.v2
 
     private class CheckServiceStatus
     {
-      private PersonalityInsights m_Service = null;
-      private ServiceStatus m_Callback = null;
+      private PersonalityInsights service = null;
+      private ServiceStatus callback = null;
 
-      public CheckServiceStatus(PersonalityInsights service, ServiceStatus callback)
+      public CheckServiceStatus(PersonalityInsights personalityInsights, ServiceStatus serviceStatus)
       {
-        m_Service = service;
-        m_Callback = callback;
+        service = personalityInsights;
+        callback = serviceStatus;
         string dataPath = Application.dataPath + "/Watson/Examples/ServiceExamples/TestData/personalityInsights.json";
-        if (!m_Service.GetProfile(OnGetProfile, dataPath, ContentType.TEXT_PLAIN, Language.ENGLISH))
-          m_Callback(SERVICE_ID, false);
+        if (!service.GetProfile(OnGetProfile, dataPath, ContentType.TEXT_PLAIN, Language.ENGLISH))
+          callback(SERVICE_ID, false);
       }
 
       private void OnGetProfile(Profile resp, string data)
       {
-        if (m_Callback != null)
-          m_Callback(SERVICE_ID, resp != null);
+        if (callback != null)
+          callback(SERVICE_ID, resp != null);
       }
     };
     #endregion

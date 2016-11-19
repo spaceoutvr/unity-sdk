@@ -28,9 +28,9 @@ namespace IBM.Watson.DeveloperCloud.Camera
   {
     #region Private Members
     [SerializeField]
-    private float m_NormalizedThresholdWidth = 0.1f;
+    private float normalizedThresholdWidth = 0.1f;
     [SerializeField]
-    private float m_NormalizedThresholdHeight = 0.1f;
+    private float normalizedThresholdHeight = 0.1f;
     #endregion
 
     #region TapThreeTimes Event Handles
@@ -52,35 +52,35 @@ namespace IBM.Watson.DeveloperCloud.Camera
         //Got three tap gesture, now checking the corners
         TouchScript.Gestures.TapGesture tapGesture = args[0] as TouchScript.Gestures.TapGesture;
 
-        if (tapGesture.NormalizedScreenPosition.x < m_NormalizedThresholdWidth && tapGesture.NormalizedScreenPosition.y < m_NormalizedThresholdHeight)
+        if (tapGesture.NormalizedScreenPosition.x < normalizedThresholdWidth && tapGesture.NormalizedScreenPosition.y < normalizedThresholdHeight)
         {
           EventManager.Instance.SendEvent("OnTripleTapBottomLeft");
         }
-        else if (tapGesture.NormalizedScreenPosition.x < m_NormalizedThresholdWidth && tapGesture.NormalizedScreenPosition.y > 1.0f - m_NormalizedThresholdHeight)
+        else if (tapGesture.NormalizedScreenPosition.x < normalizedThresholdWidth && tapGesture.NormalizedScreenPosition.y > 1.0f - normalizedThresholdHeight)
         {
           EventManager.Instance.SendEvent("OnTripleTapTopLeft");
         }
-        else if (tapGesture.NormalizedScreenPosition.x > 1.0f - m_NormalizedThresholdWidth && tapGesture.NormalizedScreenPosition.y < m_NormalizedThresholdHeight)
+        else if (tapGesture.NormalizedScreenPosition.x > 1.0f - normalizedThresholdWidth && tapGesture.NormalizedScreenPosition.y < normalizedThresholdHeight)
         {
           EventManager.Instance.SendEvent("OnTripleTapBottomRight");
         }
-        else if (tapGesture.NormalizedScreenPosition.x > 1.0f - m_NormalizedThresholdWidth && tapGesture.NormalizedScreenPosition.y > 1.0f - m_NormalizedThresholdHeight)
+        else if (tapGesture.NormalizedScreenPosition.x > 1.0f - normalizedThresholdWidth && tapGesture.NormalizedScreenPosition.y > 1.0f - normalizedThresholdHeight)
         {
           EventManager.Instance.SendEvent("OnTripleTapTopRight");
         }
-        else if (tapGesture.NormalizedScreenPosition.x < m_NormalizedThresholdWidth && tapGesture.NormalizedScreenPosition.y > 0.5f - (m_NormalizedThresholdHeight / 2.0f) && tapGesture.NormalizedScreenPosition.y < 0.5f + (m_NormalizedThresholdHeight / 2.0f))
+        else if (tapGesture.NormalizedScreenPosition.x < normalizedThresholdWidth && tapGesture.NormalizedScreenPosition.y > 0.5f - (normalizedThresholdHeight / 2.0f) && tapGesture.NormalizedScreenPosition.y < 0.5f + (normalizedThresholdHeight / 2.0f))
         {
           EventManager.Instance.SendEvent("OnTripleTapMiddleLeft");
         }
-        else if (tapGesture.NormalizedScreenPosition.x > 1.0f - m_NormalizedThresholdWidth && tapGesture.NormalizedScreenPosition.y > 0.5f - (m_NormalizedThresholdHeight / 2.0f) && tapGesture.NormalizedScreenPosition.y < 0.5f + (m_NormalizedThresholdHeight / 2.0f))
+        else if (tapGesture.NormalizedScreenPosition.x > 1.0f - normalizedThresholdWidth && tapGesture.NormalizedScreenPosition.y > 0.5f - (normalizedThresholdHeight / 2.0f) && tapGesture.NormalizedScreenPosition.y < 0.5f + (normalizedThresholdHeight / 2.0f))
         {
           EventManager.Instance.SendEvent("OnTripleTapMiddleRight");
         }
-        else if (tapGesture.NormalizedScreenPosition.x > 0.5f - (m_NormalizedThresholdWidth / 2.0f) && tapGesture.NormalizedScreenPosition.x < 0.5f + (m_NormalizedThresholdWidth / 2.0f) && tapGesture.NormalizedScreenPosition.y < m_NormalizedThresholdHeight)
+        else if (tapGesture.NormalizedScreenPosition.x > 0.5f - (normalizedThresholdWidth / 2.0f) && tapGesture.NormalizedScreenPosition.x < 0.5f + (normalizedThresholdWidth / 2.0f) && tapGesture.NormalizedScreenPosition.y < normalizedThresholdHeight)
         {
           EventManager.Instance.SendEvent("OnTripleTapMiddleBottom");
         }
-        else if (tapGesture.NormalizedScreenPosition.x > 0.5f - (m_NormalizedThresholdWidth / 2.0f) && tapGesture.NormalizedScreenPosition.x < 0.5f + (m_NormalizedThresholdWidth / 2.0f) && tapGesture.NormalizedScreenPosition.y > 1.0f - m_NormalizedThresholdHeight)
+        else if (tapGesture.NormalizedScreenPosition.x > 0.5f - (normalizedThresholdWidth / 2.0f) && tapGesture.NormalizedScreenPosition.x < 0.5f + (normalizedThresholdWidth / 2.0f) && tapGesture.NormalizedScreenPosition.y > 1.0f - normalizedThresholdHeight)
         {
           EventManager.Instance.SendEvent("OnTripleTapMiddleTop");
         }

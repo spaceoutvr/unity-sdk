@@ -81,34 +81,34 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
     #endregion
 
     #region Private Data
-    private OnRecognize m_ListenCallback = null;        // Callback is set by StartListening()                                                             
-    private WSConnector m_ListenSocket = null;          // WebSocket object used when StartListening() is invoked  
-    private bool m_ListenActive = false;
-    private bool m_AudioSent = false;
-    private bool m_IsListening = false;
-    private Queue<AudioData> m_ListenRecordings = new Queue<AudioData>();
-    private int m_KeepAliveRoutine = 0;             // ID of the keep alive co-routine
-    private DateTime m_LastKeepAlive = DateTime.Now;
-    private DateTime m_LastStartSent = DateTime.Now;
-    private string m_RecognizeModel = "en-US_BroadbandModel";   // ID of the model to use.
-    private int m_MaxAlternatives = 1;              // maximum number of alternatives to return.
-    private bool m_Timestamps = false;
-    private bool m_WordConfidence = false;
-    private bool m_DetectSilence = true;            // If true, then we will try not to record silence.
-    private float m_SilenceThreshold = 0.03f;         // If the audio level is below this value, then it's considered silent.
-    private int m_RecordingHZ = -1;
-    private static fsSerializer sm_Serializer = new fsSerializer();
+    private OnRecognize listenCallback = null;        // Callback is set by StartListening()                                                             
+    private WSConnector listenSocket = null;          // WebSocket object used when StartListening() is invoked  
+    private bool listenActive = false;
+    private bool audioSent = false;
+    private bool isListening = false;
+    private Queue<AudioData> listenRecordings = new Queue<AudioData>();
+    private int keepAliveRoutine = 0;             // ID of the keep alive co-routine
+    private DateTime lastKeepAlive = DateTime.Now;
+    private DateTime lastStartSent = DateTime.Now;
+    private string recognizeModel = "en-US_BroadbandModel";   // ID of the model to use.
+    private int maxAlternatives = 1;              // maximum number of alternatives to return.
+    private bool timestamps = false;
+    private bool wordConfidence = false;
+    private bool detectSilence = true;            // If true, then we will try not to record silence.
+    private float silenceThreshold = 0.03f;         // If the audio level is below this value, then it's considered silent.
+    private int recordingHZ = -1;
+    private static fsSerializer sserializer = new fsSerializer();
     #endregion
 
     #region Public Properties
     /// <summary>
     /// True if StartListening() has been called.
     /// </summary>
-    public bool IsListening { get { return m_IsListening; } private set { m_IsListening = value; } }
+    public bool IsListening { get { return isListening; } private set { isListening = value; } }
     /// <summary>
     /// True if AudioData has been sent and we are recognizing speech.
     /// </summary>
-    public bool AudioSent { get { return m_AudioSent; } }
+    public bool AudioSent { get { return audioSent; } }
     /// <summary>
     /// This delegate is invoked when an error occurs.
     /// </summary>
@@ -118,12 +118,12 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
     /// </summary>
     public string RecognizeModel
     {
-      get { return m_RecognizeModel; }
+      get { return recognizeModel; }
       set
       {
-        if (m_RecognizeModel != value)
+        if (recognizeModel != value)
         {
-          m_RecognizeModel = value;
+          recognizeModel = value;
           StopListening();        // close any active connection when our model is changed.
         }
       }
@@ -131,15 +131,15 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
     /// <summary>
     /// Returns the maximum number of alternatives returned by recognize.
     /// </summary>
-    public int MaxAlternatives { get { return m_MaxAlternatives; } set { m_MaxAlternatives = value; } }
+    public int MaxAlternatives { get { return maxAlternatives; } set { maxAlternatives = value; } }
     /// <summary>
     /// True to return timestamps of words with results.
     /// </summary>
-    public bool EnableTimestamps { get { return m_Timestamps; } set { m_Timestamps = value; } }
+    public bool EnableTimestamps { get { return timestamps; } set { timestamps = value; } }
     /// <summary>
     /// True to return word confidence with results.
     /// </summary>
-    public bool EnableWordConfidence { get { return m_WordConfidence; } set { m_WordConfidence = value; } }
+    public bool EnableWordConfidence { get { return wordConfidence; } set { wordConfidence = value; } }
     /// <summary>
     /// If true, then we will try to continuously recognize speech.
     /// </summary>
@@ -153,12 +153,12 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
     /// If true, then we will try not to send silent audio clips to the server. This can save bandwidth
     /// when no sound is happening.
     /// </summary>
-    public bool DetectSilence { get { return m_DetectSilence; } set { m_DetectSilence = value; } }
+    public bool DetectSilence { get { return detectSilence; } set { detectSilence = value; } }
     /// <summary>
     /// A value from 1.0 to 0.0 that determines what is considered silence. If the audio level is below this value
     /// then we consider it silence.
     /// </summary>
-    public float SilenceThreshold { get { return m_SilenceThreshold; } set { m_SilenceThreshold = value; } }
+    public float SilenceThreshold { get { return silenceThreshold; } set { silenceThreshold = value; } }
     #endregion
 
     #region Get Models
@@ -311,7 +311,7 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = response;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -347,15 +347,15 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
     {
       if (callback == null)
         throw new ArgumentNullException("callback");
-      if (m_IsListening)
+      if (isListening)
         return false;
       if (!CreateListenConnector())
         return false;
 
-      m_IsListening = true;
-      m_ListenCallback = callback;
-      m_KeepAliveRoutine = Runnable.Run(KeepAlive());
-      m_LastKeepAlive = DateTime.Now;
+      isListening = true;
+      listenCallback = callback;
+      keepAliveRoutine = Runnable.Run(KeepAlive());
+      lastKeepAlive = DateTime.Now;
 
       return true;
     }
@@ -368,29 +368,29 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
     /// <param name="clip">A AudioData object containing the AudioClip and max level found in the clip.</param>
     public void OnListen(AudioData clip)
     {
-      if (m_IsListening)
+      if (isListening)
       {
-        if (m_RecordingHZ < 0)
+        if (recordingHZ < 0)
         {
-          m_RecordingHZ = clip.Clip.frequency;
+          recordingHZ = clip.Clip.frequency;
           SendStart();
         }
 
-        if (!DetectSilence || clip.MaxLevel >= m_SilenceThreshold)
+        if (!DetectSilence || clip.MaxLevel >= silenceThreshold)
         {
-          if (m_ListenActive)
+          if (listenActive)
           {
-            m_ListenSocket.Send(new WSConnector.BinaryMessage(AudioClipUtil.GetL16(clip.Clip)));
-            m_AudioSent = true;
+            listenSocket.Send(new WSConnector.BinaryMessage(AudioClipUtil.GetL16(clip.Clip)));
+            audioSent = true;
           }
           else
           {
             // we have not received the "listening" state yet from the server, so just queue
             // the audio clips until that happens.
-            m_ListenRecordings.Enqueue(clip);
+            listenRecordings.Enqueue(clip);
 
             // check the length of this queue and do something if it gets too full.
-            if (m_ListenRecordings.Count > MAX_QUEUED_RECORDINGS)
+            if (listenRecordings.Count > MAX_QUEUED_RECORDINGS)
             {
               Log.Error("SpeechToText", "Recording queue is full.");
 
@@ -400,15 +400,15 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
             }
           }
         }
-        else if (m_AudioSent)
+        else if (audioSent)
         {
           SendStop();
-          m_AudioSent = false;
+          audioSent = false;
         }
 
         // After sending start, we should get into the listening state within the amount of time specified
         // by LISTEN_TIMEOUT. If not, then stop listening and record the error.
-        if (!m_ListenActive && (DateTime.Now - m_LastStartSent).TotalSeconds > LISTEN_TIMEOUT)
+        if (!listenActive && (DateTime.Now - lastStartSent).TotalSeconds > LISTEN_TIMEOUT)
         {
           Log.Error("SpeechToText", "Failed to enter listening state.");
 
@@ -425,35 +425,35 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
     /// <returns>Returns true on success, false on failure.</returns>
     public bool StopListening()
     {
-      if (!m_IsListening)
+      if (!isListening)
         return false;
 
-      m_IsListening = false;
+      isListening = false;
       CloseListenConnector();
 
-      if (m_KeepAliveRoutine != 0)
+      if (keepAliveRoutine != 0)
       {
-        Runnable.Stop(m_KeepAliveRoutine);
-        m_KeepAliveRoutine = 0;
+        Runnable.Stop(keepAliveRoutine);
+        keepAliveRoutine = 0;
       }
 
-      m_ListenRecordings.Clear();
-      m_ListenCallback = null;
-      m_RecordingHZ = -1;
+      listenRecordings.Clear();
+      listenCallback = null;
+      recordingHZ = -1;
 
       return true;
     }
 
     private bool CreateListenConnector()
     {
-      if (m_ListenSocket == null)
+      if (listenSocket == null)
       {
-        m_ListenSocket = WSConnector.CreateConnector(SERVICE_ID, "/v1/recognize", "?model=" + WWW.EscapeURL(m_RecognizeModel));
-        if (m_ListenSocket == null)
+        listenSocket = WSConnector.CreateConnector(SERVICE_ID, "/v1/recognize", "?model=" + WWW.EscapeURL(recognizeModel));
+        if (listenSocket == null)
           return false;
 
-        m_ListenSocket.OnMessage = OnListenMessage;
-        m_ListenSocket.OnClose = OnListenClosed;
+        listenSocket.OnMessage = OnListenMessage;
+        listenSocket.OnClose = OnListenClosed;
       }
 
       return true;
@@ -461,55 +461,55 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
 
     private void CloseListenConnector()
     {
-      if (m_ListenSocket != null)
+      if (listenSocket != null)
       {
-        m_ListenSocket.Close();
-        m_ListenSocket = null;
+        listenSocket.Close();
+        listenSocket = null;
       }
     }
 
     private void SendStart()
     {
-      if (m_ListenSocket == null)
+      if (listenSocket == null)
         throw new WatsonException("SendStart() called with null connector.");
 
       Dictionary<string, object> start = new Dictionary<string, object>();
       start["action"] = "start";
-      start["content-type"] = "audio/l16;rate=" + m_RecordingHZ.ToString() + ";channels=1;";
+      start["content-type"] = "audio/l16;rate=" + recordingHZ.ToString() + ";channels=1;";
       start["continuous"] = EnableContinousRecognition;
-      start["max_alternatives"] = m_MaxAlternatives;
+      start["max_alternatives"] = maxAlternatives;
       start["interim_results"] = EnableInterimResults;
-      start["word_confidence"] = m_WordConfidence;
-      start["timestamps"] = m_Timestamps;
+      start["word_confidence"] = wordConfidence;
+      start["timestamps"] = timestamps;
 
-      m_ListenSocket.Send(new WSConnector.TextMessage(Json.Serialize(start)));
-      m_LastStartSent = DateTime.Now;
+      listenSocket.Send(new WSConnector.TextMessage(Json.Serialize(start)));
+      lastStartSent = DateTime.Now;
     }
 
     private void SendStop()
     {
-      if (m_ListenSocket == null)
+      if (listenSocket == null)
         throw new WatsonException("SendStart() called with null connector.");
 
-      if (m_ListenActive)
+      if (listenActive)
       {
         Dictionary<string, string> stop = new Dictionary<string, string>();
         stop["action"] = "stop";
 
-        m_ListenSocket.Send(new WSConnector.TextMessage(Json.Serialize(stop)));
-        m_LastStartSent = DateTime.Now;     // sending stop, will send the listening state again..
-        m_ListenActive = false;
+        listenSocket.Send(new WSConnector.TextMessage(Json.Serialize(stop)));
+        lastStartSent = DateTime.Now;     // sending stop, will send the listening state again..
+        listenActive = false;
       }
     }
 
     // This keeps the WebSocket connected when we are not sending any data.
     private IEnumerator KeepAlive()
     {
-      while (m_ListenSocket != null)
+      while (listenSocket != null)
       {
         yield return null;
 
-        if ((DateTime.Now - m_LastKeepAlive).TotalSeconds > WS_KEEP_ALIVE_TIME)
+        if ((DateTime.Now - lastKeepAlive).TotalSeconds > WS_KEEP_ALIVE_TIME)
         {
           Dictionary<string, string> nop = new Dictionary<string, string>();
           nop["action"] = "no-op";
@@ -517,8 +517,8 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
 #if ENABLE_DEBUGGING
           Log.Debug("SpeechToText", "Sending keep alive.");
 #endif
-          m_ListenSocket.Send(new WSConnector.TextMessage(Json.Serialize(nop)));
-          m_LastKeepAlive = DateTime.Now;
+          listenSocket.Send(new WSConnector.TextMessage(Json.Serialize(nop)));
+          lastKeepAlive = DateTime.Now;
         }
       }
       Log.Debug("SpeechToText", "KeepAlive exited.");
@@ -543,8 +543,8 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
               if (!EnableContinousRecognition && results.HasFinalResult())
                 SendStart();
 
-              if (m_ListenCallback != null)
-                m_ListenCallback(results);
+              if (listenCallback != null)
+                listenCallback(results);
               else
                 StopListening();            // automatically stop listening if our callback is destroyed.
             }
@@ -560,18 +560,18 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
 #endif
             if (state == "listening")
             {
-              if (m_IsListening)
+              if (isListening)
               {
-                if (!m_ListenActive)
+                if (!listenActive)
                 {
-                  m_ListenActive = true;
+                  listenActive = true;
 
                   // send all pending audio clips ..
-                  while (m_ListenRecordings.Count > 0)
+                  while (listenRecordings.Count > 0)
                   {
-                    AudioData clip = m_ListenRecordings.Dequeue();
-                    m_ListenSocket.Send(new WSConnector.BinaryMessage(AudioClipUtil.GetL16(clip.Clip)));
-                    m_AudioSent = true;
+                    AudioData clip = listenRecordings.Dequeue();
+                    listenSocket.Send(new WSConnector.BinaryMessage(AudioClipUtil.GetL16(clip.Clip)));
+                    audioSent = true;
                   }
                 }
               }
@@ -605,7 +605,7 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
       Log.Debug("SpeechToText", "OnListenClosed(), State = {0}", connector.State.ToString());
 #endif
 
-      m_ListenActive = false;
+      listenActive = false;
       StopListening();
 
       if (connector.State == WSConnector.ConnectionState.DISCONNECTED)
@@ -647,11 +647,11 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
         Log.Error("SpeechToText", "AudioClip is too large for Recognize().");
         return false;
       }
-      req.Parameters["model"] = m_RecognizeModel;
+      req.Parameters["model"] = recognizeModel;
       req.Parameters["continuous"] = "false";
-      req.Parameters["max_alternatives"] = m_MaxAlternatives.ToString();
-      req.Parameters["timestamps"] = m_Timestamps ? "true" : "false";
-      req.Parameters["word_confidence"] = m_WordConfidence ? "true" : "false";
+      req.Parameters["max_alternatives"] = maxAlternatives.ToString();
+      req.Parameters["timestamps"] = timestamps ? "true" : "false";
+      req.Parameters["word_confidence"] = wordConfidence ? "true" : "false";
       req.OnResponse = OnRecognizeResponse;
 
       return connector.Send(req);
@@ -857,7 +857,7 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = customizations;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -904,7 +904,7 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
       customLanguage.description = string.IsNullOrEmpty(description) ? name : description;
 
       fsData data;
-      sm_Serializer.TrySerialize(customLanguage.GetType(), customLanguage, out data).AssertSuccessWithoutWarnings();
+      sserializer.TrySerialize(customLanguage.GetType(), customLanguage, out data).AssertSuccessWithoutWarnings();
       string customizationJson = fsJsonPrinter.CompressedJson(data);
 
       CreateCustomizationRequest req = new CreateCustomizationRequest();
@@ -943,7 +943,7 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = customizationID;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1066,7 +1066,7 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = customization;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1307,7 +1307,7 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = corpora;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1573,7 +1573,7 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = wordsList;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1643,7 +1643,7 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
         throw new WatsonException("Custom words are required to add words to a custom language model.");
 
       fsData data;
-      sm_Serializer.TrySerialize(words.GetType(), words, out data).AssertSuccessWithoutWarnings();
+      sserializer.TrySerialize(words.GetType(), words, out data).AssertSuccessWithoutWarnings();
       string wordsJson = fsJsonPrinter.CompressedJson(data);
 
       return AddCustomWords(callback, customizationID, wordsJson, customData);
@@ -1807,7 +1807,7 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
             throw new WatsonException(r.FormattedMessages);
 
           object obj = word;
-          r = sm_Serializer.TryDeserialize(data, obj.GetType(), ref obj);
+          r = sserializer.TryDeserialize(data, obj.GetType(), ref obj);
           if (!r.Succeeded)
             throw new WatsonException(r.FormattedMessages);
         }
@@ -1841,22 +1841,22 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
 
     private class CheckServiceStatus
     {
-      private SpeechToText m_Service = null;
-      private ServiceStatus m_Callback = null;
+      private SpeechToText service = null;
+      private ServiceStatus callback = null;
 
-      public CheckServiceStatus(SpeechToText service, ServiceStatus callback)
+      public CheckServiceStatus(SpeechToText speechToText, ServiceStatus serviceStatus)
       {
-        m_Service = service;
-        m_Callback = callback;
+        service = speechToText;
+        callback = serviceStatus;
 
-        if (!m_Service.GetModels(OnCheckService))
-          m_Callback(SERVICE_ID, false);
+        if (!service.GetModels(OnCheckService))
+          callback(SERVICE_ID, false);
       }
 
       private void OnCheckService(Model[] models)
       {
-        if (m_Callback != null && m_Callback.Target != null)
-          m_Callback(SERVICE_ID, models != null);
+        if (callback != null && callback.Target != null)
+          callback(SERVICE_ID, models != null);
       }
     };
     #endregion
