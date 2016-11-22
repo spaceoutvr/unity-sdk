@@ -402,52 +402,36 @@ public class ExampleRetrieveAndRank : MonoBehaviour
             {
               Log.Debug("ExampleRetrieveAndRank", "\tSearch | id: {0}.", doc.id);
 
-              if (doc.title != null)
+              if (!string.IsNullOrEmpty(doc.title))
               {
-                if (doc.title.Length == 0)
-                  Log.Debug("ExampleRetrieveAndRank", "Search | There are no title");
-                else
-                  foreach (string s in doc.title)
-                    Log.Debug("ExampleRetrieveAndRank", "\tSearch | title: {0}.", s);
+                Log.Debug("ExampleRetrieveAndRank", "Search | title: {0}", doc.title);
               }
               else
               {
                 Log.Debug("ExampleRetrieveAndRank", "Search | title is null");
               }
 
-              if (doc.author != null)
+              if (!string.IsNullOrEmpty(doc.author))
               {
-                if (doc.author.Length == 0)
-                  Log.Debug("ExampleRetrieveAndRank", "Search | There are no authors");
-                else
-                  foreach (string s in doc.author)
-                    Log.Debug("ExampleRetrieveAndRank", "\tSearch | Author: {0}.", s);
+                Log.Debug("ExampleRetrieveAndRank", "Search | author: {0}", doc.author);
               }
               else
               {
                 Log.Debug("ExampleRetrieveAndRank", "Search | Authors is null");
               }
 
-              if (doc.body != null)
+              if (!string.IsNullOrEmpty(doc.body))
               {
-                if (doc.body.Length == 0)
-                  Log.Debug("ExampleRetrieveAndRank", "Search | There are no body");
-                else
-                  foreach (string s in doc.body)
-                    Log.Debug("ExampleRetrieveAndRank", "\tSearch | body: {0}.", s);
+                Log.Debug("ExampleRetrieveAndRank", "Search | body: {0}.", doc.body);
               }
               else
               {
                 Log.Debug("ExampleRetrieveAndRank", "Search | Body is null");
               }
 
-              if (doc.bibliography != null)
+              if (!string.IsNullOrEmpty(doc.bibliography))
               {
-                if (doc.bibliography.Length == 0)
-                  Log.Debug("ExampleRetrieveAndRank", "Search | There are no bibliographies");
-                else
-                  foreach (string s in doc.bibliography)
-                    Log.Debug("ExampleRetrieveAndRank", "\tSearch | bibliography: {0}.", s);
+                Log.Debug("ExampleRetrieveAndRank", "Search | bibliography: {0}.", doc.bibliography);
               }
               else
               {
