@@ -289,19 +289,19 @@ namespace IBM.Watson.DeveloperCloud.Services.RetrieveAndRank.v1
     /// <summary>
     /// The document body.
     /// </summary>
-    public string[] body { get; set; }
+    public string body { get; set; }
     /// <summary>
     /// The doucument title.
     /// </summary>
-    public string[] title { get; set; }
+    public string title { get; set; }
     /// <summary>
     /// The document author.
     /// </summary>
-    public string[] author { get; set; }
+    public string author { get; set; }
     /// <summary>
     /// The bibliography info.
     /// </summary>
-    public string[] bibliography { get; set; }
+    public string bibliography { get; set; }
   }
 
   /// <summary>
