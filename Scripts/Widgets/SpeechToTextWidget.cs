@@ -70,6 +70,14 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     #endregion
 
     #region Public Properties
+	//// SPACEOUT.VR introduction - Event for stop sent
+    /// <summary>
+    /// This delegate is invoked when a silence is detected.
+    /// </summary>
+    public System.Action OnStopSent { get; set; }
+    //// SPACEOUT.VR introduction - Event for stop sent
+	
+	
     /// <summary>
     /// This property starts or stop's this widget listening for speech.
     /// </summary>
@@ -88,6 +96,8 @@ namespace IBM.Watson.DeveloperCloud.Widgets
           m_SpeechToText.EnableContinousRecognition = m_EnableContinous;
           m_SpeechToText.EnableInterimResults = m_EnableInterimResults;
           m_SpeechToText.OnError = OnError;
+		  //// SPACEOUT.VR introduction - Event for stop sent
+          m_SpeechToText.OnStopSent = _OnStopSent;
           m_SpeechToText.StartListening(OnRecognize);
           if (m_StatusText != null)
             m_StatusText.text = "LISTENING";
@@ -143,6 +153,14 @@ namespace IBM.Watson.DeveloperCloud.Widgets
         m_StatusText.text = "ERROR: " + error;
     }
 
+	//// SPACEOUT.VR introduction - Event for stop sent
+    private void _OnStopSent()
+    {
+      if (OnStopSent != null)
+      OnStopSent();
+    }
+    //// SPACEOUT.VR introduction - Event for stop sent
+	
     private void OnAudio(Data data)
     {
       if (!Active)

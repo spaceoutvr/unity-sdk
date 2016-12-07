@@ -113,6 +113,14 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
     /// This delegate is invoked when an error occurs.
     /// </summary>
     public ErrorEvent OnError { get; set; }
+	
+    //// SPACEOUT.VR introduction - Event for stop sent
+    /// <summary>
+    /// This delegate is invoked when a silence is detected.
+    /// </summary>
+    public Action OnStopSent { get; set; }
+    ////
+
     /// <summary>
     /// This property controls which recognize model we use when making recognize requests of the server.
     /// </summary>
@@ -491,6 +499,14 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
       if (m_ListenSocket == null)
         throw new WatsonException("SendStart() called with null connector.");
 
+	  //// SPACEOUT.VR introduction - Event for stop sent
+      //Debug.DebugConsole.print("SendStop");
+      if (OnStopSent != null)
+      {
+        OnStopSent();
+      }
+      ////
+	
       if (m_ListenActive)
       {
         Dictionary<string, string> stop = new Dictionary<string, string>();
