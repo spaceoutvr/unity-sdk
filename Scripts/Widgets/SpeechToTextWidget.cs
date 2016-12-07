@@ -154,6 +154,10 @@ namespace IBM.Watson.DeveloperCloud.Widgets
     }
 
 	//// SPACEOUT.VR introduction - Event for stop sent
+	public void ForceSendStop()
+    {
+        m_SpeechToText.ForceSendStop();
+    }
     private void _OnStopSent()
     {
       if (OnStopSent != null)

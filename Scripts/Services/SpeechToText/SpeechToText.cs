@@ -427,6 +427,18 @@ namespace IBM.Watson.DeveloperCloud.Services.SpeechToText.v1
       }
     }
 
+	// SPACEOUTVR added
+    public void ForceSendStop()
+    {
+        if (!m_IsListening)
+            return;
+        if (m_AudioSent)
+        {
+            SendStop();
+            m_AudioSent = false;
+        }
+    }
+	
     /// <summary>
     /// Invoke this function stop this service from listening.
     /// </summary>
